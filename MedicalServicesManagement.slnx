@@ -1,3 +1,5 @@
 <Solution>
+  <Project Path="src/MedicalServicesManagement.BLL/MedicalServicesManagement.BLL.csproj" Id="1c784243-1d42-4e28-b64a-2c1abe454947" />
+  <Project Path="src/MedicalServicesManagement.DAL/MedicalServicesManagement.DAL.csproj" Id="c72b76e9-e6ba-4cab-8efa-fd95254c6eb1" />
   <Project Path="src/MedicalServicesManagement.WebApp/MedicalServicesManagement.WebApp.csproj" Id="16324d2d-1a72-4f04-b3f4-8145a8c40885" />
 </Solution>
