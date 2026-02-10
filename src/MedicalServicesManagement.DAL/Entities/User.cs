@@ -1,15 +1,40 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MedicalServicesManagement.DAL.Entities
 {
-    public class User : IdentityUser
+    [Table("Users")]
+    public class User : BaseEntity
     {
+        [Required]
+        public string AuthUserId { get; set; }
+        public string MedSpecialityId {  get; set; }
+
+        [MaxLength(50)]
+        public string MedInfo { get; set; }
+    }
+
+    public class AuthUser : IdentityUser
+    {
+        [Required]
+        [MaxLength(50)]
         public string Surname { get; set; }
+
+        [Required]
+        [MaxLength(50)]
         public string Name { get; set; }
-        public string? MiddleName { get; set; }
+
+        [MaxLength(50)]
+        public string MiddleName { get; set; }
+
+        public string MiddleNameInitial => string.IsNullOrEmpty(MiddleName) ? string.Empty : $" {MiddleName}";
+
+        public string FullName => $"{Surname} {Name}{MiddleNameInitial}";
+
+        [Required]
         public DateTime BirthDate { get; set; }
         public string Telephone { get; set; }
-        public int? MedSpecialityId {  get; set; }
-        public string? MedInfo { get; set; }
     }
 }
