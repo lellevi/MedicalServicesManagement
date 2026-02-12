@@ -2,8 +2,8 @@
 {
     public class AppointmentService : BaseEntity
     {
-        public int AdditionalServiceId { get; set; }
-        public int AppointmentId { get; set; }
+        public string AdditionalServiceId { get; set; }
+        public string AppointmentId { get; set; }
         public int Amount { get; set; }
     }
 }
