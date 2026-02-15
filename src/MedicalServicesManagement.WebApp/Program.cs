@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-//const string MedConnectionString = "MedDB";
+const string MedServiceConnectionString = "MedDB";
 const string AuthConnectionString = "AuthDB";
 const string JwtTokenSettings = "JwtTokenSettings";
 
@@ -17,11 +17,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 var configuration = builder.Configuration;
 
+var medServiceConnection = builder.Configuration.GetConnectionString(MedServiceConnectionString)
+    ?? throw new ArgumentNullException(nameof(MedServiceConnectionString));
 var authConnection = builder.Configuration.GetConnectionString(AuthConnectionString)
-                ?? throw new ArgumentNullException(AuthConnectionString);
+                ?? throw new ArgumentNullException(nameof(AuthConnectionString));
 
 var strings = new Dictionary<string, string>
 {
+    [MedServiceConnectionString] = medServiceConnection,
     [AuthConnectionString] = authConnection
 };
 
