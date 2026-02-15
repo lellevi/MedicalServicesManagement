@@ -30,12 +30,12 @@ namespace MedicalServicesManagement.DAL
             services.AddDbContext<MedServiceContext>(options =>
                 options.UseSqlServer(connectionString: medString));
 
-            services.AddScoped<IRepository<User>, MedServiceRepository<User>>();
-            services.AddScoped<IRepository<Service>, MedServiceRepository<Service>>();
-            services.AddScoped<IRepository<MedSpeciality>, MedServiceRepository<MedSpeciality>>();
-            services.AddScoped<IRepository<AppointmentService>, MedServiceRepository<AppointmentService>>();
-            services.AddScoped<IRepository<Appointment>, MedServiceRepository<Appointment>>();
-            services.AddScoped<IRepository<AdditionalService>, MedServiceRepository<AdditionalService>>();
+            services.AddScoped<IRepository<User>, GenericRepository<User>>();
+            services.AddScoped<IRepository<Service>, GenericRepository<Service>>();
+            services.AddScoped<IRepository<MedSpeciality>, GenericRepository<MedSpeciality>>();
+            services.AddScoped<IRepository<AppointmentServiceDAL>, GenericRepository<AppointmentServiceDAL>>();
+            services.AddScoped<IRepository<Appointment>, GenericRepository<Appointment>>();
+            services.AddScoped<IRepository<AdditionalService>, GenericRepository<AdditionalService>>();
         }
     }
 }

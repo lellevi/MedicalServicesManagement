@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace MedicalServicesManagement.DAL.Repositories
 {
-    public class MedServiceRepository<T> : IRepository<T>
+    public class GenericRepository<T> : IRepository<T>
         where T : BaseEntity
     {
         protected readonly MedServiceContext _context;
         protected readonly DbSet<T> _dbSet;
-        public MedServiceRepository(MedServiceContext context)
+        public GenericRepository(MedServiceContext context)
         {
             _context = context;
             _dbSet = context.Set<T>();

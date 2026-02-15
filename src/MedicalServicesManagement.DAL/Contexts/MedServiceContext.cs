@@ -13,7 +13,7 @@ namespace MedicalServicesManagement.DAL.Contexts
         public DbSet<User> Users { get; set; }
         public DbSet<Service> Services { get; set; }
         public DbSet<MedSpeciality> MedSpecialities { get; set; }
-        public DbSet<AppointmentService> AppointmentServices { get; set; }
+        public DbSet<AppointmentServiceDAL> AppointmentServices { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<AdditionalService> AdditionalServices { get; set; }
     }

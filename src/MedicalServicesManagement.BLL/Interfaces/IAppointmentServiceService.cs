@@ -1,0 +1,15 @@
+﻿using MedicalServicesManagement.BLL.Dto;
+using MedicalServicesManagement.DAL.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MedicalServicesManagement.BLL.Interfaces
+{
+    public interface IAppointmentServiceService : IService<AppointmentServiceDTO>
+    {
+
+    }
+}
