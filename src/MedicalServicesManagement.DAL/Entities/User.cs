@@ -5,11 +5,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MedicalServicesManagement.DAL.Entities
 {
-    [Table("Users")]
+    [Table("[User]")]
     public class User : BaseEntity
     {
         [Required]
+        [MaxLength(36)]
         public string AuthUserId { get; set; }
+
+        [MaxLength(36)]
         public string MedSpecialityId {  get; set; }
 
         [MaxLength(50)]
