@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace MedicalServicesManagement.BLL.Interfaces
 {
-    public interface IService<T>
+    public interface IManager<T>
         where T : IDTO
     {
         Task CreateAsync(T item);

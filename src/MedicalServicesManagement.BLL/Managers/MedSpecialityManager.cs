@@ -8,41 +8,38 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace MedicalServicesManagement.BLL.Services
+namespace MedicalServicesManagement.BLL.Managers
 {
-    public class AdditionalServiceService : IAdditionalServiceService
+    public class MedSpecialityManager : IMedSpecialityManager
     {
-        private readonly IRepository<AdditionalService> _repository;
+        private readonly IRepository<MedSpeciality> _repository;
         private readonly IMapper _mapper;
 
-        public AdditionalServiceService(IRepository<AdditionalService> repository, IMapper mapper)
+        public MedSpecialityManager(IRepository<MedSpeciality> repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
         }
-        private void Validate(AdditionalServiceDTO item)
+
+        private void Validate(MedSpecialityDTO item)
         {
             if (string.IsNullOrWhiteSpace(item.Name))
                 throw new ArgumentException("Name is required");
             if (item.Name.Length > 50)
                 throw new ArgumentException("Name max length is 50");
-            if (string.IsNullOrEmpty(item.MedSpecialityId) || item.MedSpecialityId.Length > 36)
-                throw new ArgumentException("MedSpecialityId is required and max length 36");
-            if (item.Price < 0)
-                throw new ArgumentException("Price must be zero or positive");
         }
 
-        public async Task CreateAsync(AdditionalServiceDTO item)
+        public async Task CreateAsync(MedSpecialityDTO item)
         {
             try
             {
                 Validate(item);
-                var entity = _mapper.Map<AdditionalService>(item);
+                var entity = _mapper.Map<MedSpeciality>(item);
                 await _repository.CreateAsync(entity);
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("Error creating additionalService: " + ex.Message, ex);
+                throw new InvalidOperationException("Error creating medSpeciality: " + ex.Message, ex);
             }
         }
 
@@ -50,24 +47,24 @@ namespace MedicalServicesManagement.BLL.Services
         {
             var entity = await _repository.GetByIdAsync(id);
             if (entity == null)
-                throw new KeyNotFoundException("AdditionalService not found.");
+                throw new KeyNotFoundException("MedSpeciality not found.");
 
             await _repository.DeleteByIdAsync(id);
         }
 
-        public async Task<List<AdditionalServiceDTO>> GetAllAsync()
+        public async Task<List<MedSpecialityDTO>> GetAllAsync()
         {
             var entities = await (await _repository.GetAllAsync()).ToListAsync();
-            return _mapper.Map<List<AdditionalServiceDTO>>(entities);
+            return _mapper.Map<List<MedSpecialityDTO>>(entities);
         }
 
-        public async Task<AdditionalServiceDTO> GetByIdAsync(string id)
+        public async Task<MedSpecialityDTO> GetByIdAsync(string id)
         {
             var entity = await _repository.GetByIdAsync(id);
-            return entity == null ? null : _mapper.Map<AdditionalServiceDTO>(entity);
+            return entity == null ? null : _mapper.Map<MedSpecialityDTO>(entity);
         }
 
-        public async Task UpdateAsync(AdditionalServiceDTO item)
+        public async Task UpdateAsync(MedSpecialityDTO item)
         {
             if (item == null)
                 throw new ArgumentNullException(nameof(item));
@@ -76,9 +73,9 @@ namespace MedicalServicesManagement.BLL.Services
 
             var existing = await _repository.GetByIdAsync(item.Id);
             if (existing == null)
-                throw new KeyNotFoundException($"AdditionalService not found.");
+                throw new KeyNotFoundException($"MedSpeciality not found.");
 
-            var entity = _mapper.Map<AdditionalService>(item);
+            var entity = _mapper.Map<MedSpeciality>(item);
             await _repository.UpdateAsync(entity);
         }
     }

@@ -8,14 +8,14 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace MedicalServicesManagement.BLL.Services
+namespace MedicalServicesManagement.BLL.Managers
 {
-    public class UserService : IUserService
+    public class UserManager : IUserManager
     {
         private readonly IRepository<User> _repository;
         private readonly IMapper _mapper;
 
-        public UserService(IRepository<User> repository, IMapper mapper)
+        public UserManager(IRepository<User> repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;

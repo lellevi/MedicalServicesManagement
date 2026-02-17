@@ -8,14 +8,14 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace MedicalServicesManagement.BLL.Services
+namespace MedicalServicesManagement.BLL.Managers
 {
-    public class AppointmentServiceService : IAppointmentServiceService
+    public class AppointmentServiceManager : IAppointmentServiceManager
     {
         private readonly IRepository<AppointmentServiceDAL> _repository;
         private readonly IMapper _mapper;
 
-        public AppointmentServiceService(IRepository<AppointmentServiceDAL> repository, IMapper mapper)
+        public AppointmentServiceManager(IRepository<AppointmentServiceDAL> repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;

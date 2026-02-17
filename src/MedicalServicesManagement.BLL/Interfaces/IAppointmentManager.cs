@@ -2,7 +2,7 @@
 
 namespace MedicalServicesManagement.BLL.Interfaces
 {
-    public interface IUserService : IService<UserDTO>
+    public interface IAppointmentManager : IManager<AppointmentDTO>
     {
 
     }

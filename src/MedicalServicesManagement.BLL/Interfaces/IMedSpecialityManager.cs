@@ -2,7 +2,7 @@
 
 namespace MedicalServicesManagement.BLL.Interfaces
 {
-    public interface IMedSpecialityService : IService<MedSpecialityDTO>
+    public interface IMedSpecialityManager : IManager<MedSpecialityDTO>
     {
 
     }

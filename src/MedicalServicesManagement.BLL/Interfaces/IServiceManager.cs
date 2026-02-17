@@ -2,7 +2,7 @@
 
 namespace MedicalServicesManagement.BLL.Interfaces
 {
-    public interface IAdditionalServiceService : IService<AdditionalServiceDTO>
+    public interface IServiceManager : IManager<ServiceDTO>
     {
 
     }
