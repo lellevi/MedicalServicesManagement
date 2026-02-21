@@ -2,8 +2,10 @@
 using MedicalServicesManagement.DAL.Entities;
 using MedicalServicesManagement.DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace MedicalServicesManagement.DAL.Repositories
@@ -12,17 +14,18 @@ namespace MedicalServicesManagement.DAL.Repositories
         where T : BaseEntity
     {
         protected readonly MedServiceContext _context;
-        protected readonly DbSet<T> _dbSet;
         public GenericRepository(MedServiceContext context)
         {
             _context = context;
-            _dbSet = context.Set<T>();
         }
 
         public async Task<string> CreateAsync(T item)
         {
-            await _dbSet.AddAsync(item);
+            await _context.AddAsync(item);
             await _context.SaveChangesAsync();
+
+            _context.Entry(item).State = EntityState.Detached;
+
             return item.Id;
         }
 
@@ -32,22 +35,55 @@ namespace MedicalServicesManagement.DAL.Repositories
             if (item == null)
                 throw new KeyNotFoundException("Entity not found.");
 
-            _dbSet.Remove(item);
+            _context.Remove(item);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IQueryable<T>> GetAllAsync() => _dbSet.AsQueryable().AsNoTracking();
+        public async Task<IReadOnlyCollection<T>> GetAllAsync(Expression<Func<T, bool>> filter = null)
+        {
+            var query = _context.Set<T>().AsNoTracking();
 
-        public async Task<T> GetByIdAsync(string id) => await _dbSet.FindAsync(id);
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            var items = await query.ToListAsync();
+            return items;
+        }
+
+        public async Task<T> GetByIdAsync(string id)
+        {
+            var query = _context.Set<T>().AsNoTracking();
+
+            var item = await query.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (item == null)
+            {
+                _context.Entry(item).State = EntityState.Detached;
+            }
+
+            return item;
+        }
 
         public async Task UpdateAsync(T item)
         {
-            var existing = _dbSet.Find(item.Id);
-            if (existing == null)
+            if (item.Id == null)
+            {
+                return;
+            }
+
+            var query = _context.Set<T>().AsNoTracking();
+
+            var entityExists = await query.AnyAsync(x => x.Id == item.Id);
+
+            if (!entityExists)
                 throw new KeyNotFoundException("Entity not found.");
 
-            _context.Entry(existing).CurrentValues.SetValues(item);
-            _context.SaveChanges();
+            _context.Update(item);
+            await _context.SaveChangesAsync();
+
+            _context.Entry(item).State = EntityState.Detached;
         }
     }
 }

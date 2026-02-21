@@ -1,16 +1,19 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using MedicalServicesManagement.DAL.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace MedicalServicesManagement.BLL.Interfaces
 {
-    public interface IManager<T>
-        where T : IDTO
+    public interface IManager<TDTO,TEntity>
+        where TDTO : IDTO
+        where TEntity : IEntity
     {
-        Task CreateAsync(T item);
+        Task CreateAsync(TDTO item);
         Task DeleteByIdAsync(string id);
-        Task<List<T>> GetAllAsync();
-        Task<T> GetByIdAsync(string id);
-        Task UpdateAsync(T item);
+        Task<IReadOnlyCollection<TDTO>> GetAllAsync(Expression<Func<TEntity, bool>> predicate = null);
+        Task<TDTO> GetByIdAsync(string id);
+        Task UpdateAsync(TDTO item);
     }
 }
