@@ -1,7 +1,5 @@
 ﻿using MedicalServicesManagement.DAL.Interfaces;
-using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace MedicalServicesManagement.BLL.Interfaces
@@ -12,7 +10,7 @@ namespace MedicalServicesManagement.BLL.Interfaces
     {
         Task CreateAsync(TDTO item);
         Task DeleteByIdAsync(string id);
-        Task<IReadOnlyCollection<TDTO>> GetAllAsync(Expression<Func<TEntity, bool>> predicate = null);
+        Task<List<TDTO>> GetAllAsync();
         Task<TDTO> GetByIdAsync(string id);
         Task UpdateAsync(TDTO item);
     }

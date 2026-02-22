@@ -5,17 +5,18 @@ using MedicalServicesManagement.DAL.Entities;
 using MedicalServicesManagement.DAL.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
 namespace MedicalServicesManagement.BLL.Managers
 {
-    public class UserManager : BaseManager<UserDTO, User>, IUserManager
+    public class EntityUserManager : BaseManager<EntityUserDTO, EntityUser>, IEntityUserManager
     {
         protected override string EntityName { get => "user"; }
 
-        public UserManager(IRepository<User> repository, IMapper mapper) : base(repository, mapper) { }
+        public EntityUserManager(IRepository<EntityUser> repository, IMapper mapper) : base(repository, mapper) { }
 
-        protected override void Validate(UserDTO item)
+        protected override void Validate(EntityUserDTO item)
         {
             if (string.IsNullOrWhiteSpace(item.AuthUserId))
                 throw new ArgumentException("AuthUserId is required.");
@@ -25,10 +26,12 @@ namespace MedicalServicesManagement.BLL.Managers
                 throw new ArgumentException("MedInfo max length is 50.");
         }
 
-        public async Task<IReadOnlyCollection<UserDTO>> GetMedicsAsync()
+        public async Task<List<EntityUserDTO>> GetMedicsAsync()
         {
-            var entities = await _repository.GetAllAsync(x => x.MedSpecialityId != null);
-            return _mapper.Map<IReadOnlyCollection<UserDTO>>(entities);
+            var entities = await _repository.GetAllAsync(x => x.MedSpecialityId != null,
+                includes: [ u => u.MedSpeciality ]);
+
+            return _mapper.Map<List<EntityUserDTO>>(entities);
         }
     }
 }

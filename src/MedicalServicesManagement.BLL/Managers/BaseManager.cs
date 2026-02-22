@@ -45,10 +45,10 @@ namespace MedicalServicesManagement.BLL.Managers
             }
         }
 
-        public async Task<IReadOnlyCollection<TDTO>> GetAllAsync()
+        public async Task<List<TDTO>> GetAllAsync()
         {
             var entities = await _repository.GetAllAsync();
-            return _mapper.Map<IReadOnlyCollection<TDTO>>(entities);
+            return _mapper.Map<List<TDTO>>(entities);
         }
 
         public async Task<TDTO> GetByIdAsync(string id)

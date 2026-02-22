@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MedicalServicesManagement.BLL.Interfaces
 {
-    public interface IAppointmentServiceManager : IManager<AppointmentServiceDTO>
+    public interface IAppointmentServiceManager : IManager<AppointmentServiceDTO, AppointmentServiceDAL>
     {
 
     }

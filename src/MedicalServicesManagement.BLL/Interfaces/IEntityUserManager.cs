@@ -3,7 +3,7 @@ using MedicalServicesManagement.DAL.Entities;
 
 namespace MedicalServicesManagement.BLL.Interfaces
 {
-    public interface IServiceManager : IManager<ServiceDTO, Service>
+    public interface IEntityUserManager : IManager<EntityUserDTO, EntityUser>
     {
 
     }

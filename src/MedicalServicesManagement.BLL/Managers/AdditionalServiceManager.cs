@@ -3,24 +3,17 @@ using MedicalServicesManagement.BLL.Dto;
 using MedicalServicesManagement.BLL.Interfaces;
 using MedicalServicesManagement.DAL.Entities;
 using MedicalServicesManagement.DAL.Interfaces;
-using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace MedicalServicesManagement.BLL.Managers
 {
-    public class AdditionalServiceManager : IAdditionalServiceManager
+    public class AdditionalServiceManager : BaseManager<AdditionalServiceDTO, AdditionalService>, IAdditionalServiceManager
     {
-        private readonly IRepository<AdditionalService> _repository;
-        private readonly IMapper _mapper;
+        protected override string EntityName { get => "additionalService"; }
 
-        public AdditionalServiceManager(IRepository<AdditionalService> repository, IMapper mapper)
-        {
-            _repository = repository;
-            _mapper = mapper;
-        }
-        private void Validate(AdditionalServiceDTO item)
+        public AdditionalServiceManager(IRepository<AdditionalService> repository, IMapper mapper) : base(repository, mapper) { }
+
+        protected override void Validate(AdditionalServiceDTO item)
         {
             if (string.IsNullOrWhiteSpace(item.Name))
                 throw new ArgumentException("Name is required");
@@ -30,56 +23,6 @@ namespace MedicalServicesManagement.BLL.Managers
                 throw new ArgumentException("MedSpecialityId is required and max length 36");
             if (item.Price < 0)
                 throw new ArgumentException("Price must be zero or positive");
-        }
-
-        public async Task CreateAsync(AdditionalServiceDTO item)
-        {
-            try
-            {
-                Validate(item);
-                var entity = _mapper.Map<AdditionalService>(item);
-                await _repository.CreateAsync(entity);
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidOperationException("Error creating additionalService: " + ex.Message, ex);
-            }
-        }
-
-        public async Task DeleteByIdAsync(string id)
-        {
-            var entity = await _repository.GetByIdAsync(id);
-            if (entity == null)
-                throw new KeyNotFoundException("AdditionalService not found.");
-
-            await _repository.DeleteByIdAsync(id);
-        }
-
-        public async Task<List<AdditionalServiceDTO>> GetAllAsync()
-        {
-            var entities = await (await _repository.GetAllAsync()).ToListAsync();
-            return _mapper.Map<List<AdditionalServiceDTO>>(entities);
-        }
-
-        public async Task<AdditionalServiceDTO> GetByIdAsync(string id)
-        {
-            var entity = await _repository.GetByIdAsync(id);
-            return entity == null ? null : _mapper.Map<AdditionalServiceDTO>(entity);
-        }
-
-        public async Task UpdateAsync(AdditionalServiceDTO item)
-        {
-            if (item == null)
-                throw new ArgumentNullException(nameof(item));
-
-            Validate(item);
-
-            var existing = await _repository.GetByIdAsync(item.Id);
-            if (existing == null)
-                throw new KeyNotFoundException($"AdditionalService not found.");
-
-            var entity = _mapper.Map<AdditionalService>(item);
-            await _repository.UpdateAsync(entity);
         }
     }
 }

@@ -8,7 +8,7 @@ namespace MedicalServicesManagement.BLL.Mapper
     {
         public BLLAutomapperProfile()
         {
-            CreateMap<User, UserDTO>().ReverseMap();
+            CreateMap<EntityUser, EntityUserDTO>().ReverseMap();
             CreateMap<Service, ServiceDTO>().ReverseMap();
             CreateMap<MedSpeciality, MedSpecialityDTO>().ReverseMap();
             CreateMap<Appointment, AppointmentDTO>().ReverseMap();
