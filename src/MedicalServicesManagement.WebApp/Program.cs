@@ -1,9 +1,12 @@
+using AutoMapper;
 using MedicalServicesManagement.BLL;
 using MedicalServicesManagement.BLL.Jwt;
+using MedicalServicesManagement.BLL.Mapper;
 using MedicalServicesManagement.DAL.Contexts;
 using MedicalServicesManagement.DAL.Entities;
 using MedicalServicesManagement.WebApp.Extensions;
 using MedicalServicesManagement.WebApp.Jwt;
+using MedicalServicesManagement.WebApp.Mapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -29,6 +32,14 @@ var strings = new Dictionary<string, string>
 };
 
 builder.Services.ConfigureBLL(strings);
+
+var mapperConfig = new MapperConfiguration(cfg =>
+{
+    cfg.AddProfile<BLLAutomapperProfile>();
+    cfg.AddProfile<AutomapperProfile>();
+}, new LoggerFactory());
+IMapper mapper = mapperConfig.CreateMapper();
+builder.Services.AddSingleton(mapper);
 
 builder.Services.RegisterOptions<JwtTokenSettings>(JwtTokenSettings);
 

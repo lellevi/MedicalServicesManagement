@@ -1,6 +1,9 @@
 ﻿@using System.Security.Claims
 @{
     var role = User?.Claims?.FirstOrDefault(claim => claim.Type == ClaimTypes.Role)?.Value;
+
+    var subtitle = ViewData["Subtitle"]?.ToString();
+    var titleIsShown = (ViewData["ShowTitle"] as bool?) ?? false;
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -41,9 +44,9 @@
 <body class="index-page">
 
     <header id="header" class="header d-flex align-items-center fixed-top">
-        <div class="header-container container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+        <div class="header-container container-fluid container-xl position-relative d-flex align-items-center">
 
-            <a href="index.html" class="logo d-flex align-items-center me-auto me-xl-0">
+            <a asp-controller="Home" asp-action="Index" class="logo d-flex align-items-center me-auto me-xl-0">
                 <svg class="my-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <g id="bgCarrier" stroke-width="0"></g>
                     <g id="tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -113,10 +116,10 @@
                 </ul>
                 <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
             </nav>
-
-            <a class="btn-getstarted" href="appointment.html">Appointment</a>
-
-            <a class="btn-getstarted" href="appointment.html">Личный кабинет</a>
+            <div style="margin-left:auto;margin-right:0">
+                <a class="btn-getstarted" href="appointment.html">Запись на приём</a>
+                <a class="btn-getstarted" asp-controller="Profile" asp-action="Index">Личный кабинет</a>
+            </div>
            @*  @if (User.Identity.IsAuthenticated)
             {
                 <ul class="navbar-nav">
@@ -146,6 +149,18 @@
     </header>
 
     <main class="main">
+        @if (titleIsShown)
+        {
+            <div class="page-title">
+                <div class="title-wrapper">
+                    <h1>@ViewData["Title"]</h1>
+                    @if (!string.IsNullOrEmpty(subtitle))
+                    {
+                        <p>@subtitle</p>
+                    }
+                </div>
+            </div>
+        }
 
         @RenderBody()
 

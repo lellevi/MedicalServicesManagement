@@ -1,25 +1,74 @@
 ﻿@model MedicalServicesManagement.WebApp.Models.Auth.LoginModel
 
 @{
+    ViewData["ShowTitle"] = true;
     ViewData["Title"] = "Login";
+    ViewData["Subtitle"] = "After successful login you will be able to enter your Profile";
 }
 
-<h2>Login</h2>
+<section class="section">
 
-<form asp-action="Login" method="post">
-    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="container">
+        <div class="contact-wrapper">
 
-    <div class="form-group">
-        <label asp-for="Email"></label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
+
+            <div class="contact-form-panel">
+
+
+                <div class="form-container">
+                    <p>Need to register? <a asp-action="Register">👉 Register</a></p>
+
+                    <form asp-action="Login" method="post">
+                        <div asp-validation-summary="All" class="text-danger"></div>
+
+                        <div class="form-group">
+                            <label asp-for="Email"></label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Password"></label>
+                            <input asp-for="Password" type="password" class="form-control" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </form>
+
+                    <form action="forms/contact.php" method="post" class="php-email-form">
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="nameInput" name="name" placeholder="Full Name" required="">
+                            <label for="nameInput">Full Name</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" id="emailInput" name="email" placeholder="Email Address" required="">
+                            <label for="emailInput">Email Address</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="subjectInput" name="subject" placeholder="Subject" required="">
+                            <label for="subjectInput">Subject</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <textarea class="form-control" id="messageInput" name="message" rows="5" placeholder="Your Message" style="height: 150px" required=""></textarea>
+                            <label for="messageInput">Your Message</label>
+                        </div>
+
+                        <div class="my-3">
+                            <div class="loading">Loading</div>
+                            <div class="error-message"></div>
+                            <div class="sent-message">Your message has been sent. Thank you!</div>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn-submit">Send Message <i class="bi bi-send-fill ms-2"></i></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <div class="form-group">
-        <label asp-for="Password"></label>
-        <input asp-for="Password" type="password" class="form-control" />
-        <span asp-validation-for="Password" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Login</button>
-</form>
+</section>
