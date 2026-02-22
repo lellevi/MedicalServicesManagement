@@ -3,58 +3,121 @@
     ViewData["Title"] = "Register";
 }
 
-<h2>Register</h2>
+<form asp-action="Register" method="post" class="appointment-form php-email-form">
+    <div class="row gy-3">
+        <div class="col-md-6 form-group">
+            <label asp-for="Email"></label>
+            <input type="text" asp-for="Email" class="form-control" placeholder="Your Email" required="">
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
 
-<form asp-action="Register" method="post">
-    <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="col-md-6 form-group">
+            <label asp-for="Password"></label>
+            <input type="password" asp-for="Password" class="form-control" required="">
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
 
-    <div class="form-group">
-        <label asp-for="Email"></label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
+        <div class="col-md-6 form-group">
+            <label asp-for="ConfirmPassword"></label>
+            <input type="password" asp-for="ConfirmPassword" class="form-control" required="">
+            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6 form-group">
+            <label asp-for="Surname"></label>
+            <input type="text" asp-for="Surname" class="form-control" required="">
+            <span asp-validation-for="Surname" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6 form-group">
+            <label asp-for="Name"></label>
+            <input type="text" asp-for="Name" class="form-control" required="">
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6 form-group">
+            <label asp-for="MiddleName"></label>
+            <input type="text" asp-for="MiddleName" class="form-control">
+            <span asp-validation-for="MiddleName" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6 form-group">
+            <label asp-for="BirthDate"></label>
+            <input type="date" asp-for="BirthDate" class="form-control" required="">
+            <span asp-validation-for="BirthDate" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6 form-group">
+            <label asp-for="Telephone"></label>
+            <input asp-for="Telephone" type="tel" class="form-control" placeholder="Your Phone Number" required="">
+            <span asp-validation-for="Telephone" class="text-danger"></span>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <div class="col-md-6">
+            <input type="email" name="email" class="form-control" placeholder="Your Email" required="">
+        </div>
+
+        <div class="col-md-6">
+            <input type="tel" name="phone" class="form-control" placeholder="Your Phone Number" required="">
+        </div>
+
+        <div class="col-md-6">
+            <select name="department" class="form-select" required="">
+                <option value="">Select Department</option>
+                <option value="cardiology">Cardiology</option>
+                <option value="neurology">Neurology</option>
+                <option value="orthopedics">Orthopedics</option>
+                <option value="pediatrics">Pediatrics</option>
+                <option value="dermatology">Dermatology</option>
+                <option value="general">General Medicine</option>
+            </select>
+        </div>
+
+        <div class="col-md-6">
+            <input type="date" name="date" class="form-control" required="">
+        </div>
+
+        <div class="col-md-6">
+            <select name="doctor" class="form-select" required="">
+                <option value="">Select Doctor</option>
+                <option value="dr-johnson">Dr. Sarah Johnson</option>
+                <option value="dr-martinez">Dr. Michael Martinez</option>
+                <option value="dr-chen">Dr. Lisa Chen</option>
+                <option value="dr-patel">Dr. Raj Patel</option>
+                <option value="dr-williams">Dr. Emily Williams</option>
+                <option value="dr-thompson">Dr. David Thompson</option>
+            </select>
+        </div>
+
+        <div class="col-12">
+            <textarea class="form-control" name="message" rows="5" placeholder="Please describe your symptoms or reason for visit (optional)"></textarea>
+        </div>
+
+        <div class="col-12">
+            <div class="loading">Loading</div>
+            <div class="error-message"></div>
+            <div class="sent-message">Your appointment request has been sent successfully. We will contact you shortly!</div>
+
+            <button type="submit" class="btn btn-appointment w-100">
+                <i class="bi bi-calendar-plus me-2"></i>Book Appointment
+            </button>
+        </div>
+
     </div>
-
-    <div class="form-group">
-        <label asp-for="Password"></label>
-        <input asp-for="Password" type="password" class="form-control" />
-        <span asp-validation-for="Password" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="ConfirmPassword"></label>
-        <input asp-for="ConfirmPassword" type="password" class="form-control" />
-        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Surname"></label>
-        <input asp-for="Surname" class="form-control" />
-        <span asp-validation-for="Surname" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Name"></label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="MiddleName"></label>
-        <input asp-for="MiddleName" class="form-control" />
-        <span asp-validation-for="MiddleName" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="BirthDate"></label>
-        <input type="date" asp-for="BirthDate" class="form-control" />
-        <span asp-validation-for="BirthDate" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Telephone"></label>
-        <input asp-for="Telephone" class="form-control" />
-        <span asp-validation-for="Telephone" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Register</button>
 </form>

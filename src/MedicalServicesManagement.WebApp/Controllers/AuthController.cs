@@ -1,4 +1,6 @@
-﻿using MedicalServicesManagement.BLL.Jwt;
+﻿using MedicalServicesManagement.BLL.Dto;
+using MedicalServicesManagement.BLL.Interfaces;
+using MedicalServicesManagement.BLL.Jwt;
 using MedicalServicesManagement.DAL.Entities;
 using MedicalServicesManagement.WebApp.Models.Auth;
 using Microsoft.AspNetCore.Authorization;
@@ -10,7 +12,8 @@ namespace MedicalServicesManagement.WebApp.Controllers
     public class AuthController : Controller
     {
         private readonly SignInManager<AuthUser> _signInManager;
-        private readonly UserManager<AuthUser> _userManager;
+        private readonly UserManager<AuthUser> _identityUserManager;
+        private readonly IEntityUserManager _userManager;
         private readonly JwtTokenService _jwtTokenService;
 
         public AuthController(
@@ -19,7 +22,7 @@ namespace MedicalServicesManagement.WebApp.Controllers
             JwtTokenService jwtTokenService)
         {
             _signInManager = signInManager;
-            _userManager = userManager;
+            _identityUserManager = userManager;
             _jwtTokenService = jwtTokenService;
         }
 
@@ -55,12 +58,19 @@ namespace MedicalServicesManagement.WebApp.Controllers
                 SecurityStamp = Guid.NewGuid().ToString("D")
             };
 
-            var creationResult = await _userManager.CreateAsync(user, model.Password);
+            var creationResult = await _identityUserManager.CreateAsync(user, model.Password);
 
             if (creationResult.Succeeded)
             {
-                await _userManager.AddToRoleAsync(user, Constants.PatientRole);
+                await _identityUserManager.AddToRoleAsync(user, Constants.PatientRole);
                 await _signInManager.SignInAsync(user, isPersistent: false);
+
+                var entityUser = new EntityUserDTO()
+                {
+                    AuthUserId = user.Id,
+                };
+
+                await _userManager.CreateAsync(entityUser);
 
                 return RedirectToAction("Index", "Home");
             }
@@ -96,7 +106,7 @@ namespace MedicalServicesManagement.WebApp.Controllers
                 return View(model);
             }
 
-            var user = await _userManager.FindByEmailAsync(model.Email);
+            var user = await _identityUserManager.FindByEmailAsync(model.Email);
 
             var token = await CreateUserTokenAsync(user);
 
@@ -119,7 +129,7 @@ namespace MedicalServicesManagement.WebApp.Controllers
 
         private async Task<string> CreateUserTokenAsync(AuthUser user)
         {
-            var roles = await _userManager.GetRolesAsync(user);
+            var roles = await _identityUserManager.GetRolesAsync(user);
             var role = roles.FirstOrDefault();
 
             return _jwtTokenService.GetToken(user, roles, role);

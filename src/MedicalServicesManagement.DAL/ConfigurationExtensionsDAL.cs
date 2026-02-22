@@ -1,5 +1,7 @@
 ﻿using MedicalServicesManagement.DAL.Contexts;
 using MedicalServicesManagement.DAL.Entities;
+using MedicalServicesManagement.DAL.Interfaces;
+using MedicalServicesManagement.DAL.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,11 +14,10 @@ namespace MedicalServicesManagement.DAL
     {
         public const string MedConnectionString = "MedDB";
         public const string AuthConnectionString = "AuthDB";
-
         public static void ConfigureDAL(this IServiceCollection services, Dictionary<string, string> connectionStrings)
         {
-            //var medString = connectionStrings.GetValueOrDefault(MedConnectionString)
-            //    ?? throw new ArgumentNullException(MedConnectionString);
+            var medString = connectionStrings.GetValueOrDefault(MedConnectionString)
+                ?? throw new ArgumentNullException(MedConnectionString);
             var authString = connectionStrings.GetValueOrDefault(AuthConnectionString)
                 ?? throw new ArgumentNullException(AuthConnectionString);
 
@@ -26,10 +27,15 @@ namespace MedicalServicesManagement.DAL
                 .AddEntityFrameworkStores<AuthDbContext>()
                 .AddDefaultTokenProviders();
 
-            //services.AddDbContext<TicketContext>(options => options.UseSqlServer(ticketString));
-            //services.AddDbContext<ShowContext>(options => options.UseSqlServer(showString));
-            //services.AddScoped<IRepository<Ticket>, TicketRepository>();
-            //services.AddScoped<IRepository<Show>, ShowRepository>();
+            services.AddDbContext<MedServiceContext>(options =>
+                options.UseSqlServer(connectionString: medString));
+
+            services.AddScoped<IRepository<EntityUser>, GenericRepository<EntityUser>>();
+            services.AddScoped<IRepository<Service>, GenericRepository<Service>>();
+            services.AddScoped<IRepository<MedSpeciality>, GenericRepository<MedSpeciality>>();
+            services.AddScoped<IRepository<AppointmentServiceDAL>, GenericRepository<AppointmentServiceDAL>>();
+            services.AddScoped<IRepository<Appointment>, GenericRepository<Appointment>>();
+            services.AddScoped<IRepository<AdditionalService>, GenericRepository<AdditionalService>>();
         }
     }
 }
