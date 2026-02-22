@@ -39,7 +39,8 @@ namespace MedicalServicesManagement.DAL.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IReadOnlyCollection<T>> GetAllAsync(Expression<Func<T, bool>> filter = null)
+        public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>> filter = null,
+            params Expression<Func<T, object>>[] includes)
         {
             var query = _context.Set<T>().AsNoTracking();
 
@@ -48,11 +49,19 @@ namespace MedicalServicesManagement.DAL.Repositories
                 query = query.Where(filter);
             }
 
+            if (includes != null && includes.Length != 0)
+            {
+                foreach (var include in includes)
+                {
+                    query = query.Include(include);
+                }
+            }
+
             var items = await query.ToListAsync();
             return items;
         }
 
-        public async Task<T> GetByIdAsync(string id)
+        public async Task<T> GetByIdAsync(string id, params Expression<Func<T, object>>[] includes)
         {
             var query = _context.Set<T>().AsNoTracking();
 
@@ -61,6 +70,14 @@ namespace MedicalServicesManagement.DAL.Repositories
             if (item == null)
             {
                 _context.Entry(item).State = EntityState.Detached;
+            }
+
+            if (includes != null && includes.Length != 0)
+            {
+                foreach (var include in includes)
+                {
+                    query = query.Include(include);
+                }
             }
 
             return item;

@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace MedicalServicesManagement.DAL.Entities
 {
     [Table("[User]")]
-    public class User : BaseEntity
+    public class EntityUser : BaseEntity
     {
         [Required]
         [MaxLength(36)]
@@ -14,6 +14,7 @@ namespace MedicalServicesManagement.DAL.Entities
 
         [MaxLength(36)]
         public string MedSpecialityId { get; set; }
+        public virtual MedSpeciality MedSpeciality { get; set; }
 
         [MaxLength(50)]
         public string MedInfo { get; set; }
