@@ -4,12 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MedicalServicesManagement.WebApp.Controllers
 {
-    public class AdditionalServiceController : Controller
+    public class AdditionalServicesController : Controller
     {
         private readonly AdditionalServiceManager _additionalServiceManager;
         private readonly IMapper _mapper;
 
-        public AdditionalServiceController(AdditionalServiceManager additionalServiceManager, IMapper mapper)
+        public AdditionalServicesController(AdditionalServiceManager additionalServiceManager, IMapper mapper)
         {
             _additionalServiceManager = additionalServiceManager;
             _mapper = mapper;

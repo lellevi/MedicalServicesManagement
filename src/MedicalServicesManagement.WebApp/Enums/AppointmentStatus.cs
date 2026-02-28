@@ -1,4 +1,4 @@
-﻿namespace MedicalServicesManagement.DAL.Entities
+﻿namespace MedicalServicesManagement.WebApp.Enums
 {
     public enum AppointmentStatus
     {

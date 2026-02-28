@@ -10,6 +10,10 @@ using System.Threading.Tasks;
 
 namespace MedicalServicesManagement.BLL.Managers
 {
+    public interface IAppointmentManager : IManager<AppointmentDTO, Appointment>
+    {
+
+    }
     public class AppointmentManager : BaseManager<AppointmentDTO, Appointment>, IAppointmentManager
     {
         protected override string EntityName { get => "appointment"; }

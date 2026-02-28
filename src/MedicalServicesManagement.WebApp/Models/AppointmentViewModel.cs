@@ -1,5 +1,4 @@
-﻿using MedicalServicesManagement.DAL.Entities;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace MedicalServicesManagement.WebApp.Models
 {
@@ -27,7 +26,7 @@ namespace MedicalServicesManagement.WebApp.Models
 
         [Required]
         [MaxLength(20)]
-        public AppointmentStatus Status { get; set; } // need add enum to web?
+        public Enums.AppointmentStatus Status { get; set; }
 
         [Range(0, double.MaxValue)]
         public decimal TotalCost { get; set; }

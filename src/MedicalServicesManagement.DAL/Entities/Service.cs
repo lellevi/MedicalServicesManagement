@@ -14,6 +14,7 @@ namespace MedicalServicesManagement.DAL.Entities
         [Required]
         [MaxLength(36)]
         public string MedSpecialityId { get; set; }
+        public virtual MedSpeciality MedSpeciality { get; set; }
 
         [Range(0, double.MaxValue)]
         public decimal Cost { get; set; } = decimal.Zero;

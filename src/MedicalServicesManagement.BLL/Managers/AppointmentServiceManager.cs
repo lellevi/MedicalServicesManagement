@@ -7,11 +7,15 @@ using System;
 
 namespace MedicalServicesManagement.BLL.Managers
 {
-    public class AppointmentServiceManager : BaseManager<AppointmentServiceDTO, AppointmentServiceDAL>, IAppointmentServiceManager
+    public interface IAppointmentServiceManager : IManager<AppointmentServiceDTO, AppointmentService>
+    {
+
+    }
+    public class AppointmentServiceManager : BaseManager<AppointmentServiceDTO, AppointmentService>, IAppointmentServiceManager
     {
         protected override string EntityName { get => "appointmentService"; }
 
-        public AppointmentServiceManager(IRepository<AppointmentServiceDAL> repository, IMapper mapper) : base(repository, mapper) { }
+        public AppointmentServiceManager(IRepository<AppointmentService> repository, IMapper mapper) : base(repository, mapper) { }
 
         protected override void Validate(AppointmentServiceDTO item)
         {

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.Extensions.EnumMapping;
 using MedicalServicesManagement.BLL.Dto;
 using MedicalServicesManagement.DAL.Entities;
 
@@ -12,8 +13,12 @@ namespace MedicalServicesManagement.BLL.Mapper
             CreateMap<Service, ServiceDTO>().ReverseMap();
             CreateMap<MedSpeciality, MedSpecialityDTO>().ReverseMap();
             CreateMap<Appointment, AppointmentDTO>().ReverseMap();
-            CreateMap<AppointmentServiceDAL, AppointmentServiceDTO>().ReverseMap();
+            CreateMap<AppointmentService, AppointmentServiceDTO>().ReverseMap();
             CreateMap<AdditionalService, AdditionalServiceDTO>().ReverseMap();
+
+            CreateMap<AppointmentStatus, Enums.AppointmentStatus>()
+                .ConvertUsingEnumMapping(opt => opt.MapByName())
+                .ReverseMap();
         }
     }
 }

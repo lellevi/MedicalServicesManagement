@@ -33,7 +33,7 @@ namespace MedicalServicesManagement.DAL
             services.AddScoped<IRepository<EntityUser>, GenericRepository<EntityUser>>();
             services.AddScoped<IRepository<Service>, GenericRepository<Service>>();
             services.AddScoped<IRepository<MedSpeciality>, GenericRepository<MedSpeciality>>();
-            services.AddScoped<IRepository<AppointmentServiceDAL>, GenericRepository<AppointmentServiceDAL>>();
+            services.AddScoped<IRepository<AppointmentService>, GenericRepository<AppointmentService>>();
             services.AddScoped<IRepository<Appointment>, GenericRepository<Appointment>>();
             services.AddScoped<IRepository<AdditionalService>, GenericRepository<AdditionalService>>();
         }

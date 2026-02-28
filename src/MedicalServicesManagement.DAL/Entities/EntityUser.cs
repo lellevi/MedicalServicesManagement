@@ -18,10 +18,7 @@ namespace MedicalServicesManagement.DAL.Entities
 
         [MaxLength(50)]
         public string MedInfo { get; set; }
-    }
 
-    public class AuthUser : IdentityUser
-    {
         [Required]
         [MaxLength(50)]
         public string Surname { get; set; }
@@ -40,5 +37,10 @@ namespace MedicalServicesManagement.DAL.Entities
         [Required]
         public DateTime BirthDate { get; set; }
         public string Telephone { get; set; }
+    }
+
+    public class AuthUser : IdentityUser
+    {
+        public string ImageName { get; set; }
     }
 }

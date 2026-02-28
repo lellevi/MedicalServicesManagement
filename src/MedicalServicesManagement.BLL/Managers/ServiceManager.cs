@@ -7,6 +7,10 @@ using System;
 
 namespace MedicalServicesManagement.BLL.Managers
 {
+    public interface IServiceManager : IManager<ServiceDTO, Service>
+    {
+
+    }
     public class ServiceManager : BaseManager<ServiceDTO, Service>, IServiceManager
     {
         protected override string EntityName { get => "service"; }

@@ -22,7 +22,7 @@ namespace MedicalServicesManagement.BLL
 
             services.AddScoped<IManager<ServiceDTO, Service>, ServiceManager>();
             services.AddScoped<IManager<MedSpecialityDTO, MedSpeciality>, MedSpecialityManager>();
-            services.AddScoped<IManager<AppointmentServiceDTO, AppointmentServiceDAL>, AppointmentServiceManager>();
+            services.AddScoped<IManager<AppointmentServiceDTO, AppointmentService>, AppointmentServiceManager>();
             services.AddScoped<IManager<AppointmentDTO, Appointment>, AppointmentManager>();
             services.AddScoped<IManager<AdditionalServiceDTO, AdditionalService>, AdditionalServiceManager>();
         }

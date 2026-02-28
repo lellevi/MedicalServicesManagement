@@ -1,5 +1,4 @@
 ﻿using MedicalServicesManagement.BLL.Interfaces;
-using MedicalServicesManagement.DAL.Entities;
 using System;
 
 namespace MedicalServicesManagement.BLL.Dto
@@ -12,7 +11,7 @@ namespace MedicalServicesManagement.BLL.Dto
         public string MedicId { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public AppointmentStatus Status { get; set; }
+        public Enums.AppointmentStatus Status { get; set; }
         public decimal TotalCost { get; set; }
     }
 }

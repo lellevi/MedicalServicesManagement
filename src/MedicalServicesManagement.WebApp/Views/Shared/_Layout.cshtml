@@ -17,7 +17,7 @@
     <title>@ViewData["Title"] - Айболит</title>
 @*     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
- *@
+*@
     <!-- Favicons -->
     <link href="~/img/favicon.png" rel="icon">
     <link href="~/img/apple-touch-icon.png" rel="apple-touch-icon">
@@ -243,15 +243,17 @@
     <!-- Preloader -->
     <div id="preloader"></div>
 
+    @RenderSection("Scripts", required: false)
+
     <!-- Vendor JS Files -->
     <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="~/lib/php-email-form/validate.js"></script>
     <script src="~/lib/aos/aos.js"></script>
     <script src="~/lib/purecounter/purecounter_vanilla.js"></script>
     <script src="~/lib/swiper/swiper-bundle.min.js"></script>
     <script src="~/lib/imagesloaded/imagesloaded.pkgd.min.js"></script>
     <script src="~/lib/isotope-layout/isotope.pkgd.min.js"></script>
     <script src="~/lib/glightbox/js/glightbox.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
     <!-- Main JS File -->
     <script src="~/js/main.js"></script>

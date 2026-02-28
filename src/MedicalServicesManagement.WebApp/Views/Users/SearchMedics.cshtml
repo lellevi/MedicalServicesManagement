@@ -1,0 +1,112 @@
+﻿@{
+    ViewData["ShowTitle"] = true;
+    ViewData["Title"] = "Поиск врача";
+    ViewData["Subtitle"] = "Поиск по специальности или фамилии";
+}
+
+<div class="col-md-6">
+    <div class="input-group">
+        <input type="text"
+               id="surnameInput"
+               class="form-control"
+               placeholder="Введите фамилию врача..."
+               autocomplete="off" />
+        <button type="button"
+                id="searchBySurnameBtn"
+                class="btn btn-primary">
+            Поиск по фамилии
+        </button>
+    </div>
+</div>
+
+<div class="col-md-6">
+    <div class="input-group">
+        <select id="specialitySelect" class="form-select">
+            <option value="">-- Выберите специальность --</option>
+        </select>
+        <button type="button"
+                id="searchBySpecialityBtn"
+                class="btn btn-outline-primary">
+            Поиск по специальности
+        </button>
+    </div>
+</div>
+
+<div id="searchResults" class="mt-3"></div>
+
+@section Scripts {
+    <script>
+        $(function () {
+            $.ajax({
+                url: "/MedSpecialities/GetAll",
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                    const select = $("#specialitySelect");
+                    select.empty();
+                    select.append('<option value="">-- Выберите специальность --</option>');
+                    $.each(data, function (i, item) {
+                        select.append(`<option value="${item.id}">${item.name}</option>`);
+                    });
+                },
+                error: function () {
+                    $("#searchResults").html("<div class='alert alert-danger'>Ошибка загрузки специальностей</div>");
+                }
+            });
+
+            $("#searchBySurnameBtn").click(function () {
+                const surname = $("#surnameInput").val().trim();
+                if (!surname) {
+                    $("#searchResults").html("<div class='alert alert-warning'>Введите фамилию</div>");
+                    return;
+                }
+
+                $.ajax({
+                    url: "/Users/searchDoc?surname=" + surname,
+                    type: "GET",
+                    dataType: "json",
+                    success: function (html) {
+
+                        const searchResults = $("#searchResults");
+
+                        searchResults.append('<ul>');
+                        $.each(data, function (i, item) {
+                            searchResults.append(`<li>${item.surnname}</li>`);
+                        });
+                        searchResults.append('/<ul>');
+                    },
+                    error: function () {
+                        $("#searchResults").html("<div class='alert alert-danger'>Ошибка поиска по фамилии</div>");
+                    }
+                });
+            });
+
+            $("#searchBySpecialityBtn").click(function () {
+                const specialityId = $("#specialitySelect").val();
+                if (!specialityId) {
+                    $("#searchResults").html("<div class='alert alert-warning'>Выберите специальность</div>");
+                    return;
+                }
+
+                $.ajax({
+                    url: "/Users/searchDoc?specialityId=" + specialityId,
+                    type: "GET",
+                    dataType: "json",
+                    success: function (html) {
+
+                        const searchResults = $("#searchResults");
+
+                        searchResults.append('<ul>');
+                        $.each(data, function (i, item) {
+                            searchResults.append(`<li>${item.surnname}</li>`);
+                        });
+                        searchResults.append('/<ul>');
+                    },
+                    error: function () {
+                        $("#searchResults").html("<div class='alert alert-danger'>Ошибка поиска по специальности</div>");
+                    }
+                });
+            });
+        });
+    </script>
+}

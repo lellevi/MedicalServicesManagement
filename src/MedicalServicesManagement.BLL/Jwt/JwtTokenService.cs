@@ -46,7 +46,7 @@ namespace MedicalServicesManagement.BLL.Jwt
             var userClaims = new List<Claim>
             {
                 new Claim(type: UserIdClaim, user.Id),
-                new Claim(type: JwtRegisteredClaimNames.GivenName, user.FullName),
+                new Claim(type: JwtRegisteredClaimNames.GivenName, entityUser.FullName),
                 new Claim(type: RoleNameClaim, roleName),
             };
 

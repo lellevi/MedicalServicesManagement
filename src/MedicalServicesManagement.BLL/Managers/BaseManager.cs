@@ -30,6 +30,7 @@ namespace MedicalServicesManagement.BLL.Managers
             Validate(item);
 
             var entity = _mapper.Map<TEntity>(item);
+
             await _repository.CreateAsync(entity);
         }
 
@@ -53,7 +54,7 @@ namespace MedicalServicesManagement.BLL.Managers
 
         public async Task<TDTO> GetByIdAsync(string id)
         {
-            var entity = await _repository.GetByIdAsync(id);
+            var entity = await _repository.GetSingleAsync(x => x.Id == id);
             return entity == null ? default : _mapper.Map<TDTO>(entity);
         }
 

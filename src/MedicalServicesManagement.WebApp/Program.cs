@@ -2,14 +2,11 @@ using AutoMapper;
 using MedicalServicesManagement.BLL;
 using MedicalServicesManagement.BLL.Jwt;
 using MedicalServicesManagement.BLL.Mapper;
-using MedicalServicesManagement.DAL.Contexts;
-using MedicalServicesManagement.DAL.Entities;
 using MedicalServicesManagement.WebApp.Extensions;
 using MedicalServicesManagement.WebApp.Jwt;
 using MedicalServicesManagement.WebApp.Mapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 const string MedServiceConnectionString = "MedDB";

@@ -1,7 +1,9 @@
 ﻿@model MedicalServicesManagement.WebApp.Models.Auth.RegisterModel
 @{
+    ViewData["ShowTitle"] = true;
     ViewData["Title"] = "Register";
 }
+
 
 <form asp-action="Register" method="post" class="appointment-form php-email-form">
     <div class="row gy-3">
@@ -69,7 +71,7 @@
 
 
 
-        <div class="col-md-6">
+ @*        <div class="col-md-6">
             <input type="email" name="email" class="form-control" placeholder="Your Email" required="">
         </div>
 
@@ -109,15 +111,8 @@
             <textarea class="form-control" name="message" rows="5" placeholder="Please describe your symptoms or reason for visit (optional)"></textarea>
         </div>
 
-        <div class="col-12">
-            <div class="loading">Loading</div>
-            <div class="error-message"></div>
-            <div class="sent-message">Your appointment request has been sent successfully. We will contact you shortly!</div>
-
-            <button type="submit" class="btn btn-appointment w-100">
-                <i class="bi bi-calendar-plus me-2"></i>Book Appointment
-            </button>
-        </div>
-
-    </div>
+    </div> *@
+        <button type="submit" class="btn btn-appointment w-100">
+            Register
+        </button>
 </form>

@@ -14,8 +14,18 @@ create:
 dotnet ef migrations add InitialAuthDbCreate -c AuthDbContext --project src\MedicalServicesManagement.DAL\MedicalServicesManagement.DAL.csproj
 ```
 
+```
+dotnet ef migrations add InitialMedServiceCreate -c MedServiceContext --project src\MedicalServicesManagement.DAL\MedicalServicesManagement.DAL.csproj
+```
+
 
 use:
 ```
 dotnet ef database update -c AuthDbContext --project src\MedicalServicesManagement.DAL\MedicalServicesManagement.DAL.csproj
 ```
+
+```
+dotnet ef database update -c MedServiceContext --project src\MedicalServicesManagement.DAL\MedicalServicesManagement.DAL.csproj
+```
+
+2) Применить sql-скрипты (Auth.sql, Med.sql)

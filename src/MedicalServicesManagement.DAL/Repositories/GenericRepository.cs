@@ -31,7 +31,7 @@ namespace MedicalServicesManagement.DAL.Repositories
 
         public async Task DeleteByIdAsync(string id)
         {
-            var item = await GetByIdAsync(id);
+            var item = await GetSingleAsync(x => x.Id == id);
             if (item == null)
                 throw new KeyNotFoundException("Entity not found.");
 
@@ -61,11 +61,11 @@ namespace MedicalServicesManagement.DAL.Repositories
             return items;
         }
 
-        public async Task<T> GetByIdAsync(string id, params Expression<Func<T, object>>[] includes)
+        public async Task<T> GetSingleAsync(Expression<Func<T, bool>> filter, params Expression<Func<T, object>>[] includes)
         {
             var query = _context.Set<T>().AsNoTracking();
 
-            var item = await query.FirstOrDefaultAsync(x => x.Id == id);
+            var item = await query.Where(filter).FirstOrDefaultAsync();
 
             if (item == null)
             {
