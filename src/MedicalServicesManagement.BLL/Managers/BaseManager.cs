@@ -3,7 +3,6 @@ using MedicalServicesManagement.BLL.Interfaces;
 using MedicalServicesManagement.DAL.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace MedicalServicesManagement.BLL.Managers

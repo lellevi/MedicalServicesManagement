@@ -1,5 +1,6 @@
-﻿using MedicalServicesManagement.DAL.Entities;
-using Microsoft.Extensions.Configuration;
+﻿using MedicalServicesManagement.BLL.Dto;
+using MedicalServicesManagement.DAL.Entities;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -7,9 +8,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
-
-using Microsoft.Extensions.Options;
 
 namespace MedicalServicesManagement.BLL.Jwt
 {
@@ -34,7 +32,7 @@ namespace MedicalServicesManagement.BLL.Jwt
             }
         }
 
-        public string GetToken(AuthUser user, IList<string> roles, string roleName)
+        public string GetToken(AuthUser user, EntityUserDTO entityUser, IList<string> roles, string roleName)
         {
             if (user is null)
             {

@@ -1,6 +1,6 @@
 ﻿using MedicalServicesManagement.BLL.Dto;
-using MedicalServicesManagement.BLL.Interfaces;
 using MedicalServicesManagement.BLL.Jwt;
+using MedicalServicesManagement.BLL.Managers;
 using MedicalServicesManagement.DAL.Entities;
 using MedicalServicesManagement.WebApp.Models.Auth;
 using Microsoft.AspNetCore.Authorization;
@@ -18,12 +18,14 @@ namespace MedicalServicesManagement.WebApp.Controllers
 
         public AuthController(
             SignInManager<AuthUser> signInManager,
-            UserManager<AuthUser> userManager,
-            JwtTokenService jwtTokenService)
+            UserManager<AuthUser> identityUserManager,
+            JwtTokenService jwtTokenService,
+            IEntityUserManager userManager)
         {
             _signInManager = signInManager;
-            _identityUserManager = userManager;
+            _identityUserManager = identityUserManager;
             _jwtTokenService = jwtTokenService;
+            _userManager = userManager;
         }
 
         [HttpGet("register")]
@@ -44,11 +46,6 @@ namespace MedicalServicesManagement.WebApp.Controllers
             var user = new AuthUser
             {
                 Id = Guid.NewGuid().ToString(),
-                Surname = model.Surname,
-                Name = model.Name,
-                MiddleName = model.MiddleName,
-                BirthDate = model.BirthDate,
-                Telephone = model.Telephone,
                 Email = model.Email,
                 UserName = model.Email,
                 NormalizedUserName = model.Email.ToUpper(),
@@ -68,6 +65,11 @@ namespace MedicalServicesManagement.WebApp.Controllers
                 var entityUser = new EntityUserDTO()
                 {
                     AuthUserId = user.Id,
+                    Surname = model.Surname,
+                    Name = model.Name,
+                    MiddleName = model.MiddleName,
+                    BirthDate = model.BirthDate,
+                    Telephone = model.Telephone,
                 };
 
                 await _userManager.CreateAsync(entityUser);
@@ -132,7 +134,9 @@ namespace MedicalServicesManagement.WebApp.Controllers
             var roles = await _identityUserManager.GetRolesAsync(user);
             var role = roles.FirstOrDefault();
 
-            return _jwtTokenService.GetToken(user, roles, role);
+            var entityUser = await _userManager.GetByAuthIdAsync(user.Id);
+
+            return _jwtTokenService.GetToken(user, entityUser, roles, role);
         }
 
         private void SetTokenCookies(string jwtToken)

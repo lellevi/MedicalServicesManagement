@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using MedicalServicesManagement.BLL.Dto;
-using MedicalServicesManagement.BLL.Interfaces;
 using MedicalServicesManagement.BLL.Managers;
 using Microsoft.AspNetCore.Mvc;
 

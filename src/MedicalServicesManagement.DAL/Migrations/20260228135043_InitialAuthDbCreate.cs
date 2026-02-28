@@ -3,8 +3,6 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace MedicalServicesManagement.DAL.Migrations
 {
     /// <inheritdoc />
@@ -32,11 +30,7 @@ namespace MedicalServicesManagement.DAL.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Surname = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    MiddleName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    BirthDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Telephone = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImageName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -162,27 +156,6 @@ namespace MedicalServicesManagement.DAL.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[,]
-                {
-                    { "1", null, "Администратор", "АДМИНИСТРАТОР" },
-                    { "2", null, "Пациент", "ПАЦИЕНТ" },
-                    { "3", null, "Врач", "ВРАЧ" },
-                    { "4", null, "Регистратор", "РЕГИСТРАТОР" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "BirthDate", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "MiddleName", "Name", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "Surname", "Telephone", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "6778b048-8c5b-4ae4-8bf8-c0cd2080db52", 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "bc6dabcf-9dca-4aa0-a6a8-e7a7c5b6d5b9", "admin@mail.com", true, false, null, null, "Админ", "admin@mail.com", "admin@mail.com", "AQAAAAIAAYagAAAAEODYuFBjS2A7TP/IBOOxhQJXT2Wpw1j6hbX30yoBVDdWEQ7A3OJ2v3gfek+rYeG3MA==", null, false, "beaf504c-7609-410b-94dc-aa9afd330fca", "Главный", null, false, "admin@mail.com" });
-
-            migrationBuilder.InsertData(
-                table: "AspNetUserRoles",
-                columns: new[] { "RoleId", "UserId" },
-                values: new object[] { "1", "6778b048-8c5b-4ae4-8bf8-c0cd2080db52" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

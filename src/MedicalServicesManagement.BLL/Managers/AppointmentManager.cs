@@ -3,10 +3,7 @@ using MedicalServicesManagement.BLL.Dto;
 using MedicalServicesManagement.BLL.Interfaces;
 using MedicalServicesManagement.DAL.Entities;
 using MedicalServicesManagement.DAL.Interfaces;
-using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace MedicalServicesManagement.BLL.Managers
 {
