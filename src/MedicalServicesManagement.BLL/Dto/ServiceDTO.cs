@@ -1,10 +1,7 @@
-﻿using MedicalServicesManagement.BLL.Interfaces;
-
-namespace MedicalServicesManagement.BLL.Dto
+﻿namespace MedicalServicesManagement.BLL.Dto
 {
-    public class ServiceDTO : IDTO
+    public class ServiceDTO : BaseDTO
     {
-        public string Id { get; set; }
         public string Name { get; set; }
         public bool ForAdults { get; set; }
         public string MedSpecialityId { get; set; }

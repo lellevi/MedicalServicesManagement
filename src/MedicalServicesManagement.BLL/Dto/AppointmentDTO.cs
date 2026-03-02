@@ -1,11 +1,9 @@
-﻿using MedicalServicesManagement.BLL.Interfaces;
-using System;
+﻿using System;
 
 namespace MedicalServicesManagement.BLL.Dto
 {
-    public class AppointmentDTO : IDTO
+    public class AppointmentDTO : BaseDTO
     {
-        public string Id { get; set; }
         public string PatientId { get; set; }
         public string ServiceId { get; set; }
         public string MedicId { get; set; }
