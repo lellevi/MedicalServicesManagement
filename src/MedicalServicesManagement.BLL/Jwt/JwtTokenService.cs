@@ -16,6 +16,7 @@ namespace MedicalServicesManagement.BLL.Jwt
         private const int DaysExpirationTerm = 50; //срок действия
         private const string UserIdClaim = "userId";
         private const string RoleNameClaim = "roleName";
+        private const string FullNameClaim = "fullName";
 
         private readonly string _jwtIssuer;
         private readonly string _jwtAudience;
@@ -44,7 +45,7 @@ namespace MedicalServicesManagement.BLL.Jwt
             var userClaims = new List<Claim>
             {
                 new Claim(type: UserIdClaim, user.Id),
-                new Claim(type: JwtRegisteredClaimNames.GivenName, entityUser.FullName),
+                new Claim(type: FullNameClaim, entityUser.FullName),
                 new Claim(type: RoleNameClaim, roleName),
             };
 
