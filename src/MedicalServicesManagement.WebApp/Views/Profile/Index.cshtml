@@ -1,5 +1,16 @@
-﻿@{
+﻿@using System.IdentityModel.Tokens.Jwt
+@using System.Security.Claims
+@{
+    var fullname = User.Claims.FirstOrDefault(claim => claim.Type == "fullName")?.Value;
+    var role = User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Role)?.Value;
+
     ViewData["ShowTitle"] = true;
     ViewData["Title"] = "Profile";
-    ViewData["Subtitle"] = "Here blablabla";
+    ViewData["Subtitle"] = User.Identity.IsAuthenticated ? $"Добро пожаловать, {fullname}!" : "Вы не вошли в аккаунт...";
+}
+
+@if (role == Constants.AdminRole)
+{
+    <a asp-action ="Index" asp-controller="MedSpecialities" class="btn btn-primary">Просмотр мед. специальностей</a>
+    <a asp-action="Index" asp-controller="Services" class="btn btn-primary">Просмотр услуг</a>
 }

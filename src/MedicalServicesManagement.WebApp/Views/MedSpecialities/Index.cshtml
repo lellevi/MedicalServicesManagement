@@ -1,0 +1,27 @@
+﻿@model List<MedicalServicesManagement.WebApp.Models.MedSpecialityViewModel>
+
+@{
+    ViewData["ShowTitle"] = true;
+    ViewData["Title"] = "MedSpecialities";
+}
+
+<table>
+    <thead class="table-dark">
+        <tr>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var medSpeciality in Model)
+        {
+            <tr>
+                <td>@medSpeciality.Name</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@medSpeciality.Id" class="btn-primary">Редактировать</a>
+                    <a asp-action="Delete" asp-route-id="@medSpeciality.Id" class="btn btn-sm btn-danger ms-2">Удалить</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<a asp-controller="MedSpecialities" asp-action="Add">Добавить специальность</a>
