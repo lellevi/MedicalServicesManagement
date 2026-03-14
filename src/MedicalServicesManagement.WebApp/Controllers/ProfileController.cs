@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MedicalServicesManagement.WebApp.Controllers
 {
+
+    [Route("[controller]")]
     public class ProfileController : Controller
     {
         private readonly IEntityUserManager _userManager;
