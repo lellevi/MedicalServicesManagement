@@ -21,6 +21,8 @@ namespace MedicalServicesManagement.DAL.Repositories
 
         public async Task<string> CreateAsync(T item)
         {
+            item.Id ??= Guid.NewGuid().ToString();
+
             await _context.AddAsync(item);
             await _context.SaveChangesAsync();
 

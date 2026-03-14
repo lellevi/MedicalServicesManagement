@@ -16,4 +16,10 @@
     <ProjectReference Include="..\MedicalServicesManagement.BLL\MedicalServicesManagement.BLL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\AdditionalServices\" />
+    <Folder Include="Views\Appointments\" />
+    <Folder Include="Views\AppointmentServices\" />
+  </ItemGroup>
+
 </Project>

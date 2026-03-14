@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.Extensions.EnumMapping;
 using MedicalServicesManagement.BLL.Dto;
-using MedicalServicesManagement.DAL.Entities;
+using MedicalServicesManagement.WebApp.Models;
 
 namespace MedicalServicesManagement.WebApp.Mapper
 {
@@ -9,12 +9,12 @@ namespace MedicalServicesManagement.WebApp.Mapper
     {
         public AutomapperProfile()
         {
-            CreateMap<EntityUser, EntityUserDTO>().ReverseMap();
-            CreateMap<Service, ServiceDTO>().ReverseMap();
-            CreateMap<MedSpeciality, MedSpecialityDTO>().ReverseMap();
-            CreateMap<Appointment, AppointmentDTO>().ReverseMap();
-            CreateMap<AppointmentService, AppointmentServiceDTO>().ReverseMap();
-            CreateMap<AdditionalService, AdditionalServiceDTO>().ReverseMap();
+            CreateMap<UserViewModel, EntityUserDTO>().ReverseMap();
+            CreateMap<ServiceViewModel, ServiceDTO>().ReverseMap();
+            CreateMap<MedSpecialityViewModel, MedSpecialityDTO>().ReverseMap();
+            CreateMap<AppointmentViewModel, AppointmentDTO>().ReverseMap();
+            CreateMap<AppointmentServiceViewModel, AppointmentServiceDTO>().ReverseMap();
+            CreateMap<AdditionalServiceViewModel, AdditionalServiceDTO>().ReverseMap();
 
             CreateMap<BLL.Enums.AppointmentStatus, Enums.AppointmentStatus>()
                 .ConvertUsingEnumMapping(opt => opt.MapByName())

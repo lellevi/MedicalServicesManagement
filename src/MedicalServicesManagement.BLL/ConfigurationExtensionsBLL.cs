@@ -20,11 +20,11 @@ namespace MedicalServicesManagement.BLL
             services.AddScoped<IManager<EntityUserDTO, EntityUser>, EntityUserManager>();
             services.AddScoped<IEntityUserManager, EntityUserManager>();
 
-            services.AddScoped<IManager<ServiceDTO, Service>, ServiceManager>();
-            services.AddScoped<IManager<MedSpecialityDTO, MedSpeciality>, MedSpecialityManager>();
-            services.AddScoped<IManager<AppointmentServiceDTO, AppointmentService>, AppointmentServiceManager>();
-            services.AddScoped<IManager<AppointmentDTO, Appointment>, AppointmentManager>();
-            services.AddScoped<IManager<AdditionalServiceDTO, AdditionalService>, AdditionalServiceManager>();
+            services.AddScoped<IServiceManager, ServiceManager>();
+            services.AddScoped<IMedSpecialityManager, MedSpecialityManager>();
+            services.AddScoped<IAppointmentServiceManager, AppointmentServiceManager>();
+            services.AddScoped<IAppointmentManager, AppointmentManager>();
+            services.AddScoped<IAdditionalServiceManager, AdditionalServiceManager>();
         }
     }
 }

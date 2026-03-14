@@ -2,7 +2,7 @@
 
 namespace MedicalServicesManagement.WebApp.Models
 {
-    public class SeviceViewModel
+    public class ServiceViewModel
     {
         public string Id { get; set; }
 
