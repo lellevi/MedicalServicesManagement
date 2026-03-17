@@ -49,10 +49,10 @@ namespace MedicalServicesManagement.WebApp.Controllers
             return View(resultMedSpeciality);
         }
 
-        [HttpPost("edit")]
-        public async Task<IActionResult> Edit(MedSpecialityViewModel model)
+        [HttpPost("edit/{id}")]
+        public async Task<IActionResult> Edit([FromRoute] string id, MedSpecialityViewModel model)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid || string.IsNullOrEmpty(id))
             {
                 return View(model);
             }

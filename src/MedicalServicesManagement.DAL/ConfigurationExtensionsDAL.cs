@@ -24,7 +24,6 @@ namespace MedicalServicesManagement.DAL
             services.AddDbContext<AuthDbContext>(options =>
                 options.UseSqlServer(connectionString: authString));
 
-            // Используем AddIdentityCore вместо AddIdentity, чтобы не добавлять cookie-based аутентификацию автоматически
             services.AddIdentityCore<AuthUser>()
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<AuthDbContext>()

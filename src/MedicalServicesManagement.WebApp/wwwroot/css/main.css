@@ -5920,3 +5920,44 @@ section,
   padding-bottom: 60px;
   /* Add your styles here */
 }
+
+.med-speciality-card {
+    padding: 15px 20px;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 0 15px rgba(0,0,0,0.05);
+}
+
+.med-speciality-name {
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.med-speciality-actions a {
+    min-width: 110px;
+}
+.profile-actions-wrapper {
+    background: linear-gradient(135deg, #f0f8ff 0%, #e6f3ff 100%);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+}
+
+.profile-btn {
+    background: transparent;
+    border: 2px solid #26a69a;
+    color: #00695c;
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(38, 166, 154, 0.2);
+}
+
+.profile-btn:hover {
+    background: #26a69a;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(38, 166, 154, 0.4);
+}
