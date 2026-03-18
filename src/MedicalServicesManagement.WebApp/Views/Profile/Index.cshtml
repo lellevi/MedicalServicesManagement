@@ -2,7 +2,6 @@
 @using System.Security.Claims
 @{
     var fullname = User.Claims.FirstOrDefault(claim => claim.Type == "fullName")?.Value;
-    var role = User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.Role)?.Value;
 
     ViewData["ShowTitle"] = true;
     ViewData["Title"] = "Profile";
