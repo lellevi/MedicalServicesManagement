@@ -30,9 +30,6 @@ namespace MedicalServicesManagement.DAL.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("BirthDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -44,20 +41,14 @@ namespace MedicalServicesManagement.DAL.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("ImageName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("MiddleName")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -79,14 +70,6 @@ namespace MedicalServicesManagement.DAL.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Surname")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Telephone")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -105,27 +88,6 @@ namespace MedicalServicesManagement.DAL.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "6778b048-8c5b-4ae4-8bf8-c0cd2080db52",
-                            AccessFailedCount = 0,
-                            BirthDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            ConcurrencyStamp = "bc6dabcf-9dca-4aa0-a6a8-e7a7c5b6d5b9",
-                            Email = "admin@mail.com",
-                            EmailConfirmed = true,
-                            LockoutEnabled = false,
-                            Name = "Админ",
-                            NormalizedEmail = "admin@mail.com",
-                            NormalizedUserName = "admin@mail.com",
-                            PasswordHash = "AQAAAAIAAYagAAAAEODYuFBjS2A7TP/IBOOxhQJXT2Wpw1j6hbX30yoBVDdWEQ7A3OJ2v3gfek+rYeG3MA==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "beaf504c-7609-410b-94dc-aa9afd330fca",
-                            Surname = "Главный",
-                            TwoFactorEnabled = false,
-                            UserName = "admin@mail.com"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -153,32 +115,6 @@ namespace MedicalServicesManagement.DAL.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "1",
-                            Name = "Администратор",
-                            NormalizedName = "АДМИНИСТРАТОР"
-                        },
-                        new
-                        {
-                            Id = "2",
-                            Name = "Пациент",
-                            NormalizedName = "ПАЦИЕНТ"
-                        },
-                        new
-                        {
-                            Id = "3",
-                            Name = "Врач",
-                            NormalizedName = "ВРАЧ"
-                        },
-                        new
-                        {
-                            Id = "4",
-                            Name = "Регистратор",
-                            NormalizedName = "РЕГИСТРАТОР"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -266,13 +202,6 @@ namespace MedicalServicesManagement.DAL.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "6778b048-8c5b-4ae4-8bf8-c0cd2080db52",
-                            RoleId = "1"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>

@@ -1,0 +1,218 @@
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
+
+#nullable disable
+
+namespace MedicalServicesManagement.DAL.Migrations.MedService
+{
+    /// <inheritdoc />
+    public partial class InitialMedServiceCreate : Migration
+    {
+        /// <inheritdoc />
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.CreateTable(
+                name: "MedSpeciality",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MedSpeciality", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "[User]",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
+                    AuthUserId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
+                    MedSpecialityId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: true),
+                    MedInfo = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Surname = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    MiddleName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    BirthDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Telephone = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_[User]", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_[User]_MedSpeciality_MedSpecialityId",
+                        column: x => x.MedSpecialityId,
+                        principalTable: "MedSpeciality",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AdditionalService",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    MedSpecialityId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AdditionalService", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AdditionalService_MedSpeciality_MedSpecialityId",
+                        column: x => x.MedSpecialityId,
+                        principalTable: "MedSpeciality",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Service",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    ForAdults = table.Column<bool>(type: "bit", nullable: false),
+                    MedSpecialityId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
+                    Cost = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Comment = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Service", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Service_MedSpeciality_MedSpecialityId",
+                        column: x => x.MedSpecialityId,
+                        principalTable: "MedSpeciality",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Appointment",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
+                    PatientId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
+                    ServiceId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
+                    MedicId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<int>(type: "int", maxLength: 20, nullable: false),
+                    TotalCost = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Appointment", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Appointment_Service_ServiceId",
+                        column: x => x.ServiceId,
+                        principalTable: "Service",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Appointment_[User]_MedicId",
+                        column: x => x.MedicId,
+                        principalTable: "[User]",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Appointment_[User]_PatientId",
+                        column: x => x.PatientId,
+                        principalTable: "[User]",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AppointmentService",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
+                    AdditionalServiceId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
+                    AppointmentId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
+                    Amount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppointmentService", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AppointmentService_AdditionalService_AdditionalServiceId",
+                        column: x => x.AdditionalServiceId,
+                        principalTable: "AdditionalService",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_AppointmentService_Appointment_AppointmentId",
+                        column: x => x.AppointmentId,
+                        principalTable: "Appointment",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_[User]_MedSpecialityId",
+                table: "[User]",
+                column: "MedSpecialityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AdditionalService_MedSpecialityId",
+                table: "AdditionalService",
+                column: "MedSpecialityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Appointment_MedicId",
+                table: "Appointment",
+                column: "MedicId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Appointment_PatientId",
+                table: "Appointment",
+                column: "PatientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Appointment_ServiceId",
+                table: "Appointment",
+                column: "ServiceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppointmentService_AdditionalServiceId",
+                table: "AppointmentService",
+                column: "AdditionalServiceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppointmentService_AppointmentId",
+                table: "AppointmentService",
+                column: "AppointmentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Service_MedSpecialityId",
+                table: "Service",
+                column: "MedSpecialityId");
+        }
+
+        /// <inheritdoc />
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropTable(
+                name: "AppointmentService");
+
+            migrationBuilder.DropTable(
+                name: "AdditionalService");
+
+            migrationBuilder.DropTable(
+                name: "Appointment");
+
+            migrationBuilder.DropTable(
+                name: "Service");
+
+            migrationBuilder.DropTable(
+                name: "[User]");
+
+            migrationBuilder.DropTable(
+                name: "MedSpeciality");
+        }
+    }
+}

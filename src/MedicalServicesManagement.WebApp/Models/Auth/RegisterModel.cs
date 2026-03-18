@@ -4,7 +4,7 @@ namespace MedicalServicesManagement.WebApp.Models.Auth
 {
     public class RegisterModel
     {
-        [Display(Name = "Email")]
+        [Display(Name = "Email", Description = "Email")]
         [Required(ErrorMessage = "Must be filled")]
         public string Email { get; set; }
 

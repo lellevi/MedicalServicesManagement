@@ -1,4 +1,6 @@
-﻿using MedicalServicesManagement.BLL.Jwt;
+﻿using MedicalServicesManagement.BLL.Dto;
+using MedicalServicesManagement.BLL.Jwt;
+using MedicalServicesManagement.BLL.Managers;
 using MedicalServicesManagement.DAL.Entities;
 using MedicalServicesManagement.WebApp.Models.Auth;
 using Microsoft.AspNetCore.Authorization;
@@ -7,20 +9,22 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MedicalServicesManagement.WebApp.Controllers
 {
+
+    [Route("[controller]")]
     public class AuthController : Controller
     {
-        private readonly SignInManager<AuthUser> _signInManager;
-        private readonly UserManager<AuthUser> _userManager;
+        private readonly UserManager<AuthUser> _identityUserManager;
+        private readonly IEntityUserManager _userManager;
         private readonly JwtTokenService _jwtTokenService;
 
         public AuthController(
-            SignInManager<AuthUser> signInManager,
-            UserManager<AuthUser> userManager,
-            JwtTokenService jwtTokenService)
+            UserManager<AuthUser> identityUserManager,
+            JwtTokenService jwtTokenService,
+            IEntityUserManager userManager)
         {
-            _signInManager = signInManager;
-            _userManager = userManager;
+            _identityUserManager = identityUserManager;
             _jwtTokenService = jwtTokenService;
+            _userManager = userManager;
         }
 
         [HttpGet("register")]
@@ -41,11 +45,6 @@ namespace MedicalServicesManagement.WebApp.Controllers
             var user = new AuthUser
             {
                 Id = Guid.NewGuid().ToString(),
-                Surname = model.Surname,
-                Name = model.Name,
-                MiddleName = model.MiddleName,
-                BirthDate = model.BirthDate,
-                Telephone = model.Telephone,
                 Email = model.Email,
                 UserName = model.Email,
                 NormalizedUserName = model.Email.ToUpper(),
@@ -55,12 +54,27 @@ namespace MedicalServicesManagement.WebApp.Controllers
                 SecurityStamp = Guid.NewGuid().ToString("D")
             };
 
-            var creationResult = await _userManager.CreateAsync(user, model.Password);
+            var creationResult = await _identityUserManager.CreateAsync(user, model.Password);
 
             if (creationResult.Succeeded)
             {
-                await _userManager.AddToRoleAsync(user, Constants.PatientRole);
-                await _signInManager.SignInAsync(user, isPersistent: false);
+                await _identityUserManager.AddToRoleAsync(user, Constants.PatientRole);
+
+                var entityUser = new EntityUserDTO()
+                {
+                    AuthUserId = user.Id,
+                    Surname = model.Surname,
+                    Name = model.Name,
+                    MiddleName = model.MiddleName,
+                    BirthDate = model.BirthDate,
+                    Telephone = model.Telephone,
+                };
+
+                await _userManager.CreateAsync(entityUser);
+
+                // Создаем JWT токен вместо стандартной Identity cookie
+                var token = await CreateUserTokenAsync(user);
+                SetTokenCookies(token);
 
                 return RedirectToAction("Index", "Home");
             }
@@ -88,15 +102,22 @@ namespace MedicalServicesManagement.WebApp.Controllers
                 return View(model);
             }
 
-            var signInResult = await _signInManager.PasswordSignInAsync(model.Email, model.Password, isPersistent: false, lockoutOnFailure: false);
+            var user = await _identityUserManager.FindByEmailAsync(model.Email);
 
-            if (!signInResult.Succeeded)
+            if (user == null)
             {
                 ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                 return View(model);
             }
 
-            var user = await _userManager.FindByEmailAsync(model.Email);
+            // Проверяем пароль вручную вместо SignInManager
+            var passwordValid = await _identityUserManager.CheckPasswordAsync(user, model.Password);
+
+            if (!passwordValid)
+            {
+                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                return View(model);
+            }
 
             var token = await CreateUserTokenAsync(user);
 
@@ -108,10 +129,9 @@ namespace MedicalServicesManagement.WebApp.Controllers
         [HttpPost("logout")]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Logout()
+        public IActionResult Logout()
         {
-            await _signInManager.SignOutAsync();
-
+            // Удаляем JWT токен из cookies
             SetTokenCookies(jwtToken: null);
 
             return RedirectToAction("Index", "Home");
@@ -119,10 +139,12 @@ namespace MedicalServicesManagement.WebApp.Controllers
 
         private async Task<string> CreateUserTokenAsync(AuthUser user)
         {
-            var roles = await _userManager.GetRolesAsync(user);
+            var roles = await _identityUserManager.GetRolesAsync(user);
             var role = roles.FirstOrDefault();
 
-            return _jwtTokenService.GetToken(user, roles, role);
+            var entityUser = await _userManager.GetByAuthIdAsync(user.Id);
+
+            return _jwtTokenService.GetToken(user, entityUser, roles, role);
         }
 
         private void SetTokenCookies(string jwtToken)

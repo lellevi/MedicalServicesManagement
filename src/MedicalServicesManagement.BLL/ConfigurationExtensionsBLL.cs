@@ -1,5 +1,9 @@
-﻿using MedicalServicesManagement.BLL.Jwt;
+﻿using MedicalServicesManagement.BLL.Dto;
+using MedicalServicesManagement.BLL.Interfaces;
+using MedicalServicesManagement.BLL.Jwt;
+using MedicalServicesManagement.BLL.Managers;
 using MedicalServicesManagement.DAL;
+using MedicalServicesManagement.DAL.Entities;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 
@@ -12,8 +16,15 @@ namespace MedicalServicesManagement.BLL
             services.ConfigureDAL(connectionStrings);
 
             services.AddScoped<JwtTokenService>();
-            //services.AddScoped<IShowService, ShowService>();
-            //services.AddScoped<ITicketService, TicketService>();
+
+            services.AddScoped<IManager<EntityUserDTO, EntityUser>, EntityUserManager>();
+            services.AddScoped<IEntityUserManager, EntityUserManager>();
+
+            services.AddScoped<IServiceManager, ServiceManager>();
+            services.AddScoped<IMedSpecialityManager, MedSpecialityManager>();
+            services.AddScoped<IAppointmentServiceManager, AppointmentServiceManager>();
+            services.AddScoped<IAppointmentManager, AppointmentManager>();
+            services.AddScoped<IAdditionalServiceManager, AdditionalServiceManager>();
         }
     }
 }

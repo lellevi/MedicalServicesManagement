@@ -1,25 +1,39 @@
 ﻿@model MedicalServicesManagement.WebApp.Models.Auth.LoginModel
 
 @{
+    ViewData["ShowTitle"] = true;
     ViewData["Title"] = "Login";
+    ViewData["Subtitle"] = "After successful login you will be able to enter your Profile";
 }
 
-<h2>Login</h2>
+<section class="section">
 
-<form asp-action="Login" method="post">
-    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="container">
+        <div class="contact-wrapper">
+            <div class="contact-form-panel">
+                <div class="form-container">
+                    <p>Need to register? <a asp-action="Register">👉 Register</a></p>
 
-    <div class="form-group">
-        <label asp-for="Email"></label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
+                    <form asp-action="Login" method="post">
+                        <div asp-validation-summary="All" class="text-danger"></div>
+
+                        <div class="form-floating mb-3">
+                            <input asp-for="Email" type="email" class="form-control" placeholder="Email Address">
+                            <label for="emailInput">Email Address</label>
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input asp-for="Password" type="password" class="form-control" placeholder="Password">
+                            <label asp-for="Password"></label>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Login</button>
+
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <div class="form-group">
-        <label asp-for="Password"></label>
-        <input asp-for="Password" type="password" class="form-control" />
-        <span asp-validation-for="Password" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Login</button>
-</form>
+</section>

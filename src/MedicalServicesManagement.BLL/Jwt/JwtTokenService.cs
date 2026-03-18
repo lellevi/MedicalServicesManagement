@@ -1,5 +1,6 @@
-﻿using MedicalServicesManagement.DAL.Entities;
-using Microsoft.Extensions.Configuration;
+﻿using MedicalServicesManagement.BLL.Dto;
+using MedicalServicesManagement.DAL.Entities;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -7,9 +8,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
-
-using Microsoft.Extensions.Options;
 
 namespace MedicalServicesManagement.BLL.Jwt
 {
@@ -18,6 +16,7 @@ namespace MedicalServicesManagement.BLL.Jwt
         private const int DaysExpirationTerm = 50; //срок действия
         private const string UserIdClaim = "userId";
         private const string RoleNameClaim = "roleName";
+        private const string FullNameClaim = "fullName";
 
         private readonly string _jwtIssuer;
         private readonly string _jwtAudience;
@@ -34,7 +33,7 @@ namespace MedicalServicesManagement.BLL.Jwt
             }
         }
 
-        public string GetToken(AuthUser user, IList<string> roles, string roleName)
+        public string GetToken(AuthUser user, EntityUserDTO entityUser, IList<string> roles, string roleName)
         {
             if (user is null)
             {
@@ -46,7 +45,7 @@ namespace MedicalServicesManagement.BLL.Jwt
             var userClaims = new List<Claim>
             {
                 new Claim(type: UserIdClaim, user.Id),
-                new Claim(type: JwtRegisteredClaimNames.GivenName, user.FullName),
+                new Claim(type: FullNameClaim, entityUser.FullName),
                 new Claim(type: RoleNameClaim, roleName),
             };
 
