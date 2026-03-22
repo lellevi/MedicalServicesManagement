@@ -4,13 +4,16 @@ using MedicalServicesManagement.BLL.Interfaces;
 using MedicalServicesManagement.DAL.Entities;
 using MedicalServicesManagement.DAL.Interfaces;
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MedicalServicesManagement.BLL.Managers
 {
     public interface IServiceManager : IManager<ServiceDTO, Service>
     {
-
+        Task<List<ServiceDTO>> GetAllWithSpecialitiesAsync();
     }
+
     public class ServiceManager : BaseManager<ServiceDTO, Service>, IServiceManager
     {
         protected override string EntityName { get => "service"; }
@@ -27,6 +30,13 @@ namespace MedicalServicesManagement.BLL.Managers
                 throw new ArgumentException("MedSpecialityId is required and max length 36");
             if (item.Cost < 0)
                 throw new ArgumentException("Cost must be zero or positive");
+        }
+
+        public async Task<List<ServiceDTO>> GetAllWithSpecialitiesAsync()
+        {
+            var entities = await _repository.GetAllAsync(includes: [x => x.MedSpeciality]);
+
+            return _mapper.Map<List<ServiceDTO>>(entities);
         }
     }
 }

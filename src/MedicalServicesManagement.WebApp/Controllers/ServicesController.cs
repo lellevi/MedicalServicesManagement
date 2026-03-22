@@ -25,10 +25,10 @@ namespace MedicalServicesManagement.WebApp.Controllers
             return Json(items);
         }
 
-        [HttpGet("services")]
+        [HttpGet("")]
         public async Task<IActionResult> Index()
         {
-            var servicesDtos = await _serviceManager.GetAllAsync();
+            var servicesDtos = await _serviceManager.GetAllWithSpecialitiesAsync();
 
             var items = _mapper.Map<List<ServiceViewModel>>(servicesDtos);
 
@@ -36,7 +36,7 @@ namespace MedicalServicesManagement.WebApp.Controllers
         }
 
         [HttpGet("edit/{id}")]
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit([FromRoute] string id)
         {
             if (string.IsNullOrEmpty(id))
             {
@@ -48,10 +48,10 @@ namespace MedicalServicesManagement.WebApp.Controllers
             return View(resultSevice);
         }
 
-        [HttpPost("edit")]
-        public async Task<IActionResult> Edit(ServiceViewModel model)
+        [HttpPost("edit/{id}")]
+        public async Task<IActionResult> Edit([FromRoute] string id, ServiceViewModel model)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid || string.IsNullOrEmpty(id))
             {
                 return View(model);
             }
@@ -92,6 +92,22 @@ namespace MedicalServicesManagement.WebApp.Controllers
             {
                 ModelState.AddModelError(string.Empty, ex.Message);
                 return View(model);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet("delete/{id}")]
+        public async Task<IActionResult> Delete([FromRoute] string id)
+        {
+            try
+            {
+                await _serviceManager.DeleteByIdAsync(id);
+            }
+            catch (ArgumentException ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+                return View();
             }
 
             return RedirectToAction("Index");
