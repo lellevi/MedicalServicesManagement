@@ -26,7 +26,7 @@ namespace MedicalServicesManagement.WebApp.Controllers
             return Json(items);
         }
 
-        [HttpGet("medspecialities")]
+        [HttpGet("")]
         public async Task<IActionResult> Index()
         {
             var medSpecialitiesDtos = await _medSpecialityManager.GetAllAsync();
@@ -36,7 +36,7 @@ namespace MedicalServicesManagement.WebApp.Controllers
             return View(items);
         }
 
-        [HttpGet("edit/{id}")]
+        [HttpGet("edit/{id}")] // MedSpecialities/edit/1
         public async Task<IActionResult> Edit([FromRoute] string id)
         {
             if (string.IsNullOrEmpty(id))
