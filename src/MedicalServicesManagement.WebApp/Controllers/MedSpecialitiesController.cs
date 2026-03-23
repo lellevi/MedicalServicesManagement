@@ -36,7 +36,7 @@ namespace MedicalServicesManagement.WebApp.Controllers
             return View(items);
         }
 
-        [HttpGet("edit/{id}")] // MedSpecialities/edit/1
+        [HttpGet("edit/{id}")]
         public async Task<IActionResult> Edit([FromRoute] string id)
         {
             if (string.IsNullOrEmpty(id))

@@ -14,6 +14,8 @@ namespace MedicalServicesManagement.WebApp.Models
         [MaxLength(36)]
         public string MedSpecialityId { get; set; }
 
+        public MedSpecialityViewModel MedSpeciality { get; set; }
+
         [Range(0, double.MaxValue)]
         public decimal Price { get; set; }
     }
