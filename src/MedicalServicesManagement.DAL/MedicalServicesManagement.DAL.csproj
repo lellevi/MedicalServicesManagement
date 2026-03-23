@@ -10,7 +10,8 @@
     <CodeAnalysisRuleSet>..\..\code-analysis.ruleset</CodeAnalysisRuleSet>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <NoWarn>S3267</NoWarn>
-    <NoWarn>SA1101</NoWarn>
+    <NoWarn>SA1101</NoWarn> <!-- No usage of "this" in local calls -->
+    <NoWarn>SA1010</NoWarn> <!-- OpeningSquareBracketsMustBeSpacedCorrectly -->
   </PropertyGroup>
 
   <ItemGroup>
