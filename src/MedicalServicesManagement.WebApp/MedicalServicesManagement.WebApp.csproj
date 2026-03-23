@@ -10,6 +10,7 @@
     <CodeAnalysisRuleSet>..\..\code-analysis.ruleset</CodeAnalysisRuleSet>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <NoWarn>S3267</NoWarn>
+    <NoWarn>SA1101</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
