@@ -2,17 +2,27 @@
 
 @{
     ViewData["ShowTitle"] = true;
-    ViewData["Title"] = "Изменение специальности:";
+    ViewData["Title"] = "Изменение специальности";
 }
 
-<form asp-action="Edit" method="post" class="needs-validation" novalidate>
-    <input type="hidden" asp-for="Id"/>
-    <div>
-        <div class="col-md-10 form-group">
-            <label asp-for="Name"></label>
-            <input asp-for="Name" class="form-control">
-            <span asp-validation-for="Name" class="text-danger"></span>
+<section class="appointmnet section">
+    <div class="container" data-aos="fade-up">
+        <div class="row gy-10">
+            <div class="col-lg-10">
+                <div class="appointment-form-wrapper" data-aos="fade-up" data-aos-delay="200">
+                    <form asp-action="Edit" method="post" class="appointment-form php-email-form needs-validation" novalidate>
+                        <div class="row gy-10">
+                            <div class="w-100 form-group">
+                                <label asp-for="Name" class="form-label"></label>
+                                <input asp-for="Name" class="form-control" required>
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <input type="hidden" asp-for="Id" />
+                        <button type="submit" class="btn btn-appointment w-100" style="margin-top:20px">Сохранить изменения</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
-    <button type="submit" class="btn btn-appointment w-100" style="margin-top:20px">Сохранить изменения</button>
-</form>
+</section>
