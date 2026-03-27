@@ -1,9 +1,9 @@
-﻿using AutoMapper;
-using MedicalServicesManagement.BLL.Interfaces;
-using MedicalServicesManagement.DAL.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
+using MedicalServicesManagement.BLL.Interfaces;
+using MedicalServicesManagement.DAL.Interfaces;
 
 namespace MedicalServicesManagement.BLL.Managers
 {
@@ -71,6 +71,5 @@ namespace MedicalServicesManagement.BLL.Managers
                 throw new InvalidOperationException($"Error updating {EntityName}: {ex.Message}", ex);
             }
         }
-
     }
 }

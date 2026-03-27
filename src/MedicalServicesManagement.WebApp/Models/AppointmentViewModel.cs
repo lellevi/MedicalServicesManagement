@@ -9,6 +9,7 @@ namespace MedicalServicesManagement.WebApp.Models
         [Required]
         [MaxLength(36)]
         public string PatientId { get; set; }
+
         public UserViewModel Patient { get; set; }
 
         [Required]

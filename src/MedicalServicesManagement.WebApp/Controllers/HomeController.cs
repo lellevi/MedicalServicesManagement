@@ -1,7 +1,6 @@
-using Azure.Core;
+using System.Diagnostics;
 using MedicalServicesManagement.WebApp.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 
 namespace MedicalServicesManagement.WebApp.Controllers
 {
@@ -25,24 +24,15 @@ namespace MedicalServicesManagement.WebApp.Controllers
             return View();
         }
 
-        //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        //public IActionResult Error()
-        //{
-        //    return View(new ErrorViewModel {RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        //}
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            var model = new ErrorViewModel(
-                errorMessage: "Ошибка"
-            )
+            var model = new ErrorViewModel(errorMessage: "Ошибка")
             {
-                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier,
             };
 
             return View(model);
         }
-
     }
 }

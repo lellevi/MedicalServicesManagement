@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MedicalServicesManagement.WebApp.Controllers
 {
-
     [Route("[controller]")]
     public class AuthController : Controller
     {
@@ -37,6 +36,7 @@ namespace MedicalServicesManagement.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterModel model)
         {
+            ArgumentNullException.ThrowIfNull(model);
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -47,11 +47,11 @@ namespace MedicalServicesManagement.WebApp.Controllers
                 Id = Guid.NewGuid().ToString(),
                 Email = model.Email,
                 UserName = model.Email,
-                NormalizedUserName = model.Email.ToUpper(),
-                NormalizedEmail = model.Email.ToUpper(),
+                NormalizedUserName = model.Email.ToUpperInvariant(), // which culture choose?
+                NormalizedEmail = model.Email.ToUpperInvariant(),
                 EmailConfirmed = true,
                 LockoutEnabled = true,
-                SecurityStamp = Guid.NewGuid().ToString("D")
+                SecurityStamp = Guid.NewGuid().ToString("D"),
             };
 
             var creationResult = await _identityUserManager.CreateAsync(user, model.Password);
@@ -97,6 +97,7 @@ namespace MedicalServicesManagement.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginModel model)
         {
+            ArgumentNullException.ThrowIfNull(model);
             if (!ModelState.IsValid)
             {
                 return View(model);

@@ -59,7 +59,6 @@ namespace MedicalServicesManagement.WebApp.Controllers
             try
             {
                 await _serviceManager.UpdateAsync(_mapper.Map<ServiceDTO>(model));
-
             }
             catch (ArgumentException ex)
             {

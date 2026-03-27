@@ -9,13 +9,14 @@ namespace MedicalServicesManagement.WebApp.Models
         [Required]
         [MaxLength(36)]
         public string AdditionalServiceId { get; set; }
+
         public AdditionalServiceViewModel AdditionalService { get; set; }
 
         [Required]
         [MaxLength(36)]
         public string AppointmentId { get; set; }
-        public AppointmentViewModel Appointment { get; set; }
 
+        public AppointmentViewModel Appointment { get; set; }
 
         [Range(1, int.MaxValue)]
         public int Amount { get; set; }

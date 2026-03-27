@@ -1,4 +1,5 @@
-﻿using MedicalServicesManagement.DAL.Entities;
+﻿using System;
+using MedicalServicesManagement.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace MedicalServicesManagement.DAL.Contexts
@@ -8,11 +9,24 @@ namespace MedicalServicesManagement.DAL.Contexts
         public MedServiceContext(DbContextOptions<MedServiceContext> options)
             : base(options)
         {
-
         }
+
+        public DbSet<EntityUser> Users { get; set; }
+
+        public DbSet<Service> Services { get; set; }
+
+        public DbSet<MedSpeciality> MedSpecialities { get; set; }
+
+        public DbSet<AppointmentService> AppointmentServices { get; set; }
+
+        public DbSet<Appointment> Appointments { get; set; }
+
+        public DbSet<AdditionalService> AdditionalServices { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            ArgumentNullException.ThrowIfNull(modelBuilder);
+
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<EntityUser>(entity =>
             {
@@ -73,12 +87,5 @@ namespace MedicalServicesManagement.DAL.Contexts
                         .OnDelete(DeleteBehavior.Restrict);
             });
         }
-
-        public DbSet<EntityUser> Users { get; set; }
-        public DbSet<Service> Services { get; set; }
-        public DbSet<MedSpeciality> MedSpecialities { get; set; }
-        public DbSet<AppointmentService> AppointmentServices { get; set; }
-        public DbSet<Appointment> Appointments { get; set; }
-        public DbSet<AdditionalService> AdditionalServices { get; set; }
     }
 }

@@ -1,17 +1,21 @@
-﻿using MedicalServicesManagement.DAL.Interfaces;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using MedicalServicesManagement.DAL.Interfaces;
 
 namespace MedicalServicesManagement.BLL.Interfaces
 {
-    public interface IManager<TDTO,TEntity>
+    public interface IManager<TDTO, TEntity>
         where TDTO : IDTO
         where TEntity : IEntity
     {
         Task CreateAsync(TDTO item);
+
         Task DeleteByIdAsync(string id);
+
         Task<List<TDTO>> GetAllAsync();
+
         Task<TDTO> GetByIdAsync(string id);
+
         Task UpdateAsync(TDTO item);
     }
 }
