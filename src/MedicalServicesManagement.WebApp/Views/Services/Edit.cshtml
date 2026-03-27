@@ -3,6 +3,8 @@
 @{
     ViewData["ShowTitle"] = true;
     ViewData["Title"] = "Изменение услуги";
+    ViewData["ForAdultsLabel"] = "Для взрослых";
+    ViewData["CostLabel"] = "Стоимость";
 }
 
 <section class="appointmnet section">
@@ -19,10 +21,9 @@
                             </div>
 
                             <div class="col-md-10 form-group">
-                                <label asp-for="ForAdults" class="form-check-label">Для взрослых</label>
                                 <div class="form-check mt-2">
                                     <input asp-for="ForAdults" class="form-check-input" type="checkbox" id="forAdults">
-                                    <label class="form-check-label" for="forAdults"></label>
+                                    <span class="form-check-label">@ViewData["ForAdultsLabel"]</span>
                                 </div>
                                 <span asp-validation-for="ForAdults" class="text-danger"></span>
                             </div>
@@ -34,7 +35,7 @@
                             </div>
 
                             <div class="col-md-10 form-group">
-                                <label asp-for="Cost">Стоимость</label>
+                                <span class="form-check-label">@ViewData["CostLabel"]</span>
                                 <input asp-for="Cost" type="number" step="0.01" class="form-control" placeholder="0.00" required>
                                 <span asp-validation-for="Cost" class="text-danger"></span>
                             </div>
