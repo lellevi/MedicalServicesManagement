@@ -1,0 +1,104 @@
+﻿@model MedicalServicesManagement.WebApp.Models.UserViewModel
+
+@{
+    ViewData["ShowTitle"] = true;
+    ViewData["Title"] = "Редактирование пользователя";
+}
+
+<section class="appointmnet section">
+    <div class="container" data-aos="fade-up">
+        <div class="row gy-10">
+            <div class="col-lg-10">
+                <div class="appointment-form-wrapper" data-aos="fade-up" data-aos-delay="200">
+                <form asp-action="Edit" method="post" class="appointment-form php-email-form needs-validation" novalidate>
+
+                <div class="row gy-10">
+                    <div class="col-md-6 form-group">
+                        <label asp-for="Surname"></label>
+                        <input asp-for="Surname" class="form-control" required>
+                        <span asp-validation-for="Surname" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 form-group">
+                        <label asp-for="Name"></label>
+                        <input asp-for="Name" class="form-control" required>
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-10 form-group">
+                        <label asp-for="MiddleName"></label>
+                        <input asp-for="MiddleName" class="form-control">
+                        <span asp-validation-for="MiddleName" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 form-group">
+                        <label asp-for="BirthDate"></label>
+                        <input asp-for="BirthDate" type="date" class="form-control" required>
+                        <span asp-validation-for="BirthDate" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6 form-group">
+                        <label asp-for="Telephone"></label>
+                        <input asp-for="Telephone" type="tel" class="form-control" required>
+                        <span asp-validation-for="Telephone" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-10 form-group">
+                        <label asp-for="MedInfo"></label>
+                        <textarea asp-for="MedInfo" rows="2" class="form-control"></textarea>
+                        <span asp-validation-for="MedInfo" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-10 form-group">
+                        <label asp-for="MedSpecialityId"></label>
+                        <select asp-for="MedSpecialityId" id="dropdownMedSpecialities" class="form-control" required>
+                            <option value="">Выберите специальность</option>
+                        </select>
+                        <span asp-validation-for="MedSpecialityId" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-10 form-group">
+                        @foreach (var role in (string[])ViewData["Roles"])
+                        {
+                            var isChecked = Model.Roles?.Contains(role) ?? false;
+                            <div class="form-check">
+                                <label asp-for="Roles"></label>
+                                <input type="checkbox" class="form-check-input" name="Roles" value="@role" id="role_@role"
+                                @(isChecked ? "checked" : "")>
+                                <label class="form-check-label" for="role_@role">@role</label>
+                            </div>
+                        }
+                    </div>
+                    </div>
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="AuthUserId" />
+                        <button type="submit" class="btn btn-appointment w-100" style="margin-top:20px">Сохранить изменения</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        $(document).ready(function (){
+            $.ajax({
+                url: "/MedSpecialities/GetAll",
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                    const select = $("#dropdownMedSpecialities");
+                    select.empty();
+                    select.append('<option value="">Выберите специальность</option>');
+                    $.each(data, function (i, item) {
+                        select.append(`<option value="${item.id}">${item.name}</option>`);
+                    });
+                },
+                error: function () {
+                    console.log("Ошибка загрузки специальностей");
+                }
+            });
+        });
+    </script>
+}

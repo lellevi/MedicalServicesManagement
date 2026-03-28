@@ -5961,3 +5961,42 @@ section,
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(38, 166, 154, 0.4);
 }
+
+.user-card {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.user-avatar {
+    flex-shrink: 0;
+}
+
+.avatar-placeholder {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #26a69a, #00695c);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.2rem;
+}
+
+.toggle-user-details {
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.toggle-user-details[aria-expanded="true"] i {
+    transform: rotate(180deg);
+}
+
+.user-details {
+    border-left: 4px solid #26a69a;
+}

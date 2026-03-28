@@ -14,11 +14,11 @@ namespace MedicalServicesManagement.DAL.Interfaces
 
         Task<List<T>> GetAllAsync(
             Expression<Func<T, bool>> filter = null,
-            params Expression<Func<T, object>>[] includes);
+            Expression<Func<T, object>>[] includes = null);
 
         Task<T> GetSingleAsync(
             Expression<Func<T, bool>> filter,
-            params Expression<Func<T, object>>[] includes);
+            Expression<Func<T, object>>[] includes = null);
 
         Task UpdateAsync(T item);
     }

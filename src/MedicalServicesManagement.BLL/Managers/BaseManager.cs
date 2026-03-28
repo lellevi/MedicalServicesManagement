@@ -57,7 +57,7 @@ namespace MedicalServicesManagement.BLL.Managers
             return entity == null ? default : _mapper.Map<TDTO>(entity);
         }
 
-        public async Task UpdateAsync(TDTO item)
+        public virtual async Task UpdateAsync(TDTO item)
         {
             try
             {

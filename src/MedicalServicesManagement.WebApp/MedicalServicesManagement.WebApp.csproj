@@ -9,9 +9,11 @@
     <CodeAnalysisTreatWarningsAsErrors>false</CodeAnalysisTreatWarningsAsErrors>
     <CodeAnalysisRuleSet>..\..\code-analysis.ruleset</CodeAnalysisRuleSet>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
-    <NoWarn>S3267,SA1101,SA1010</NoWarn>
+    <NoWarn>S3267,SA1101,SA1010,SA1309,CA1002</NoWarn>
     <!-- 1101 No usage of "this" in local calls -->
     <!-- 1010 OpeningSquareBracketsMustBeSpacedCorrectly -->
+	<!-- 1309 underscore-->
+	<!-- 1002 List-->
   </PropertyGroup>
 
   <ItemGroup>

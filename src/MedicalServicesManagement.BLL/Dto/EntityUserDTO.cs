@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace MedicalServicesManagement.BLL.Dto
 {
@@ -11,6 +12,8 @@ namespace MedicalServicesManagement.BLL.Dto
         public MedSpecialityDTO MedSpeciality { get; set; }
 
         public string MedInfo { get; set; }
+
+        public List<string> Roles { get; set; }
 
         public string Surname { get; set; }
 

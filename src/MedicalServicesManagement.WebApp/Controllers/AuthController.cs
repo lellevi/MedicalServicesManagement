@@ -47,7 +47,7 @@ namespace MedicalServicesManagement.WebApp.Controllers
                 Id = Guid.NewGuid().ToString(),
                 Email = model.Email,
                 UserName = model.Email,
-                NormalizedUserName = model.Email.ToUpperInvariant(), // which culture choose?
+                NormalizedUserName = model.Email.ToUpperInvariant(),
                 NormalizedEmail = model.Email.ToUpperInvariant(),
                 EmailConfirmed = true,
                 LockoutEnabled = true,
@@ -58,7 +58,7 @@ namespace MedicalServicesManagement.WebApp.Controllers
 
             if (creationResult.Succeeded)
             {
-                await _identityUserManager.AddToRoleAsync(user, Constants.PatientRole);
+                await _identityUserManager.AddToRoleAsync(user, Constants.GuestRole);
 
                 var entityUser = new EntityUserDTO()
                 {

@@ -1,9 +1,10 @@
 ﻿namespace MedicalServicesManagement.WebApp
 {
-    public static class Constants
+    internal static class Constants
     {
         public const string JwtCookiesKey = "jwt_key";
 
+        public const string GuestRole = "Гость";
         public const string AdminRole = "Администратор";
         public const string PatientRole = "Пациент";
         public const string MedicRole = "Врач";
