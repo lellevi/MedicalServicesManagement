@@ -13,12 +13,12 @@ namespace MedicalServicesManagement.BLL.Managers
 
     public class MedSpecialityManager : BaseManager<MedSpecialityDTO, MedSpeciality>, IMedSpecialityManager
     {
-        protected override string EntityName { get => "medSpeciality"; }
-
         public MedSpecialityManager(IRepository<MedSpeciality> repository, IMapper mapper)
             : base(repository, mapper)
         {
         }
+
+        protected override string EntityName { get => "medSpeciality"; }
 
         protected override void Validate(MedSpecialityDTO item)
         {

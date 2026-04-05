@@ -62,7 +62,6 @@
                         {
                             var isChecked = Model.Roles?.Contains(role) ?? false;
                             <div class="form-check">
-                                <label asp-for="Roles"></label>
                                 <input type="checkbox" class="form-check-input" name="Roles" value="@role" id="role_@role"
                                 @(isChecked ? "checked" : "")>
                                 <label class="form-check-label" for="role_@role">@role</label>
@@ -92,7 +91,12 @@
                     select.empty();
                     select.append('<option value="">Выберите специальность</option>');
                     $.each(data, function (i, item) {
-                        select.append(`<option value="${item.id}">${item.name}</option>`);
+                        if (item.id == '@(Model.MedSpecialityId)'){
+                            select.append(`<option value="${item.id}" selected>${item.name}</option>`);
+                        }
+                        else{
+                            select.append(`<option value="${item.id}">${item.name}</option>`);
+                        }
                     });
                 },
                 error: function () {

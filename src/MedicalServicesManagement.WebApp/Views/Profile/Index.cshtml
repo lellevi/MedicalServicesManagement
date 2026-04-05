@@ -4,15 +4,23 @@
     var fullname = User.Claims.FirstOrDefault(claim => claim.Type == "fullName")?.Value;
 
     ViewData["ShowTitle"] = true;
-    ViewData["Title"] = "Profile";
+    ViewData["Title"] = "Профиль";
     ViewData["Subtitle"] = User.Identity.IsAuthenticated ? $"Добро пожаловать, {fullname}!" : "Вы не вошли в аккаунт...";
+    @if (User.Identity.IsAuthenticated)
+    {
+        <div class="my-3 text-end">
+            <form method="post" asp-controller="Auth" asp-action="Logout" class="form-inline">
+                <button type="submit" class="btn btn-appointment w-100 profile-btn">Выйти из аккаунта</button>
+            </form>
+        </div>
+    }
 }
 
 @if (User.IsInRole(Constants.AdminRole))
 {
-    <div class="row gy-10 mb-4">
-        <div class="col-lg-10">
-            <div class="appointment-form-wrapper profile-actions-wrapper" data-aos="fade-up" data-aos-delay="200">
+    <div class="w-100">
+        <div class="w-100">
+            <div class="appointment-form-wrapper profile-actions-wrapper w-100" data-aos="fade-up" data-aos-delay="200">
                 <div class="row g-3">
                     <div class="col-md-6">
                         <a asp-action="Index" asp-controller="MedSpecialities" class="btn btn-appointment w-100 profile-btn">Просмотр мед. специальностей</a>

@@ -1,17 +1,20 @@
 ﻿@model List<MedicalServicesManagement.WebApp.Models.ServiceViewModel>
 @{
     ViewData["ShowTitle"] = true;
-    ViewData["Title"] = "Services";
+    ViewData["Title"] = "Услуги";
 }
 
 <section class="appointmnet section">
     <div class="container" data-aos="fade-up">
-
-        <div class="row gy-10 mb-3">
-            <div class="col-lg-10 d-flex justify-content-between align-items-center">
-                <a asp-controller="Services" asp-action="Add" class="btn btn-appointment">Добавить услугу</a>
+        @if (User.IsInRole(Constants.AdminRole))
+        {
+            <div class="row gy-10 mb-3">
+                <div class="col-lg-10 d-flex justify-content-between align-items-center">
+                    <a asp-controller="Services" asp-action="Add" class="btn btn-appointment">Добавить услугу</a>
+                </div>
             </div>
-        </div>
+        }
+
 
         <div class="row gy-3">
             @foreach (var service in Model)
@@ -32,14 +35,22 @@
                                 <div class="service-comment small text-secondary mt-1">@service.Comment</div>
                             }
                         </div>
-                        <div class="med-speciality-actions">
-                            <a asp-action="Edit" asp-route-id="@service.Id" class="btn btn-sm btn-primary">Редактировать</a>
-                            <a asp-action="Delete" asp-route-id="@service.Id" class="btn btn-sm btn-danger ms-2">Удалить</a>
-                        </div>
+                        @if (User.IsInRole(Constants.AdminRole))
+                        {
+                            <div class="med-speciality-actions">
+                                <a asp-action="Edit" asp-route-id="@service.Id" class="btn btn-sm btn-primary">Редактировать</a>
+                                <a asp-action="Delete" asp-route-id="@service.Id" class="btn btn-sm btn-danger ms-2">Удалить</a>
+                            </div>
+                        }
+                        @if (User.IsInRole(Constants.PatientRole))
+                        {
+                            <div class="med-speciality-actions">
+                                <a asp-action="" asp-route-id="@service.Id" class="btn btn-sm btn-primary">Редактировать</a>
+                            </div>
+                        }
                     </div>
                 </div>
             }
         </div>
-
     </div>
 </section>

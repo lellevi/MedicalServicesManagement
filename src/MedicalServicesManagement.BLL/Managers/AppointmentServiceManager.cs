@@ -13,12 +13,12 @@ namespace MedicalServicesManagement.BLL.Managers
 
     public class AppointmentServiceManager : BaseManager<AppointmentServiceDTO, AppointmentService>, IAppointmentServiceManager
     {
-        protected override string EntityName { get => "appointmentService"; }
-
         public AppointmentServiceManager(IRepository<AppointmentService> repository, IMapper mapper)
             : base(repository, mapper)
         {
         }
+
+        protected override string EntityName { get => "appointmentService"; }
 
         protected override void Validate(AppointmentServiceDTO item)
         {

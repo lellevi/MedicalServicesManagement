@@ -16,12 +16,12 @@ namespace MedicalServicesManagement.BLL.Managers
 
     public class ServiceManager : BaseManager<ServiceDTO, Service>, IServiceManager
     {
-        protected override string EntityName { get => "service"; }
-
         public ServiceManager(IRepository<Service> repository, IMapper mapper)
             : base(repository, mapper)
         {
         }
+
+        protected override string EntityName { get => "service"; }
 
         protected override void Validate(ServiceDTO item)
         {

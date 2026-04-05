@@ -1,6 +1,6 @@
 ﻿namespace MedicalServicesManagement.WebApp
 {
-    internal static class Constants
+    public static class Constants
     {
         public const string JwtCookiesKey = "jwt_key";
 

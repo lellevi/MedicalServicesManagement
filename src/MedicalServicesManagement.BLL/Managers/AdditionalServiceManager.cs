@@ -13,12 +13,12 @@ namespace MedicalServicesManagement.BLL.Managers
 
     public class AdditionalServiceManager : BaseManager<AdditionalServiceDTO, AdditionalService>, IAdditionalServiceManager
     {
-        protected override string EntityName { get => "additionalService"; }
-
         public AdditionalServiceManager(IRepository<AdditionalService> repository, IMapper mapper)
             : base(repository, mapper)
         {
         }
+
+        protected override string EntityName { get => "additionalService"; }
 
         protected override void Validate(AdditionalServiceDTO item)
         {

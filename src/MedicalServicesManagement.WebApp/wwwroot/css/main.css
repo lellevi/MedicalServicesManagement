@@ -6000,3 +6000,68 @@ section,
 .user-details {
     border-left: 4px solid #26a69a;
 }
+
+.doctor-card {
+    transition: all 0.3s ease;
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+    .doctor-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+.doctor-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 20px;
+}
+
+.doctor-body {
+    padding: 25px;
+}
+
+.doctor-name {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.doctor-speciality {
+    font-size: 1.1rem;
+    color: #667eea;
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+.doctor-info {
+    color: #6c757d;
+    line-height: 1.6;
+}
+
+.info-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.info-icon {
+    width: 20px;
+    margin-right: 10px;
+    color: #667eea;
+}
+
+.no-results {
+    text-align: center;
+    padding: 60px 20px;
+    color: #6c757d;
+}
+
+.no-results i {
+    font-size: 4rem;
+    color: #dee2e6;
+    margin-bottom: 20px;
+}

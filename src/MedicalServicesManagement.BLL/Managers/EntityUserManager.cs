@@ -133,7 +133,7 @@ namespace MedicalServicesManagement.BLL.Managers
             }
 
             var entities = await _repository.GetAllAsync(
-                x => x.MedSpecialityId != null && x.Surname == surname,
+                x => x.MedSpecialityId != null && x.Surname.ToLower().Contains(surname.ToLower()),
                 includes: [u => u.MedSpeciality]);
 
             return _mapper.Map<List<EntityUserDTO>>(entities);
@@ -142,7 +142,7 @@ namespace MedicalServicesManagement.BLL.Managers
         public async Task<List<EntityUserDTO>> GetMedicsBySpecialityAsync(string specialityId)
         {
             var entities = await _repository.GetAllAsync(
-                x => x.MedSpecialityId != null && x.MedSpecialityId == specialityId,
+                x => x.MedSpecialityId == specialityId,
                 includes: [u => u.MedSpeciality]);
 
             return _mapper.Map<List<EntityUserDTO>>(entities);

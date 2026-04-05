@@ -3,8 +3,6 @@
 @{
     ViewData["ShowTitle"] = true;
     ViewData["Title"] = "Добавление услуги";
-    ViewData["ForAdultsLabel"] = "Для взрослых";
-    ViewData["CostLabel"] = "Стоимость";
 }
 
 <section class="appointmnet section">
@@ -17,7 +15,7 @@
                         <div class="row gy-10">
                             <div class="col-md-10 form-group">
                                 <label asp-for="Name"></label>
-                                <input asp-for="Name" class="form-control" placeholder="Введите название услуги" required>
+                                <input asp-for="Name" class="form-control" required>
                                 <span asp-validation-for="Name" class="text-danger"></span>
                             </div>
 
