@@ -1,9 +1,9 @@
-﻿using MedicalServicesManagement.BLL.Jwt;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.Extensions.Options;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
+using MedicalServicesManagement.BLL.Jwt;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.Extensions.Options;
 
 namespace MedicalServicesManagement.WebApp.Jwt
 {
@@ -23,20 +23,19 @@ namespace MedicalServicesManagement.WebApp.Jwt
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
         {
-            if (!Request.Cookies.ContainsKey(Constants.JwtCookiesKey))//проверка токена в куки
+            if (!Request.Cookies.ContainsKey(Constants.JwtCookiesKey)) // проверка токена в куки
             {
                 return AuthenticateResult.Fail("Unauthorized");
             }
 
-            var token = Request.Cookies[Constants.JwtCookiesKey]!.ToString();
+            var token = Request.Cookies[Constants.JwtCookiesKey] !.ToString();
 
             var isValid = _jwtTokenService.ValidateToken(token);
 
             if (isValid)
             {
                 var tokenHandler = new JwtSecurityTokenHandler();
-                var jwtToken = tokenHandler.ReadJwtToken(token);
-                //содержит набор утверждений пользователя,название схемы аутентификации
+                var jwtToken = tokenHandler.ReadJwtToken(token); // содержит набор утверждений пользователя,название схемы аутентификации
                 var identity = new ClaimsIdentity(jwtToken.Claims, Scheme.Name);
                 var principal = new ClaimsPrincipal(identity);
                 var ticket = new AuthenticationTicket(principal, Scheme.Name);

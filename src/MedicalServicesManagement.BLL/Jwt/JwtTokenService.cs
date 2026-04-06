@@ -1,19 +1,19 @@
-﻿using MedicalServicesManagement.BLL.Dto;
-using MedicalServicesManagement.DAL.Entities;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using MedicalServicesManagement.BLL.Dto;
+using MedicalServicesManagement.DAL.Entities;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
 namespace MedicalServicesManagement.BLL.Jwt
 {
     public class JwtTokenService
     {
-        private const int DaysExpirationTerm = 50; //срок действия
+        private const int DaysExpirationTerm = 50; // срок действия
         private const string UserIdClaim = "userId";
         private const string RoleNameClaim = "roleName";
         private const string FullNameClaim = "fullName";
@@ -35,10 +35,7 @@ namespace MedicalServicesManagement.BLL.Jwt
 
         public string GetToken(AuthUser user, EntityUserDTO entityUser, IList<string> roles, string roleName)
         {
-            if (user is null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
+            ArgumentNullException.ThrowIfNull(user);
 
             // Добавление клеймов (набор утверждений) в список в JWT токене.
             var roleClaims = roles.Select(role => new Claim(ClaimTypes.Role, role));
@@ -52,8 +49,8 @@ namespace MedicalServicesManagement.BLL.Jwt
             userClaims.AddRange(roleClaims);
 
             var jwt = new JwtSecurityToken(
-                issuer: _jwtIssuer,//издатель
-                audience: _jwtAudience,//аудитория
+                issuer: _jwtIssuer, // издатель
+                audience: _jwtAudience, // аудитория
                 signingCredentials: new SigningCredentials(
                     new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSecretKey)),
                     SecurityAlgorithms.HmacSha256),

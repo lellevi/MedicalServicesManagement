@@ -10,16 +10,19 @@ namespace MedicalServicesManagement.DAL.Entities
         [Required]
         [MaxLength(36)]
         public string PatientId { get; set; }
-        public virtual EntityUser Patient {  get; set; }
+
+        public virtual EntityUser Patient { get; set; }
 
         [Required]
         [MaxLength(36)]
         public string ServiceId { get; set; }
+
         public virtual Service Service { get; set; }
 
         [Required]
         [MaxLength(36)]
         public string MedicId { get; set; }
+
         public virtual EntityUser Medic { get; set; }
 
         [Required]

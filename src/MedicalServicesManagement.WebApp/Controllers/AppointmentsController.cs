@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MedicalServicesManagement.WebApp.Controllers
 {
-
     [Route("[controller]")]
     public class AppointmentsController : Controller
     {
@@ -16,7 +15,5 @@ namespace MedicalServicesManagement.WebApp.Controllers
             _appointmentManager = appointmentManager;
             _mapper = mapper;
         }
-
-
     }
 }

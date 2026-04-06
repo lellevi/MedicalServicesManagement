@@ -1,5 +1,5 @@
-﻿using MedicalServicesManagement.BLL.Interfaces;
-using System;
+﻿using System;
+using MedicalServicesManagement.BLL.Interfaces;
 
 namespace MedicalServicesManagement.BLL.Dto
 {

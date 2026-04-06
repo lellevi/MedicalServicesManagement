@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MedicalServicesManagement.WebApp.Controllers
 {
-
     [Route("[controller]")]
     public class ProfileController : Controller
     {
@@ -20,12 +19,13 @@ namespace MedicalServicesManagement.WebApp.Controllers
         public IActionResult Index()
         {
             if (!User.Identity.IsAuthenticated)
+            {
                 return RedirectToAction("Login", "Auth");
+            }
 
             /* Load necessary data */
 
             return View();
         }
-
     }
 }

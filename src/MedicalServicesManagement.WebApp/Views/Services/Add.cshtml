@@ -1,0 +1,80 @@
+﻿@model MedicalServicesManagement.WebApp.Models.ServiceViewModel
+
+@{
+    ViewData["ShowTitle"] = true;
+    ViewData["Title"] = "Добавление услуги";
+}
+
+<section class="appointmnet section">
+    <div class="container" data-aos="fade-up">
+        <div class="row gy-10">
+            <div class="col-lg-10">
+                <div class="appointment-form-wrapper" data-aos="fade-up" data-aos-delay="200">
+                    <form asp-action="Add" method="post" class="appointment-form php-email-form needs-validation" novalidate>
+
+                        <div class="row gy-10">
+                            <div class="col-md-10 form-group">
+                                <label asp-for="Name"></label>
+                                <input asp-for="Name" class="form-control" required>
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-10 form-group">
+                                <div class="form-check mt-2">
+                                    <input asp-for="ForAdults" class="form-check-input" type="checkbox" id="forAdults">
+                                    <label asp-for="ForAdults"></label>
+                                </div>
+                                <span asp-validation-for="ForAdults" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-10 form-group">
+                                <label asp-for="MedSpecialityId"></label>
+                                <select asp-for="MedSpecialityId" id="dropdownMedSpecialities" class="form-control" required>
+                                </select>
+                                <span asp-validation-for="MedSpecialityId" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-10 form-group">
+                                <label asp-for="Cost"></label>
+                                <input asp-for="Cost" type="number" step="0.01" class="form-control" required>
+                                <span asp-validation-for="Cost" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-10 form-group">
+                                <label asp-for="Comment"></label>
+                                <textarea asp-for="Comment" rows="3" style="margin-top:15px" class="form-control"></textarea>
+                                <span asp-validation-for="Comment" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <input type="hidden" asp-for="Id" />
+                        <button type="submit" class="btn btn-appointment w-100" style="margin-top:15px">Добавить услугу</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        $(document).ready(function (){
+            $.ajax({
+                url: "/MedSpecialities/GetAll",
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                    const select = $("#dropdownMedSpecialities");
+                    select.empty();
+                    select.append('<option value="">Выберите специальность</option>');
+                    $.each(data, function (i, item) {
+                        select.append(`<option value="${item.id}">${item.name}</option>`);
+                    });
+                },
+                error: function () {
+                    console.log("Ошибка загрузки специальностей");
+                }
+            });
+        });
+    </script>
+}

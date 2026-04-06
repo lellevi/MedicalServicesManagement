@@ -18,19 +18,20 @@ var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
 var medServiceConnection = builder.Configuration.GetConnectionString(MedServiceConnectionString)
-    ?? throw new ArgumentNullException(nameof(MedServiceConnectionString));
+    ?? throw new ArgumentException($"{MedServiceConnectionString} is null. Error connection.");
 var authConnection = builder.Configuration.GetConnectionString(AuthConnectionString)
-                ?? throw new ArgumentNullException(nameof(AuthConnectionString));
+    ?? throw new ArgumentException($"{AuthConnectionString} is null. Error connection.");
 
 var strings = new Dictionary<string, string>
 {
     [MedServiceConnectionString] = medServiceConnection,
-    [AuthConnectionString] = authConnection
+    [AuthConnectionString] = authConnection,
 };
 
 builder.Services.ConfigureBLL(strings);
 
-var mapperConfig = new MapperConfiguration(cfg =>
+var mapperConfig = new MapperConfiguration(
+    cfg =>
 {
     cfg.AddProfile<BLLAutomapperProfile>();
     cfg.AddProfile<AutomapperProfile>();
@@ -52,8 +53,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseExceptionHandler("/Home/Error"); // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 

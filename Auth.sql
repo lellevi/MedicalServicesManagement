@@ -1,5 +1,7 @@
 USE [MedAuthDb]
 GO
+INSERT [dbo].[AspNetRoles] ([Id], [Name], [NormalizedName], [ConcurrencyStamp]) VALUES (N'0', N'Гость', N'ГОСТЬ', NULL)
+GO
 INSERT [dbo].[AspNetRoles] ([Id], [Name], [NormalizedName], [ConcurrencyStamp]) VALUES (N'1', N'Администратор', N'АДМИНИСТРАТОР', NULL)
 GO
 INSERT [dbo].[AspNetRoles] ([Id], [Name], [NormalizedName], [ConcurrencyStamp]) VALUES (N'2', N'Пациент', N'ПАЦИЕНТ', NULL)

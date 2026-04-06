@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MedicalServicesManagement.WebApp.Controllers
 {
-
     [Route("[controller]")]
     public class MedSpecialitiesController : Controller
     {
@@ -26,7 +25,7 @@ namespace MedicalServicesManagement.WebApp.Controllers
             return Json(items);
         }
 
-        [HttpGet("medspecialities")]
+        [HttpGet("")]
         public async Task<IActionResult> Index()
         {
             var medSpecialitiesDtos = await _medSpecialityManager.GetAllAsync();

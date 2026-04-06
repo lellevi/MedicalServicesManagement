@@ -1,6 +1,6 @@
-﻿using MedicalServicesManagement.DAL.Interfaces;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
+using MedicalServicesManagement.DAL.Interfaces;
 
 namespace MedicalServicesManagement.DAL.Entities
 {

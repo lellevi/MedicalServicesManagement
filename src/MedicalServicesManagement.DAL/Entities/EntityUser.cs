@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
 
 namespace MedicalServicesManagement.DAL.Entities
 {
@@ -14,6 +14,7 @@ namespace MedicalServicesManagement.DAL.Entities
 
         [MaxLength(36)]
         public string MedSpecialityId { get; set; }
+
         public virtual MedSpeciality MedSpeciality { get; set; }
 
         [MaxLength(50)]
@@ -36,11 +37,7 @@ namespace MedicalServicesManagement.DAL.Entities
 
         [Required]
         public DateTime BirthDate { get; set; }
-        public string Telephone { get; set; }
-    }
 
-    public class AuthUser : IdentityUser
-    {
-        public string ImageName { get; set; }
+        public string Telephone { get; set; }
     }
 }

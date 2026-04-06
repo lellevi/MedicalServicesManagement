@@ -1,11 +1,11 @@
-﻿using MedicalServicesManagement.BLL.Dto;
+﻿using System.Collections.Generic;
+using MedicalServicesManagement.BLL.Dto;
 using MedicalServicesManagement.BLL.Interfaces;
 using MedicalServicesManagement.BLL.Jwt;
 using MedicalServicesManagement.BLL.Managers;
 using MedicalServicesManagement.DAL;
 using MedicalServicesManagement.DAL.Entities;
 using Microsoft.Extensions.DependencyInjection;
-using System.Collections.Generic;
 
 namespace MedicalServicesManagement.BLL
 {

@@ -1,12 +1,12 @@
-﻿using MedicalServicesManagement.DAL.Contexts;
+﻿using System;
+using System.Collections.Generic;
+using MedicalServicesManagement.DAL.Contexts;
 using MedicalServicesManagement.DAL.Entities;
 using MedicalServicesManagement.DAL.Interfaces;
 using MedicalServicesManagement.DAL.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
 
 namespace MedicalServicesManagement.DAL
 {
@@ -14,12 +14,13 @@ namespace MedicalServicesManagement.DAL
     {
         public const string MedConnectionString = "MedDB";
         public const string AuthConnectionString = "AuthDB";
+
         public static void ConfigureDAL(this IServiceCollection services, Dictionary<string, string> connectionStrings)
         {
             var medString = connectionStrings.GetValueOrDefault(MedConnectionString)
-                ?? throw new ArgumentNullException(MedConnectionString);
+                ?? throw new ArgumentException($"Error connection to '{MedConnectionString}'.", nameof(connectionStrings));
             var authString = connectionStrings.GetValueOrDefault(AuthConnectionString)
-                ?? throw new ArgumentNullException(AuthConnectionString);
+                ?? throw new ArgumentException($"Error connection to '{AuthConnectionString}'.", nameof(connectionStrings));
 
             services.AddDbContext<AuthDbContext>(options =>
                 options.UseSqlServer(connectionString: authString));
@@ -33,6 +34,7 @@ namespace MedicalServicesManagement.DAL
                 options.UseSqlServer(connectionString: medString));
 
             services.AddScoped<IRepository<EntityUser>, GenericRepository<EntityUser>>();
+            services.AddScoped<IEntityUserRepository, EntityUserRepository>();
             services.AddScoped<IRepository<Service>, GenericRepository<Service>>();
             services.AddScoped<IRepository<MedSpeciality>, GenericRepository<MedSpeciality>>();
             services.AddScoped<IRepository<AppointmentService>, GenericRepository<AppointmentService>>();

@@ -9,11 +9,13 @@ namespace MedicalServicesManagement.DAL.Entities
         [Required]
         [MaxLength(50)]
         public string Name { get; set; }
+
         public bool ForAdults { get; set; } = true;
 
         [Required]
         [MaxLength(36)]
         public string MedSpecialityId { get; set; }
+
         public virtual MedSpeciality MedSpeciality { get; set; }
 
         [Range(0, double.MaxValue)]

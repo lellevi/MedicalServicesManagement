@@ -6,6 +6,6 @@
         Taken = 1,
         DoneNoPay = 2,
         Cancelled = 3,
-        DonePaid = 4
+        DonePaid = 4,
     }
 }
