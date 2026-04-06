@@ -1,0 +1,54 @@
+﻿@model MedicalServicesManagement.WebApp.Models.UserViewModel
+@{
+    ViewData["ShowTitle"] = true;
+    ViewData["Title"] = $"Услуги специалиста";
+}
+
+<div class="text-center mb-5">
+    <div class="avatar-container d-inline-block">
+        <div class="bg-primary rounded-circle mx-auto d-flex align-items-center justify-content-center text-white" style="width: 80px; height: 80px;">
+            <i class="fas fa-user"></i>
+        </div>
+        <h3 class="text-primary">@Model.FullName</h3>
+        @if (Model.MedSpeciality != null)
+        {
+            <div class="badge bg-success fs-6">@Model.MedSpeciality.Name</div>
+        }
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <h4 class="mb-4 text-center text-primary">Доступные услуги</h4>
+        @if (Model.Services.Any())
+        {
+            @foreach (var service in Model.Services)
+            {
+                <div class="service-card card mb-4 shadow-sm border-0">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-2 text-center">
+                                <i class="fas fa-stethoscope fa-2x text-primary"></i>
+                            </div>
+                            <div class="col-md-7">
+                                <h5 class="card-title">@service.Name</h5>
+                                <p class="card-text text-muted">@service.Name</p>
+                            </div>
+                            <div class="col-md-3 text-end">
+                                <span class="h5 text-success">@service.Cost.ToString("C")</span><br />
+                                <a href="#" class="btn btn-outline-primary btn-sm mt-2">Записаться</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="text-center py-5">
+                <i class="fas fa-clipboard-list fa-3x text-muted mb-3"></i>
+                <h5 class="text-muted">Услуги скоро появятся</h5>
+            </div>
+        }
+    </div>
+</div>

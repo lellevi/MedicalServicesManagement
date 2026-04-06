@@ -11,11 +11,13 @@ namespace MedicalServicesManagement.WebApp.Controllers
     public class UsersController : Controller
     {
         private readonly IEntityUserManager _userManager;
+        private readonly IServiceManager _serviceManager;
         private readonly IMapper _mapper;
 
-        public UsersController(IEntityUserManager userManager, IMapper mapper)
+        public UsersController(IEntityUserManager userManager, IMapper mapper, IServiceManager serviceManager)
         {
             _userManager = userManager;
+            _serviceManager = serviceManager;
             _mapper = mapper;
         }
 
@@ -93,6 +95,35 @@ namespace MedicalServicesManagement.WebApp.Controllers
             }
 
             return Json(new List<EntityUserDTO>());
+        }
+
+        [HttpGet("servicesProvidedByMedic/{id}")]
+        public async Task<IActionResult> ServicesProvidedByMedic([FromRoute] string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return View("Error", new ErrorViewModel("Ошибка просмотра услуг врача."));
+            }
+
+            var medicDto = await _userManager.GetByIdIncludingRoles(id);
+
+            if (string.IsNullOrEmpty(medicDto.MedSpecialityId))
+            {
+                var model = _mapper.Map<UserViewModel>(medicDto);
+                model.Services = new List<ServiceViewModel>();
+                return View(model);
+            }
+
+            var allServices = await _serviceManager.GetAllAsync() ?? new List<ServiceDTO>();
+
+            var medicServices = allServices
+                .Where(s => s.MedSpecialityId == medicDto.MedSpecialityId)
+                .ToList();
+
+            var resultModel = _mapper.Map<UserViewModel>(medicDto);
+            resultModel.Services = _mapper.Map<List<ServiceViewModel>>(medicServices);
+
+            return View(resultModel);
         }
     }
 }
