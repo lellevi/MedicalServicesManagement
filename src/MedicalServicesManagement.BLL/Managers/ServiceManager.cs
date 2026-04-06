@@ -11,7 +11,7 @@ namespace MedicalServicesManagement.BLL.Managers
 {
     public interface IServiceManager : IManager<ServiceDTO, Service>
     {
-        Task<List<ServiceDTO>> GetAllWithSpecialitiesAsync();
+        Task<List<ServiceDTO>> GetAllIncludingSpecialitiesAsync();
     }
 
     public class ServiceManager : BaseManager<ServiceDTO, Service>, IServiceManager
@@ -47,7 +47,7 @@ namespace MedicalServicesManagement.BLL.Managers
             }
         }
 
-        public async Task<List<ServiceDTO>> GetAllWithSpecialitiesAsync()
+        public async Task<List<ServiceDTO>> GetAllIncludingSpecialitiesAsync()
         {
             var entities = await _repository.GetAllAsync(includes: [x => x.MedSpeciality]);
 

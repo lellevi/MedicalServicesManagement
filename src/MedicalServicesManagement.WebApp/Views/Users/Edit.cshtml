@@ -3,6 +3,8 @@
 @{
     ViewData["ShowTitle"] = true;
     ViewData["Title"] = "Редактирование пользователя";
+
+    var roles = (string[])ViewData["Roles"];
 }
 
 <section class="appointmnet section">
@@ -58,7 +60,7 @@
                     </div>
 
                     <div class="col-md-10 form-group">
-                        @foreach (var role in (string[])ViewData["Roles"])
+                        @foreach (var role in roles)
                         {
                             var isChecked = Model.Roles?.Contains(role) ?? false;
                             <div class="form-check">

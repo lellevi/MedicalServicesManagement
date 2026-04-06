@@ -33,6 +33,7 @@ namespace MedicalServicesManagement.DAL
             services.AddDbContext<MedServiceContext>(options =>
                 options.UseSqlServer(connectionString: medString));
 
+            services.AddScoped<IRepository<EntityUser>, GenericRepository<EntityUser>>();
             services.AddScoped<IEntityUserRepository, EntityUserRepository>();
             services.AddScoped<IRepository<Service>, GenericRepository<Service>>();
             services.AddScoped<IRepository<MedSpeciality>, GenericRepository<MedSpeciality>>();

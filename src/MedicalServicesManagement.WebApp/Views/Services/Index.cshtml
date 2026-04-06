@@ -15,7 +15,6 @@
             </div>
         }
 
-
         <div class="row gy-3">
             @foreach (var service in Model)
             {
@@ -45,7 +44,7 @@
                         @if (User.IsInRole(Constants.PatientRole))
                         {
                             <div class="med-speciality-actions">
-                                <a asp-action="" asp-route-id="@service.Id" class="btn btn-sm btn-primary">Редактировать</a>
+                                <a class="btn btn-sm btn-primary">Свободные талоны</a>
                             </div>
                         }
                     </div>

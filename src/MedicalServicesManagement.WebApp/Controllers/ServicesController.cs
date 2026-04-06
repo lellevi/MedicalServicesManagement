@@ -28,7 +28,7 @@ namespace MedicalServicesManagement.WebApp.Controllers
         [HttpGet("")]
         public async Task<IActionResult> Index()
         {
-            var servicesDtos = await _serviceManager.GetAllWithSpecialitiesAsync();
+            var servicesDtos = await _serviceManager.GetAllIncludingSpecialitiesAsync();
 
             var items = _mapper.Map<List<ServiceViewModel>>(servicesDtos);
 

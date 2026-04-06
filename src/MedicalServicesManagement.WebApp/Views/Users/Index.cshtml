@@ -10,7 +10,7 @@
         <div class="row gy-3">
             @foreach (var roleUsers in Model)
             {
-                <h2>@roleUsers.Key</h2>
+                <h2>Имеют роль "@roleUsers.Key":</h2>
                 @foreach (var user in roleUsers.Value)
                 {
                     <div class="col-lg-10">
@@ -60,9 +60,9 @@
     <script>
         $(document).ready(function() {
             $('.toggle-user-details').on('click', function() {
-                var $button = $(this);
-                var userId = $button.closest('.user-card').data('user-id');
-                var $details = $('#user-details-' + userId);
+                let $button = $(this);
+                let userId = $button.closest('.user-card').data('user-id');
+                let $details = $('#user-details-' + userId);
 
                 $details.collapse('toggle');
             });
