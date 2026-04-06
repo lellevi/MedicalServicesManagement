@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using MedicalServicesManagement.BLL.Dto;
 using MedicalServicesManagement.BLL.Managers;
 using MedicalServicesManagement.WebApp.Models;
