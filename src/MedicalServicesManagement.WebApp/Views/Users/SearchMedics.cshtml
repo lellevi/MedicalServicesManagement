@@ -15,7 +15,6 @@
     <div class="col-md-6">
         <div class="input-group">
             <select id="specialitySelect" class="form-select" name="specialityId">
-                <option value="">Выберите специальность</option>
             </select>
             <button id="searchBySpecialityBtn" class="btn btn-outline-primary">Поиск по специальности</button>
         </div>
@@ -59,7 +58,6 @@
                     type: "GET",
                     dataType: "json",
                     success: function (data) {
-                        debugger;
                         const searchResults = $("#searchResults");
                         searchResults.empty();
 
@@ -73,7 +71,7 @@
                             const medSpecialty = item.medSpeciality?.name || "";
                             const medInfo = item.medInfo || "";
 
-                            cardsHtml += createCard(fullName,medSpecialty,medInfo);
+                            cardsHtml += createCard(fullName,medSpecialty,medInfo,item.id);
                             });
                             searchResults.html(`<div class="row">${cardsHtml}</div>`);
                         }
@@ -109,7 +107,7 @@
                             const medSpecialty = item.medSpeciality?.name || "";
                             const medInfo = item.medInfo || "";
 
-                            cardsHtml += createCard(fullName,medSpecialty,medInfo);
+                            cardsHtml += createCard(fullName,medSpecialty,medInfo,item.id);
                             });
                             searchResults.html(`<div class="row">${cardsHtml}</div>`);
                         }
@@ -121,7 +119,8 @@
             });
         });
 
-        function createCard(fullName,medSpecialty,medInfo){
+        function createCard(fullName,medSpecialty,medInfo,id){
+            const url = `/Users/servicesProvidedByMedic/${id}`;
             return `
                     <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
                         <div class="doctor-card card h-100 shadow-sm border-0">
@@ -135,7 +134,7 @@
                                 <div class="doctor-specialty text-primary mb-2">${medSpecialty}</div>
                                 <p class="doctor-bio text-muted mb-2 small">${medInfo}</p>
                                 <div class="mt-3">
-                                    <a href="" class="btn-appointment btn btn-sm btn-outline-primary w-100">Подробнее</a>
+                                    <a href="${url}" class="btn-appointment btn btn-sm btn-outline-primary w-100">Предоставляемые услуги</a>
                                 </div>
                             </div>
                         </div>
