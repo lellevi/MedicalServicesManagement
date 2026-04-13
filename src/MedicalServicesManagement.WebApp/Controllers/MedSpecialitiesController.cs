@@ -1,18 +1,22 @@
 ﻿using AutoMapper;
 using MedicalServicesManagement.BLL.Dto;
+using MedicalServicesManagement.BLL.Interfaces;
 using MedicalServicesManagement.BLL.Managers;
 using MedicalServicesManagement.WebApp.Models;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MedicalServicesManagement.WebApp.Controllers
 {
     [Route("[controller]")]
     public class MedSpecialitiesController : Controller
     {
-        private readonly IMedSpecialityManager _medSpecialityManager;
+        private readonly IManager<MedSpecialityDTO> _medSpecialityManager;
         private readonly IMapper _mapper;
 
-        public MedSpecialitiesController(IMedSpecialityManager medSpecialityManager, IMapper mapper)
+        public MedSpecialitiesController(IManager<MedSpecialityDTO> medSpecialityManager, IMapper mapper)
         {
             _medSpecialityManager = medSpecialityManager;
             _mapper = mapper;

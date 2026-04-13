@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 using AutoMapper;
 using MedicalServicesManagement.BLL.Dto;
 using MedicalServicesManagement.BLL.Interfaces;
@@ -7,11 +10,7 @@ using MedicalServicesManagement.DAL.Interfaces;
 
 namespace MedicalServicesManagement.BLL.Managers
 {
-    public interface IAppointmentManager : IManager<AppointmentDTO, Appointment>
-    {
-    }
-
-    public class AppointmentManager : BaseManager<AppointmentDTO, Appointment>, IAppointmentManager
+    internal class AppointmentManager : BaseManager<AppointmentDTO, Appointment>, IAppointmentManager
     {
         public AppointmentManager(IRepository<Appointment> repository, IMapper mapper)
             : base(repository, mapper)
@@ -20,32 +19,87 @@ namespace MedicalServicesManagement.BLL.Managers
 
         protected override string EntityName { get => "appointment"; }
 
+        public static void CheckStatus(Enums.AppointmentStatus existingStatus, Enums.AppointmentStatus newStatus)
+        {
+            if (newStatus == Enums.AppointmentStatus.Taken && existingStatus != Enums.AppointmentStatus.Free)
+            {
+                throw new ArgumentException("Запись можно назначить только на свободный слот. Текущий статус: " + existingStatus, nameof(newStatus));
+            }
+
+            if (newStatus == Enums.AppointmentStatus.DoneNoPay && existingStatus != Enums.AppointmentStatus.Taken)
+            {
+                throw new ArgumentException("Завершение без оплаты возможно только для назначенной записи. Текущий статус: " + existingStatus, nameof(newStatus));
+            }
+
+            if (newStatus == Enums.AppointmentStatus.Cancelled && existingStatus != Enums.AppointmentStatus.Taken)
+            {
+                throw new ArgumentException("Отмена возможна только для назначенной записи. Текущий статус: " + existingStatus, nameof(newStatus));
+            }
+
+            if (newStatus == Enums.AppointmentStatus.DonePaid && existingStatus != Enums.AppointmentStatus.DoneNoPay)
+            {
+                throw new ArgumentException("Оплата возможна только после завершения без оплаты. Текущий статус: " + existingStatus, nameof(newStatus));
+            }
+        }
+
+        public async Task<List<AppointmentDTO>> GetAllFreeByMedicAndServiceAsync(string serviceId, string medicId = null) //todo expand filter 3 weeks
+        {
+            Expression<Func<Appointment, bool>> filter = medicId == null ?
+                (x => x.Status == DAL.Entities.AppointmentStatus.Free && x.ServiceId == serviceId)
+                : (x => x.Status == DAL.Entities.AppointmentStatus.Free && x.ServiceId == serviceId && x.MedicId == medicId);
+
+            var entities = await _repository.GetAllAsync(
+                filter: filter,
+                includes: [x => x.Service, x => x.Medic]);
+
+            return _mapper.Map<List<AppointmentDTO>>(entities);
+        }
+
+        public override async Task UpdateAsync(AppointmentDTO item)
+        {
+            try
+            {
+                Validate(item);
+
+                var currentEntity = await GetByIdAsync(item.Id);
+
+                CheckStatus(currentEntity.Status, item.Status);
+
+                var entity = _mapper.Map<Appointment>(item);
+                await _repository.UpdateAsync(entity);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                throw new InvalidOperationException($"Error updating {EntityName}: {ex.Message}", ex);
+            }
+        }
+
         protected override void Validate(AppointmentDTO item)
         {
             ArgumentNullException.ThrowIfNull(item);
-            if (string.IsNullOrWhiteSpace(item.PatientId) || item.PatientId.Length > 36)
+            if (string.IsNullOrWhiteSpace(item.PatientId) && item.Status != Enums.AppointmentStatus.Free)
             {
-                throw new ArgumentException("PatientId is required and max length 36");
+                throw new ArgumentException("Patient is required");
             }
 
-            if (string.IsNullOrWhiteSpace(item.ServiceId) || item.ServiceId.Length > 36)
+            if (string.IsNullOrWhiteSpace(item.ServiceId))
             {
-                throw new ArgumentException("ServiceId is required and max length 36");
+                throw new ArgumentException("Service is required");
             }
 
-            if (string.IsNullOrWhiteSpace(item.MedicId) || item.MedicId.Length > 36)
+            if (string.IsNullOrWhiteSpace(item.MedicId))
             {
-                throw new ArgumentException("MedicId is required and max length 36");
+                throw new ArgumentException("Medic is required");
             }
 
             if (item.StartDate >= item.EndDate)
             {
-                throw new ArgumentException("StartDate must be before EndDate");
+                throw new ArgumentException("Start date must be before end date");
             }
 
             if (item.TotalCost < 0)
             {
-                throw new ArgumentException("TotalCost must be zero or positive");
+                throw new ArgumentException("Total cost must be zero or positive");
             }
         }
     }

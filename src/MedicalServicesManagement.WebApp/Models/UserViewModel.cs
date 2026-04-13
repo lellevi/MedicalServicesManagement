@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace MedicalServicesManagement.WebApp.Models
 {
@@ -39,7 +41,7 @@ namespace MedicalServicesManagement.WebApp.Models
         public string FullName => $"{Surname} {Name}{MiddleNameInitial}";
 
         [Display(Name = "Дата рождения")]
-        public DateTime BirthDate { get; set; }
+        public DateTime? BirthDate { get; set; }
 
         [Display(Name = "Мобильный телефон", Description = "+375()")]
         public string Telephone { get; set; }

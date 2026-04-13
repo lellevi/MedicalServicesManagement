@@ -7,22 +7,20 @@ using MedicalServicesManagement.DAL.Interfaces;
 
 namespace MedicalServicesManagement.BLL.Managers
 {
-    public abstract class BaseManager<TDTO, TEntity> : IManager<TDTO, TEntity>
+    internal abstract class BaseManager<TDTO, TEntity> : IManager<TDTO>
         where TDTO : IDTO
         where TEntity : IEntity
     {
-        protected abstract string EntityName { get; }
-
         protected readonly IRepository<TEntity> _repository;
         protected readonly IMapper _mapper;
 
-        public BaseManager(IRepository<TEntity> repository, IMapper mapper)
+        protected BaseManager(IRepository<TEntity> repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
         }
 
-        protected abstract void Validate(TDTO item);
+        protected abstract string EntityName { get; }
 
         public async Task CreateAsync(TDTO item)
         {
@@ -71,5 +69,7 @@ namespace MedicalServicesManagement.BLL.Managers
                 throw new InvalidOperationException($"Error updating {EntityName}: {ex.Message}", ex);
             }
         }
+
+        protected abstract void Validate(TDTO item);
     }
 }

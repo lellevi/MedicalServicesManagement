@@ -9,12 +9,7 @@ using MedicalServicesManagement.DAL.Interfaces;
 
 namespace MedicalServicesManagement.BLL.Managers
 {
-    public interface IServiceManager : IManager<ServiceDTO, Service>
-    {
-        Task<List<ServiceDTO>> GetAllIncludingSpecialitiesAsync();
-    }
-
-    public class ServiceManager : BaseManager<ServiceDTO, Service>, IServiceManager
+    internal class ServiceManager : BaseManager<ServiceDTO, Service>, IServiceManager
     {
         public ServiceManager(IRepository<Service> repository, IMapper mapper)
             : base(repository, mapper)
@@ -22,6 +17,13 @@ namespace MedicalServicesManagement.BLL.Managers
         }
 
         protected override string EntityName { get => "service"; }
+
+        public async Task<List<ServiceDTO>> GetAllIncludingSpecialitiesAsync()
+        {
+            var entities = await _repository.GetAllAsync(includes: [x => x.MedSpeciality]);
+
+            return _mapper.Map<List<ServiceDTO>>(entities);
+        }
 
         protected override void Validate(ServiceDTO item)
         {
@@ -47,11 +49,5 @@ namespace MedicalServicesManagement.BLL.Managers
             }
         }
 
-        public async Task<List<ServiceDTO>> GetAllIncludingSpecialitiesAsync()
-        {
-            var entities = await _repository.GetAllAsync(includes: [x => x.MedSpeciality]);
-
-            return _mapper.Map<List<ServiceDTO>>(entities);
-        }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using MedicalServicesManagement.BLL.Managers;
+using MedicalServicesManagement.BLL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MedicalServicesManagement.WebApp.Controllers

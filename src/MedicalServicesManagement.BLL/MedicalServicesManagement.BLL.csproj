@@ -9,11 +9,12 @@
     <CodeAnalysisTreatWarningsAsErrors>false</CodeAnalysisTreatWarningsAsErrors>
     <CodeAnalysisRuleSet>..\..\code-analysis.ruleset</CodeAnalysisRuleSet>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
-    <NoWarn>S3267,SA1101,SA1010,SA1309,CA1002</NoWarn>
+    <NoWarn>S3267,SA1101,SA1010,SA1309,CA1002,S2955</NoWarn>
     <!-- 1101 No usage of "this" in local calls -->
     <!-- 1010 OpeningSquareBracketsMustBeSpacedCorrectly -->
 	<!-- 1309 underscore-->
 	<!-- 1002 List-->
+	<!-- S2955 default equality-->
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="15.1.0" />
+    <PackageReference Include="AutoMapper" Version="15.1.3" />
     <PackageReference Include="AutoMapper.Extensions.EnumMapping" Version="5.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.12" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.12" />

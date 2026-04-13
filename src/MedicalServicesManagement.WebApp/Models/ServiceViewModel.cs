@@ -12,7 +12,7 @@ namespace MedicalServicesManagement.WebApp.Models
         public string Name { get; set; }
 
         [Display(Name = "Для взрослых")]
-        public bool ForAdults { get; set; }
+        public bool? ForAdults { get; set; }
 
         [Required]
         [MaxLength(36)]

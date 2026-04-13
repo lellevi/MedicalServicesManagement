@@ -1,17 +1,12 @@
 ﻿using System;
 using AutoMapper;
 using MedicalServicesManagement.BLL.Dto;
-using MedicalServicesManagement.BLL.Interfaces;
 using MedicalServicesManagement.DAL.Entities;
 using MedicalServicesManagement.DAL.Interfaces;
 
 namespace MedicalServicesManagement.BLL.Managers
 {
-    public interface IMedSpecialityManager : IManager<MedSpecialityDTO, MedSpeciality>
-    {
-    }
-
-    public class MedSpecialityManager : BaseManager<MedSpecialityDTO, MedSpeciality>, IMedSpecialityManager
+    internal class MedSpecialityManager : BaseManager<MedSpecialityDTO, MedSpeciality>
     {
         public MedSpecialityManager(IRepository<MedSpeciality> repository, IMapper mapper)
             : base(repository, mapper)

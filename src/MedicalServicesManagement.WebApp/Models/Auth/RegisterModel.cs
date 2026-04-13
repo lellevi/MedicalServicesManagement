@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace MedicalServicesManagement.WebApp.Models.Auth
 {
@@ -21,7 +22,7 @@ namespace MedicalServicesManagement.WebApp.Models.Auth
 
         [Display(Name = "BirthDate")]
         [Required(ErrorMessage = "Must be filled")]
-        public DateTime BirthDate { get; set; }
+        public DateTime? BirthDate { get; set; }
 
         [Display(Name = "Telephone")]
         public string Telephone { get; set; }

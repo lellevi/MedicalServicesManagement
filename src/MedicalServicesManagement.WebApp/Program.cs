@@ -7,7 +7,14 @@ using MedicalServicesManagement.WebApp.Jwt;
 using MedicalServicesManagement.WebApp.Mapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
 
 const string MedServiceConnectionString = "MedDB";
 const string AuthConnectionString = "AuthDB";

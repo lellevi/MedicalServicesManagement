@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using MedicalServicesManagement.BLL.Managers;
+using MedicalServicesManagement.BLL.Dto;
+using MedicalServicesManagement.BLL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MedicalServicesManagement.WebApp.Controllers
@@ -7,10 +8,10 @@ namespace MedicalServicesManagement.WebApp.Controllers
     [Route("[controller]")]
     public class AdditionalServicesController : Controller
     {
-        private readonly IAdditionalServiceManager _additionalServiceManager;
+        private readonly IManager<AdditionalServiceDTO> _additionalServiceManager;
         private readonly IMapper _mapper;
 
-        public AdditionalServicesController(IAdditionalServiceManager additionalServiceManager, IMapper mapper)
+        public AdditionalServicesController(IManager<AdditionalServiceDTO> additionalServiceManager, IMapper mapper)
         {
             _additionalServiceManager = additionalServiceManager;
             _mapper = mapper;

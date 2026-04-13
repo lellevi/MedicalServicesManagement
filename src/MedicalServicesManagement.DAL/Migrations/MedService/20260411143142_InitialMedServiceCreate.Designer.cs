@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MedicalServicesManagement.DAL.Migrations.MedService
 {
     [DbContext(typeof(MedServiceContext))]
-    [Migration("20260228130720_InitialMedServiceCreate")]
+    [Migration("20260411143142_InitialMedServiceCreate")]
     partial class InitialMedServiceCreate
     {
         /// <inheritdoc />
@@ -66,7 +66,6 @@ namespace MedicalServicesManagement.DAL.Migrations.MedService
                         .HasColumnType("nvarchar(36)");
 
                     b.Property<string>("PatientId")
-                        .IsRequired()
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
@@ -79,7 +78,6 @@ namespace MedicalServicesManagement.DAL.Migrations.MedService
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Status")
-                        .HasMaxLength(20)
                         .HasColumnType("int");
 
                     b.Property<decimal>("TotalCost")
@@ -209,8 +207,8 @@ namespace MedicalServicesManagement.DAL.Migrations.MedService
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -241,8 +239,7 @@ namespace MedicalServicesManagement.DAL.Migrations.MedService
                     b.HasOne("MedicalServicesManagement.DAL.Entities.EntityUser", "Patient")
                         .WithMany()
                         .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("MedicalServicesManagement.DAL.Entities.Service", "Service")
                         .WithMany()
