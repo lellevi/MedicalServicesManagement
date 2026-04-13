@@ -48,6 +48,5 @@ namespace MedicalServicesManagement.BLL.Managers
                 throw new ArgumentException("Cost must be zero or positive");
             }
         }
-
     }
 }

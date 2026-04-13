@@ -26,12 +26,12 @@ namespace MedicalServicesManagement.WebApp.Models
         public UserViewModel Medic { get; set; }
 
         [Required]
-        public DateTime? StartDate { get; set; }
+        public DateTime StartDate { get; set; }
 
         [Required]
-        public DateTime? EndDate { get; set; }
+        public DateTime EndDate { get; set; }
 
-        public AppointmentStatus? Status { get; set; }
+        public AppointmentStatus Status { get; set; }
 
         [Range(0, double.MaxValue)]
         public decimal TotalCost { get; set; }

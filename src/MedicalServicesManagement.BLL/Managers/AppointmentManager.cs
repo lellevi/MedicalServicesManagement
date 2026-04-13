@@ -42,11 +42,14 @@ namespace MedicalServicesManagement.BLL.Managers
             }
         }
 
-        public async Task<List<AppointmentDTO>> GetAllFreeByMedicAndServiceAsync(string serviceId, string medicId = null) //todo expand filter 3 weeks
+        public async Task<List<AppointmentDTO>> GetAllFreeByMedicAndServiceAsync(string serviceId, string medicId = null)
         {
+            var threeWeeksFromNow = DateTime.UtcNow.Date.AddDays(21);
             Expression<Func<Appointment, bool>> filter = medicId == null ?
-                (x => x.Status == DAL.Entities.AppointmentStatus.Free && x.ServiceId == serviceId)
-                : (x => x.Status == DAL.Entities.AppointmentStatus.Free && x.ServiceId == serviceId && x.MedicId == medicId);
+                (x => x.Status == DAL.Entities.AppointmentStatus.Free && x.ServiceId == serviceId
+                && x.StartDate >= DateTime.UtcNow.Date && x.StartDate <= threeWeeksFromNow)
+                : (x => x.Status == DAL.Entities.AppointmentStatus.Free && x.ServiceId == serviceId && x.MedicId == medicId
+                && x.StartDate >= DateTime.UtcNow.Date && x.StartDate <= threeWeeksFromNow);
 
             var entities = await _repository.GetAllAsync(
                 filter: filter,
@@ -72,6 +75,14 @@ namespace MedicalServicesManagement.BLL.Managers
             {
                 throw new InvalidOperationException($"Error updating {EntityName}: {ex.Message}", ex);
             }
+        }
+
+        public async Task<List<AppointmentDTO>> GetAllIncludingServiceAndMedicAsync()
+        {
+            var entities = await _repository.GetAllAsync(
+                includes: [x => x.Service, x => x.Medic]);
+
+            return _mapper.Map<List<AppointmentDTO>>(entities);
         }
 
         protected override void Validate(AppointmentDTO item)

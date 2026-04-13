@@ -70,7 +70,7 @@ namespace MedicalServicesManagement.WebApp.Controllers
                     Surname = model.Surname,
                     Name = model.Name,
                     MiddleName = model.MiddleName,
-                    BirthDate = model.BirthDate.Value,
+                    BirthDate = model.BirthDate,
                     Telephone = model.Telephone,
                 };
 

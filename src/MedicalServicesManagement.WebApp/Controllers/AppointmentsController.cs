@@ -1,6 +1,13 @@
 ﻿using AutoMapper;
-using MedicalServicesManagement.BLL.Managers;
+using MedicalServicesManagement.BLL.Dto;
+using MedicalServicesManagement.BLL.Interfaces;
+using MedicalServicesManagement.DAL.Entities;
+using MedicalServicesManagement.WebApp.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MedicalServicesManagement.WebApp.Controllers
 {
@@ -8,12 +15,138 @@ namespace MedicalServicesManagement.WebApp.Controllers
     public class AppointmentsController : Controller
     {
         private readonly IAppointmentManager _appointmentManager;
+        private readonly IManager<ServiceDTO> _serviceManager;
+        private readonly IEntityUserManager _entityUserManager;
         private readonly IMapper _mapper;
 
-        public AppointmentsController(IAppointmentManager appointmentManager, IMapper mapper)
+        public AppointmentsController(IAppointmentManager appointmentManager, IManager<ServiceDTO> serviceManager, IEntityUserManager entityUserManager, IMapper mapper)
         {
             _appointmentManager = appointmentManager;
+            _serviceManager = serviceManager;
+            _entityUserManager = entityUserManager;
             _mapper = mapper;
+        }
+
+        [HttpGet("")]
+        public async Task<IActionResult> Index()
+        {
+            try
+            {
+                var items = await _appointmentManager.GetAllIncludingServiceAndMedicAsync();
+                var model = _mapper.Map<List<AppointmentViewModel>>(items);
+                return View(model);
+            }
+            catch
+            {
+                return View(new List<AppointmentViewModel>());
+            }
+        }
+
+        [HttpGet("getAll")]
+        public async Task<IActionResult> GetAll()
+        {
+            var items = await _appointmentManager.GetAllAsync();
+            return Json(items);
+        }
+
+        [HttpGet("edit/{id}")]
+        public async Task<IActionResult> Edit([FromRoute] string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return View("Error", new ErrorViewModel("Ошибка редактирования записи."));
+            }
+
+            var appointmentDto = await _appointmentManager.GetByIdAsync(id);
+            var resultAppointment = _mapper.Map<AppointmentViewModel>(appointmentDto);
+            return View(resultAppointment);
+        }
+
+        [HttpPost("edit/{id}")]
+        public async Task<IActionResult> Edit([FromRoute] string id, AppointmentViewModel model)
+        {
+            if (!ModelState.IsValid || string.IsNullOrEmpty(id))
+            {
+                return View(model);
+            }
+
+            try
+            {
+                await _appointmentManager.UpdateAsync(_mapper.Map<AppointmentDTO>(model));
+            }
+            catch (ArgumentException ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+                return View(model);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet("add")]
+        public async Task<IActionResult> Add()
+        {
+            return View();
+        }
+
+        [HttpPost("add")]
+        public async Task<IActionResult> Add(AppointmentViewModel model)
+        {
+            if (model is null || !ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            try
+            {
+                model.Status = Enums.AppointmentStatus.Free;
+                await _appointmentManager.CreateAsync(_mapper.Map<AppointmentDTO>(model));
+            }
+            catch (ArgumentException ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+                return View(model);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet("delete/{id}")]
+        public async Task<IActionResult> Delete([FromRoute] string id)
+        {
+            try
+            {
+                await _appointmentManager.DeleteByIdAsync(id);
+            }
+            catch (ArgumentException ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+                return View();
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet("choose")]
+        public async Task<IActionResult> Choose([FromQuery] string medicId, [FromQuery] string serviceId)
+        {
+            var service = await _serviceManager.GetByIdAsync(serviceId);
+
+            var avaibleAppointments = await _appointmentManager.GetAllFreeByMedicAndServiceAsync(serviceId, medicId);
+
+            var model = new TakeAppointmentViewModel
+            {
+                Service = _mapper.Map<ServiceViewModel>(service),
+                AvailableAppointments = _mapper.Map<List<AppointmentViewModel>>(avaibleAppointments),
+            };
+
+            if (!string.IsNullOrEmpty(medicId))
+            {
+                var medic = await _entityUserManager.GetByIdAsync(medicId);
+                model.Medic = _mapper.Map<UserViewModel>(medic);
+            }
+
+            return View(model);
         }
     }
 }

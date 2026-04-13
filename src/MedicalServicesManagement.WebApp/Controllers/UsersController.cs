@@ -1,9 +1,16 @@
 using AutoMapper;
 using MedicalServicesManagement.BLL.Dto;
-using MedicalServicesManagement.BLL.Managers;
+using MedicalServicesManagement.BLL.Interfaces;
+using MedicalServicesManagement.BLL.Jwt;
+using MedicalServicesManagement.DAL.Entities;
 using MedicalServicesManagement.WebApp.Models;
+using MedicalServicesManagement.WebApp.Models.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MedicalServicesManagement.WebApp.Controllers
 {
@@ -11,13 +18,15 @@ namespace MedicalServicesManagement.WebApp.Controllers
     public class UsersController : Controller
     {
         private readonly IEntityUserManager _userManager;
+        private readonly UserManager<AuthUser> _identityUserManager;
         private readonly IServiceManager _serviceManager;
         private readonly IMapper _mapper;
 
-        public UsersController(IEntityUserManager userManager, IMapper mapper, IServiceManager serviceManager)
+        public UsersController(IEntityUserManager userManager, IMapper mapper, IServiceManager serviceManager, UserManager<AuthUser> identityUserManager)
         {
             _userManager = userManager;
             _serviceManager = serviceManager;
+            _identityUserManager = identityUserManager;
             _mapper = mapper;
         }
 
@@ -73,6 +82,14 @@ namespace MedicalServicesManagement.WebApp.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet("allMedics")]
+        public async Task<JsonResult> AllMedicsJson()
+        {
+            var medicsDto = await _userManager.GetMedicsAsync();
+            var result = _mapper.Map<List<UserViewModel>>(medicsDto);
+            return Json(result);
+        }
+
         [HttpGet("searchMedics")]
         public async Task<IActionResult> SearchMedics()
         {
@@ -97,8 +114,8 @@ namespace MedicalServicesManagement.WebApp.Controllers
             return Json(new List<EntityUserDTO>());
         }
 
-        [HttpGet("servicesProvidedByMedic/{id}")]
-        public async Task<IActionResult> ServicesProvidedByMedic([FromRoute] string id)
+        [HttpGet("medic/{id}")]
+        public async Task<IActionResult> Medic([FromRoute] string id)
         {
             if (string.IsNullOrEmpty(id))
             {
@@ -124,6 +141,63 @@ namespace MedicalServicesManagement.WebApp.Controllers
             resultModel.Services = _mapper.Map<List<ServiceViewModel>>(medicServices);
 
             return View(resultModel);
+        }
+
+        [HttpGet("newPatient")]
+        public IActionResult NewPatient()
+        {
+            return View();
+        }
+
+        [HttpPost("newPatient")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> NewPatient(RegisterModel model)
+        {
+            ArgumentNullException.ThrowIfNull(model);
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = new AuthUser
+            {
+                Id = Guid.NewGuid().ToString(),
+                Email = model.Email,
+                UserName = model.Email,
+                NormalizedUserName = model.Email.ToUpperInvariant(),
+                NormalizedEmail = model.Email.ToUpperInvariant(),
+                EmailConfirmed = true,
+                LockoutEnabled = true,
+                SecurityStamp = Guid.NewGuid().ToString("D"),
+            };
+
+            var creationResult = await _identityUserManager.CreateAsync(user, model.Password);
+
+            if (creationResult.Succeeded)
+            {
+                await _identityUserManager.AddToRoleAsync(user, Constants.PatientRole);
+
+                var entityUser = new EntityUserDTO()
+                {
+                    AuthUserId = user.Id,
+                    Surname = model.Surname,
+                    Name = model.Name,
+                    MiddleName = model.MiddleName,
+                    BirthDate = model.BirthDate,
+                    Telephone = model.Telephone,
+                };
+
+                await _userManager.CreateAsync(entityUser);
+
+                return RedirectToAction("Index", "Home"); // todo исправить на страницу пациента
+            }
+
+            foreach (var error in creationResult.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+
+            return View(model);
         }
     }
 }

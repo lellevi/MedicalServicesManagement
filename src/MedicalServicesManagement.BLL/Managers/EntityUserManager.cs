@@ -7,8 +7,6 @@ using MedicalServicesManagement.BLL.Dto;
 using MedicalServicesManagement.BLL.Interfaces;
 using MedicalServicesManagement.DAL.Entities;
 using MedicalServicesManagement.DAL.Interfaces;
-using MedicalServicesManagement.DAL.Repositories;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace MedicalServicesManagement.BLL.Managers
 {

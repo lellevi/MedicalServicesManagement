@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using MedicalServicesManagement.DAL.Contexts;
 using MedicalServicesManagement.DAL.Entities;
@@ -10,15 +8,6 @@ using Microsoft.AspNetCore.Identity;
 
 namespace MedicalServicesManagement.DAL.Repositories
 {
-    public interface IEntityUserRepository : IRepository<EntityUser>
-    {
-        public Task UpdateRoles(string authUserId, List<string> newRoles);
-
-        public Task<List<AuthUser>> GetAuthUsersByRoleAsync(string role);
-
-        public Task<List<string>> GetUserRolesAsync(string id);
-    }
-
     public class EntityUserRepository : GenericRepository<EntityUser>, IEntityUserRepository
     {
         private readonly UserManager<AuthUser> _authUserManager;

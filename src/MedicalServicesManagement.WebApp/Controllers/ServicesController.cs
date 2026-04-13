@@ -1,8 +1,12 @@
 ﻿using AutoMapper;
 using MedicalServicesManagement.BLL.Dto;
-using MedicalServicesManagement.BLL.Managers;
+using MedicalServicesManagement.BLL.Interfaces;
 using MedicalServicesManagement.WebApp.Models;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MedicalServicesManagement.WebApp.Controllers
 {
@@ -23,6 +27,20 @@ namespace MedicalServicesManagement.WebApp.Controllers
         {
             var items = await _serviceManager.GetAllAsync();
             return Json(items);
+        }
+
+        [HttpGet("bySpecialityId/{id}")]
+        public async Task<JsonResult> GetBySpecialityId([FromRoute] string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return Json(new List<ServiceDTO>());
+            }
+
+            var services = await _serviceManager.GetAllAsync() ?? new List<ServiceDTO>();
+            var result = services.Where(s => s.MedSpecialityId == id).ToList();
+
+            return Json(result);
         }
 
         [HttpGet("")]

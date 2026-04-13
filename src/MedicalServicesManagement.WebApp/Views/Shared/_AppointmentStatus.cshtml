@@ -1,0 +1,17 @@
+﻿@using MedicalServicesManagement.WebApp.Enums
+@using MedicalServicesManagement.WebApp.Helpers
+@model MedicalServicesManagement.WebApp.Enums.AppointmentStatus
+
+@{
+    Dictionary<AppointmentStatus, string> styles = new()
+            {
+                [AppointmentStatus.Taken] = "bg-success",
+                [AppointmentStatus.DoneNoPay] = "bg-warning",
+                [AppointmentStatus.Cancelled] = "bg-danger",
+                [default] = "bg-secondary"
+            };
+
+    var value = styles.GetValueOrDefault(Model);
+}
+
+<span class="badge @value">@EnumHelper.Translate(Model)</span>

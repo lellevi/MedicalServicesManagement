@@ -24,8 +24,8 @@
                             <div class="service-name fw-bold">@service.Name</div>
                             <div class="service-speciality text-muted">@service.MedSpeciality?.Name</div>
                             <div class="service-details mt-1">
-                                <span class="badge @(service.ForAdults.Value ? "bg-success" : "bg-warning") me-2">
-                                    @(service.ForAdults.Value ? "Для взрослых" : "Для детей")
+                                <span class="badge @(service.ForAdults ? "bg-success" : "bg-warning") me-2">
+                                    @(service.ForAdults ? "Для взрослых" : "Для детей")
                                 </span>
                                 <span class="fw-bold text-primary">@service.Cost byn</span>
                             </div>

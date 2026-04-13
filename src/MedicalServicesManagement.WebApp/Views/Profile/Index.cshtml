@@ -36,3 +36,21 @@
         </div>
     </div>
 }
+
+@if (User.IsInRole(Constants.ReceptionistRole))
+{
+    <div class="w-100">
+        <div class="w-100">
+            <div class="appointment-form-wrapper profile-actions-wrapper w-100" data-aos="fade-up" data-aos-delay="200">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <a asp-action="Add" asp-controller="Appointments" class="btn btn-appointment w-100 profile-btn">Добавить талон</a>
+                    </div>
+                    <div class="col-md-6">
+                        <a asp-action="NewPatient" asp-controller="Users" class="btn btn-appointment w-100 profile-btn">Добавить пациента</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
