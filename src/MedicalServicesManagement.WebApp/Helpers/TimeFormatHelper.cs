@@ -2,7 +2,7 @@
 
 namespace MedicalServicesManagement.WebApp.Helpers
 {
-    internal static class TimeFormatHelper
+    public static class TimeFormatHelper
     {
         public static string FormatDuration(TimeSpan duration)
         {

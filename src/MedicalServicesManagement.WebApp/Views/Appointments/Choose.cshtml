@@ -1,4 +1,6 @@
 ﻿@model MedicalServicesManagement.WebApp.Models.TakeAppointmentViewModel
+@using MedicalServicesManagement.WebApp.Enums
+@using MedicalServicesManagement.WebApp.Helpers
 @{
     ViewData["ShowTitle"] = true;
     ViewData["Title"] = "Доступные талоны:";
@@ -6,40 +8,45 @@
 
 <section class="appointment section">
     <div class="container" data-aos="fade-up">
-        <div class="row gy-3">
+        @{
+            var appointmentsByDate = Model.AvailableAppointments
+                .Where(a => a.Status == AppointmentStatus.Free)
+                .GroupBy(a => a.StartDate.Date)
+                .OrderBy(g => g.Key);
+        }
 
-            @foreach (var appointment in Model.AvailableAppointments)
-            {
-                <div class="col-lg-10">
-                    <div class="appointment-form-wrapper appointment-card d-flex justify-content-between align-items-center">
-                        <div class="appointment-info">
-                            <div class="service-name text-muted">@appointment.Service?.Name (@(appointment.Service.ForAdults ? "от 18 лет" : "до 18 лет"))</div>
-                            <div class="medic-name text-primary">@appointment.Medic?.FullName</div>
-                            <div class="appointment-time mt-1">
-                                <span class="badge bg-info">
-                                    @(appointment.StartDate.ToString("dd.MM.yyyy, ddd HH:mm") + " - " + appointment.EndDate.ToString("HH:mm"))
-                                </span>
-                            </div>
-                            <div class="appointment-status mt-1">@await Html.PartialAsync("_AppointmentStatus",appointment.Status)</div>
-                            <div class="appointment-cost mt-1">
-                                <span class="fw-bold text-primary">@appointment.TotalCost byn</span>
-                            </div>
-                        </div>
-
-                        <div class="appointment-actions">
-                            @if (User.IsInRole(Constants.AdminRole) || User.IsInRole(Constants.ReceptionistRole))
-                            {
-                                <a asp-action="Edit" asp-route-id="@appointment.Id" class="btn btn-sm btn-primary me-2">Редактировать</a>
-                                <a asp-action="Delete" asp-route-id="@appointment.Id" class="btn btn-sm btn-danger">Удалить</a>
-                            }
-                            @if (User.IsInRole(Constants.PatientRole))
-                            {
-                                <a asp-action="Choose" asp-route-id="@appointment.Id" class="btn btn-sm btn-primary me-2">Записаться</a>
-                            }
-                        </div>
-                    </div>
+        @foreach (var dateGroup in appointmentsByDate)
+        {
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h5 class="text-primary mb-3">
+                        [@dateGroup.Key.ToString("d MMMM")]
+                        <small class="text-muted">(@dateGroup.Key.ToString("ddd"))</small>
+                    </h5>
                 </div>
-            }
-        </div>
+
+                @foreach (var appointment in dateGroup.OrderBy(a => a.StartDate.TimeOfDay))
+                {
+                    <div class="col-lg-2 col-md-3 col-sm-4 col-6 mb-2">
+                        <a asp-action="Choose" asp-route-id="@appointment.Id" class="btn btn-outline-primary btn-time-slot w-100 h-100 d-flex flex-column align-items-center p-3 text-decoration-none">
+                            <div class="time fs-5 fw-bold mb-1">@appointment.StartDate.ToString("HH:mm")-@appointment.EndDate.ToString("HH:mm")</div>
+                            <div class="duration text-muted small">
+                                @TimeFormatHelper.FormatDuration(appointment.EndDate.Subtract(appointment.StartDate))
+                            </div>
+                            <div class="cost mt-1 small">@appointment.TotalCost byn</div>
+                        </a>
+                    </div>
+                }
+            </div>
+        }
+
+        @if (!appointmentsByDate.Any())
+        {
+            <div class="row">
+                <div class="col-12 text-center py-5">
+                    <h5 class="text-muted">На ближайшие 3 недели нет свободных талонов</h5>
+                </div>
+            </div>
+        }
     </div>
 </section>
