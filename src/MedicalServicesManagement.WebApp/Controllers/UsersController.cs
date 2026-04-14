@@ -119,7 +119,7 @@ namespace MedicalServicesManagement.WebApp.Controllers
         {
             if (string.IsNullOrEmpty(id))
             {
-                return View("Error", new ErrorViewModel("Ошибка просмотра услуг врача."));
+                return View("Error", new ErrorViewModel("Ошибка просмотра услуг, врач не найден."));
             }
 
             var medicDto = await _userManager.GetByIdIncludingRoles(id);
@@ -131,11 +131,7 @@ namespace MedicalServicesManagement.WebApp.Controllers
                 return View(model);
             }
 
-            var allServices = await _serviceManager.GetAllAsync() ?? new List<ServiceDTO>();
-
-            var medicServices = allServices
-                .Where(s => s.MedSpecialityId == medicDto.MedSpecialityId)
-                .ToList();
+            var medicServices = await _serviceManager.GetAllIncludingSpecialitiesAsync();
 
             var resultModel = _mapper.Map<UserViewModel>(medicDto);
             resultModel.Services = _mapper.Map<List<ServiceViewModel>>(medicServices);
