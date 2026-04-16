@@ -23,7 +23,7 @@
                     <div class="appointment-form-wrapper appointment-card d-flex justify-content-between align-items-center">
                         <div class="appointment-info">
                             <div class="patient-name fw-bold">@appointment.Patient?.FullName</div>
-                            <div class="service-name text-muted">@appointment.Service?.Name (@(appointment.Service.ForAdults ? "от 18 лет" : "до 18 лет"))</div>
+                            <div class="service-name text-muted">@appointment.Service?.Name (@(appointment.Service.AgeRestriction))</div>
                             <div class="medic-name text-primary">@appointment.Medic?.FullName</div>
                             <div class="appointment-time mt-1">
                                 <span class="badge bg-info">

@@ -40,7 +40,7 @@
                             <div>
                                 @Model.Appointment.Service.Name
                                 <span class="badge @(Model.Appointment.Service.ForAdults ? "bg-warning" : "bg-info") text-dark ms-2">
-                                    @(Model.Appointment.Service.ForAdults ? "от 18 лет" : "до 18 лет")
+                                    @(Model.Appointment.Service.AgeRestriction)
                                 </span>
                             </div>
                         </div>

@@ -31,7 +31,7 @@
                                 <i class="fas fa-stethoscope fa-2x text-primary"></i>
                             </div>
                             <div class="col-md-7">
-                                <h5 class="card-title">@service.Name (@(service.ForAdults ? "от 18 лет" : "до 18 лет"))</h5>
+                                <h5 class="card-title">@service.Name (@(service.AgeRestriction))</h5>
                                 <p class="card-text text-muted">@service.Name</p>
                             </div>
                             <div class="col-md-3 text-end">

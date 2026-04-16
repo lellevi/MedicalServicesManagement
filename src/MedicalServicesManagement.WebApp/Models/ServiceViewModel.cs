@@ -28,5 +28,7 @@ namespace MedicalServicesManagement.WebApp.Models
         [MaxLength(100)]
         [Display(Name = "Дополнительная информация")]
         public string Comment { get; set; }
+
+        public string AgeRestriction => ForAdults ? "от 18 лет" : "до 18 лет";
     }
 }
