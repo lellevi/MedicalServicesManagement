@@ -26,9 +26,11 @@
                 {
                     <div class="col-lg-2 col-md-3 col-sm-4 col-6 mb-2">
                         <a asp-action="Take" asp-route-appointmentId="@appointment.Id" asp-route-patientId="@(Model.Patient?.Id ?? string.Empty)" class="btn btn-outline-primary btn-time-slot w-100 h-100 d-flex flex-column align-items-center p-3 text-decoration-none">
-                            <div class="time fs-5 fw-bold mb-1">@appointment.StartDate.ToString("HH:mm")-@appointment.EndDate.ToString("HH:mm")</div>
+                            <div class="time fs-5 fw-bold mb-1">
+                                @TimeFormatHelper.FormatTimeRange(appointment.StartDate, appointment.EndDate)
+                            </div>
                             <div class="duration text-muted small">
-                                @TimeFormatHelper.FormatDuration(appointment.EndDate.Subtract(appointment.StartDate))
+                                @TimeFormatHelper.FormatDuration(appointment.StartDate, appointment.EndDate)
                             </div>
                         </a>
                     </div>
