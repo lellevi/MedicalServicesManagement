@@ -9,5 +9,7 @@ namespace MedicalServicesManagement.WebApp.Models
         public ServiceViewModel Service { get; set; }
 
         public List<AppointmentViewModel> AvailableAppointments { get; set; }
+
+        public UserViewModel Patient { get; set; }
     }
 }

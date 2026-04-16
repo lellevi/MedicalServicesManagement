@@ -1,0 +1,120 @@
+﻿@model MedicalServicesManagement.WebApp.Models.UserViewModel
+
+@{
+    ViewData["ShowTitle"] = true;
+    ViewData["Title"] = $"Страница пациента {Model.FullName}";
+    ViewData["Subtitle"] = "Быстрая запись на услугу";
+}
+
+<section class="appointment section">
+    <div class="container" data-aos="fade-up">
+        <div class="row gy-4">
+            <div class="col-lg-8">
+                <div class="appointment-form-wrapper" data-aos="fade-up" data-aos-delay="200">
+                    <form id="appointmentForm" class="needs-validation" novalidate>
+                        <div class="row gy-4">
+                            <div class="col-md-6 form-group">
+                                <span>Врач</span>
+                                <select id="dropdownMedics" class="form-control" required>
+                                    <option value="">Выберите врача</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 form-group">
+                                <span>Услуга</span>
+                                <select id="dropdownServices" class="form-control" disabled>
+                                    <option value="">Сначала выберите врача</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-12">
+                                <button type="button" id="showAppointmentsBtn" class="btn btn-outline-primary w-100" disabled>
+                                    <i class="fas fa-calendar-check me-2"></i>
+                                    Показать свободные талоны
+                                </button>
+                            </div>
+                        </div>
+
+                        <input type="hidden" id="patientId" value="@Model.Id" />
+                        <input type="hidden" id="selectedAppointmentId" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            loadMedics();
+        });
+
+        function loadMedics() {
+            $.ajax({
+                url: "/Users/AllMedics",
+                success: function (medics) {
+                    const select = $("#dropdownMedics");
+                    $.each(medics, function (i, item) {
+                        select.append(`<option value="${item.id}" data-speciality="${item.medSpecialityId}">${item.fullName}</option>`);
+                    });
+                },
+                error: function() {
+                    console.error("Ошибка загрузки врачей");
+                }
+            });
+        }
+
+        $("#dropdownMedics").on("change", function () {
+            const selectedMedicId = $(this).val();
+            const specialityId = $(this).find(":selected").data("speciality");
+
+            $("#dropdownServices").prop('disabled', !selectedMedicId).empty().append('<option value="">Выберите услугу</option>');
+            $("#showAppointmentsBtn").prop('disabled', true).html('<i class="fas fa-calendar-check me-2"></i> Показать талоны');
+            $("#appointmentsContainer").html(getEmptyHtml());
+            $("#submitBtn").prop('disabled', true);
+
+            if (selectedMedicId && specialityId) {
+                loadServices(specialityId);
+            }
+        });
+
+        $("#dropdownServices").on("change", function () {
+            const serviceId = $(this).val();
+            if (serviceId && $("#dropdownMedics").val()) {
+                $("#showAppointmentsBtn").prop('disabled', false);
+            }
+        });
+
+        $("#showAppointmentsBtn").on("click", function() {
+            const medicId = $("#dropdownMedics").val();
+            const serviceId = $("#dropdownServices").val();
+            const patientId = $("#patientId").val();
+            window.location.href = `/Appointments/choose?medicId=${medicId}&serviceId=${serviceId}&patientId=${patientId}`;
+        });
+
+        function loadServices(specialityId) {
+            $.ajax({
+                url: `/Services/bySpecialityId/${specialityId}`,
+                success: function (services) {
+                    const select = $("#dropdownServices");
+                    $.each(services, function (i, item) {
+                        select.append(`<option value="${item.id}">${item.name}(${item.forAdults ? "от 18 лет" : "до 18 лет"})</option>`);
+                    });
+                },
+                error: function(xhr) {
+                    console.error("Services error:", xhr.responseText);
+                }
+            });
+        }
+
+        function getEmptyHtml() {
+            return `
+                <div class="text-center py-5 text-muted">
+                    <i class="fas fa-calendar-plus fa-3x mb-3 opacity-50"></i>
+                    <p class="mb-0">Выберите услугу и нажмите "Показать талоны"</p>
+                </div>
+            `;
+        }
+    </script>
+}

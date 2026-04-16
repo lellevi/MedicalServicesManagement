@@ -1,0 +1,82 @@
+﻿@model MedicalServicesManagement.WebApp.Models.TakeConfirmViewModel
+@using MedicalServicesManagement.WebApp.Enums
+
+@{
+    ViewData["ShowTitle"] = true;
+    ViewData["Title"] = "Подтверждение записи";
+}
+
+<section class="appointment section">
+    <div class="container" data-aos="fade-up">
+        <div class="row gy-4 justify-content-center">
+            <div class="col-lg-8">
+                <div class="appointment-form-wrapper text-center p-5 bg-gradient-primary text-white rounded-4">
+                    <i class="fas fa-user-check fa-4x mb-4 opacity-75"></i>
+                    <h3>Подтвердите запись</h3>
+                    <p class="lead mb-4">Пациент будет записан на приём</p>
+                </div>
+
+                <div class="appointment-card p-4 border rounded-3 shadow-sm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="fw-bold text-primary mb-2">Пациент:</div>
+                            <div>@Model.Patient.FullName</div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="fw-bold text-primary mb-2">Телефон:</div>
+                            <div>@Model.Patient.Telephone</div>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="fw-bold text-primary mb-2">Врач:</div>
+                            <div>@Model.Appointment.Medic.FullName</div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="fw-bold text-primary mb-2">Услуга:</div>
+                            <div>
+                                @Model.Appointment.Service.Name
+                                <span class="badge @(Model.Appointment.Service.ForAdults ? "bg-warning" : "bg-info") text-dark ms-2">
+                                    @(Model.Appointment.Service.ForAdults ? "от 18 лет" : "до 18 лет")
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="fw-bold text-primary mb-2">Дата и время:</div>
+                            <div class="fs-5">@Model.Appointment.StartDate.ToString("dd.MM.yyyy, ddd HH:mm") - @Model.Appointment.EndDate.ToString("HH:mm")</div>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <div class="fw-bold text-primary mb-2 fs-4">@Model.Appointment.TotalCost byn</div>
+                        </div>
+                    </div>
+                </div>
+
+                <form id="confirmForm" asp-action="Take" method="post">
+                    <input type="hidden" asp-for="Appointment.Id" />
+                    <input type="hidden" asp-for="Appointment.PatientId" />
+                    <input type="hidden" asp-for="Appointment.ServiceId" />
+                    <input type="hidden" asp-for="Appointment.MedicId" />
+                    <input type="hidden" asp-for="Appointment.TotalCost" />
+                    <input type="hidden" asp-for="Appointment.StartDate" />
+                    <input type="hidden" asp-for="Appointment.EndDate" />
+                    <input type="hidden" asp-for="Appointment.Status" value="@(AppointmentStatus.Taken)" />
+
+                    <div class="d-flex gap-2 mt-4">
+                        <a asp-action="Index" class="btn btn-secondary flex-fill">Назад</a>
+                        <button type="submit" class="btn btn-success flex-fill">
+                            <i class="fas fa-check-circle me-2"></i>Подтвердить запись
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

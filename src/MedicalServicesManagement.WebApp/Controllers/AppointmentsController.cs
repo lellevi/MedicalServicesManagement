@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace MedicalServicesManagement.WebApp.Controllers
@@ -128,15 +129,15 @@ namespace MedicalServicesManagement.WebApp.Controllers
         }
 
         [HttpGet("choose")]
-        public async Task<IActionResult> Choose([FromQuery] string medicId, [FromQuery] string serviceId)
+        public async Task<IActionResult> Choose([FromQuery] string medicId, [FromQuery] string serviceId, [FromQuery] string patientId)
         {
-            var service = await _serviceManager.GetByIdAsync(serviceId);
+            var serviceDto = await _serviceManager.GetByIdAsync(serviceId);
 
             var avaibleAppointments = await _appointmentManager.GetAllFreeByMedicAndServiceAsync(serviceId, medicId);
 
             var model = new TakeAppointmentViewModel
             {
-                Service = _mapper.Map<ServiceViewModel>(service),
+                Service = _mapper.Map<ServiceViewModel>(serviceDto),
                 AvailableAppointments = _mapper.Map<List<AppointmentViewModel>>(avaibleAppointments),
             };
 
@@ -146,7 +147,70 @@ namespace MedicalServicesManagement.WebApp.Controllers
                 model.Medic = _mapper.Map<UserViewModel>(medic);
             }
 
+            if (!string.IsNullOrEmpty(patientId))
+            {
+                model.Patient = _mapper.Map<UserViewModel>(await _entityUserManager.GetByIdAsync(patientId));
+            }
+            else if (User.Identity.IsAuthenticated)
+            {
+                var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ??
+                           User.FindFirst("sub")?.Value ??
+                           User.FindFirst("id")?.Value;
+
+                if (!string.IsNullOrEmpty(currentUserId))
+                {
+                    model.Patient = _mapper.Map<UserViewModel>(await _entityUserManager.GetByIdAsync(currentUserId));
+                }
+            }
+
             return View(model);
+        }
+
+        [HttpGet("take")]
+        public async Task<IActionResult> Take(string appointmentId, string patientId)
+        {
+            var appointmentDto = await _appointmentManager.GetByIdAsync(appointmentId);
+            appointmentDto.PatientId = patientId;
+            await _appointmentManager.UpdateAsync(appointmentDto);
+
+            var appointment = _mapper.Map<AppointmentViewModel>(appointmentDto);
+
+            appointment.Medic = _mapper.Map<UserViewModel>(await _entityUserManager.GetByIdAsync(appointment.MedicId));
+            appointment.Service = _mapper.Map<ServiceViewModel>(await _serviceManager.GetByIdAsync(appointment.ServiceId));
+
+            var patientDto = await _entityUserManager.GetByIdAsync(patientId);
+            var patient = _mapper.Map<UserViewModel>(patientDto);
+
+            var model = new TakeConfirmViewModel
+            {
+                Appointment = appointment,
+                Patient = patient,
+            };
+
+            model.Appointment.PatientId = patientId;
+            return View(model);
+        }
+
+        [HttpPost("take")]
+        public async Task<IActionResult> Take(TakeConfirmViewModel model)
+        {
+            if (!ModelState.IsValid || model.Appointment == null)
+            {
+                return View(model);
+            }
+
+            try
+            {
+                model.Appointment.Status = Enums.AppointmentStatus.Taken;
+                await _appointmentManager.UpdateAsync(_mapper.Map<AppointmentDTO>(model.Appointment));
+
+                return RedirectToAction("Index");
+            }
+            catch (ArgumentException ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+                return View(model);
+            }
         }
     }
 }

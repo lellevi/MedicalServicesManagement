@@ -21,30 +21,31 @@ namespace MedicalServicesManagement.BLL.Managers
 
         public static void CheckStatus(Enums.AppointmentStatus existingStatus, Enums.AppointmentStatus newStatus)
         {
-            if (newStatus == Enums.AppointmentStatus.Taken && existingStatus != Enums.AppointmentStatus.Free)
+            var statusRules = new List<(Enums.AppointmentStatus newStatus, Enums.AppointmentStatus existingStatus, string message)>
             {
-                throw new ArgumentException("Запись можно назначить только на свободный слот. Текущий статус: " + existingStatus, nameof(newStatus));
-            }
+                (Enums.AppointmentStatus.Taken, Enums.AppointmentStatus.Free,
+                 "Запись можно назначить только на свободный слот. Текущий статус: " + existingStatus),
+                (Enums.AppointmentStatus.DoneNoPay, Enums.AppointmentStatus.Taken,
+                 "Завершение без оплаты возможно только для назначенной записи. Текущий статус: " + existingStatus),
+                (Enums.AppointmentStatus.Cancelled, Enums.AppointmentStatus.Taken,
+                 "Отмена возможна только для назначенной записи. Текущий статус: " + existingStatus),
+                (Enums.AppointmentStatus.DonePaid, Enums.AppointmentStatus.DoneNoPay,
+                 "Оплата возможна только после завершения без оплаты. Текущий статус: " + existingStatus),
+            };
 
-            if (newStatus == Enums.AppointmentStatus.DoneNoPay && existingStatus != Enums.AppointmentStatus.Taken)
+            foreach (var (expectedNewStatus, expectedExistingStatus, message) in statusRules)
             {
-                throw new ArgumentException("Завершение без оплаты возможно только для назначенной записи. Текущий статус: " + existingStatus, nameof(newStatus));
-            }
-
-            if (newStatus == Enums.AppointmentStatus.Cancelled && existingStatus != Enums.AppointmentStatus.Taken)
-            {
-                throw new ArgumentException("Отмена возможна только для назначенной записи. Текущий статус: " + existingStatus, nameof(newStatus));
-            }
-
-            if (newStatus == Enums.AppointmentStatus.DonePaid && existingStatus != Enums.AppointmentStatus.DoneNoPay)
-            {
-                throw new ArgumentException("Оплата возможна только после завершения без оплаты. Текущий статус: " + existingStatus, nameof(newStatus));
+                if (newStatus == expectedNewStatus && existingStatus != expectedExistingStatus)
+                {
+                    throw new ArgumentException(message, nameof(newStatus));
+                }
             }
         }
 
         public async Task<List<AppointmentDTO>> GetAllFreeByMedicAndServiceAsync(string serviceId, string medicId = null)
         {
-            var threeWeeksFromNow = DateTime.UtcNow.Date.AddDays(21);
+            const int threeWeekInDays = 21;
+            var threeWeeksFromNow = DateTime.UtcNow.Date.AddDays(threeWeekInDays);
             Expression<Func<Appointment, bool>> filter = medicId == null ?
                 (x => x.Status == DAL.Entities.AppointmentStatus.Free && x.ServiceId == serviceId
                 && x.StartDate >= DateTime.UtcNow.Date && x.StartDate <= threeWeeksFromNow)

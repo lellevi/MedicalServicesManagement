@@ -185,13 +185,22 @@ namespace MedicalServicesManagement.WebApp.Controllers
 
                 await _userManager.CreateAsync(entityUser);
 
-                return RedirectToAction("Index", "Home"); // todo исправить на страницу пациента
+                return RedirectToAction("Patient", new { id = entityUser.Id });
             }
 
             foreach (var error in creationResult.Errors)
             {
                 ModelState.AddModelError(string.Empty, error.Description);
             }
+
+            return View(model);
+        }
+
+        [HttpGet("patient/{id}")]
+        public async Task<IActionResult> Patient(string id)
+        {
+            var userDto = await _userManager.GetByIdAsync(id);
+            var model = _mapper.Map<UserViewModel>(userDto);
 
             return View(model);
         }

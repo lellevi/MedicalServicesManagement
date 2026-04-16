@@ -4,17 +4,15 @@
 @{
     ViewData["ShowTitle"] = true;
     ViewData["Title"] = "Доступные талоны:";
+
+    var appointmentsByDate = Model.AvailableAppointments
+    .Where(a => a.Status == AppointmentStatus.Free)
+    .GroupBy(a => a.StartDate.Date)
+    .OrderBy(g => g.Key);
 }
 
 <section class="appointment section">
     <div class="container" data-aos="fade-up">
-        @{
-            var appointmentsByDate = Model.AvailableAppointments
-                .Where(a => a.Status == AppointmentStatus.Free)
-                .GroupBy(a => a.StartDate.Date)
-                .OrderBy(g => g.Key);
-        }
-
         @foreach (var dateGroup in appointmentsByDate)
         {
             <div class="row mb-4">
@@ -28,12 +26,11 @@
                 @foreach (var appointment in dateGroup.OrderBy(a => a.StartDate.TimeOfDay))
                 {
                     <div class="col-lg-2 col-md-3 col-sm-4 col-6 mb-2">
-                        <a asp-action="Choose" asp-route-id="@appointment.Id" class="btn btn-outline-primary btn-time-slot w-100 h-100 d-flex flex-column align-items-center p-3 text-decoration-none">
+                        <a asp-action="Take" asp-route-appointmentId="@appointment.Id" asp-route-patientId="@(Model.Patient?.Id ?? string.Empty)" class="btn btn-outline-primary btn-time-slot w-100 h-100 d-flex flex-column align-items-center p-3 text-decoration-none">
                             <div class="time fs-5 fw-bold mb-1">@appointment.StartDate.ToString("HH:mm")-@appointment.EndDate.ToString("HH:mm")</div>
                             <div class="duration text-muted small">
                                 @TimeFormatHelper.FormatDuration(appointment.EndDate.Subtract(appointment.StartDate))
                             </div>
-                            <div class="cost mt-1 small">@appointment.TotalCost byn</div>
                         </a>
                     </div>
                 }

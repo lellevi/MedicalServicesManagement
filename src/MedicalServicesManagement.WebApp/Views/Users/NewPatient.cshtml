@@ -1,0 +1,70 @@
+﻿@model MedicalServicesManagement.WebApp.Models.Auth.RegisterModel
+@{
+    ViewData["ShowTitle"] = true;
+    ViewData["Title"] = "Добавление пациента";
+}
+<section class="appointmnet section">
+    <div class="container" data-aos="fade-up">
+        <div class="row gy-10">
+            <div class="col-lg-10">
+                <div class="appointment-form-wrapper" data-aos="fade-up" data-aos-delay="200">
+                    <form asp-action="NewPatient" method="post" class="appointment-form php-email-form">
+
+                        <div class="row gy-10">
+                            <div class="col-md-10 form-group">
+                                <label asp-for="Email"></label>
+                                <input type="text" asp-for="Email" class="form-control" required="">
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-10 form-group">
+                                <label asp-for="Password"></label>
+                                <input type="password" asp-for="Password" class="form-control" required="">
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-10 form-group">
+                                <label asp-for="ConfirmPassword"></label>
+                                <input type="password" asp-for="ConfirmPassword" class="form-control" required="">
+                                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-10 form-group">
+                                <label asp-for="Surname"></label>
+                                <input type="text" asp-for="Surname" class="form-control" required="">
+                                <span asp-validation-for="Surname" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-10 form-group">
+                                <label asp-for="Name"></label>
+                                <input type="text" asp-for="Name" class="form-control" required="">
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-10 form-group">
+                                <label asp-for="MiddleName"></label>
+                                <input type="text" asp-for="MiddleName" class="form-control">
+                                <span asp-validation-for="MiddleName" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-10 form-group">
+                                <label asp-for="BirthDate"></label>
+                                <input type="date" asp-for="BirthDate" class="form-control" required="">
+                                <span asp-validation-for="BirthDate" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-10 form-group">
+                                <label asp-for="Telephone"></label>
+                                <input asp-for="Telephone" type="tel" class="form-control" required="">
+                                <span asp-validation-for="Telephone" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-appointment w-100" style="margin-top:20px">
+                            Добавить
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

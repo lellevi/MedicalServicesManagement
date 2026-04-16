@@ -37,16 +37,15 @@ namespace MedicalServicesManagement.WebApp.Controllers
                 return Json(new List<ServiceDTO>());
             }
 
-            var services = await _serviceManager.GetAllAsync() ?? new List<ServiceDTO>();
-            var result = services.Where(s => s.MedSpecialityId == id).ToList();
+            var services = await _serviceManager.GetAllIncludingSpecialitiesAsync() ?? new List<ServiceDTO>();
 
-            return Json(result);
+            return Json(services);
         }
 
         [HttpGet("")]
         public async Task<IActionResult> Index()
         {
-            var servicesDtos = await _serviceManager.GetAllIncludingSpecialitiesAsync();
+            var servicesDtos = await _serviceManager.GetAllIncludingSpecialitiesAsync() ?? new List<ServiceDTO>();
 
             var items = _mapper.Map<List<ServiceViewModel>>(servicesDtos);
 
