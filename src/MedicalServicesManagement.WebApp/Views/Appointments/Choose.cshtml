@@ -7,8 +7,7 @@
 
     var appointmentsByDate = Model.AvailableAppointments
     .Where(a => a.Status == AppointmentStatus.Free)
-    .GroupBy(a => a.StartDate.Date)
-    .OrderBy(g => g.Key);
+    .GroupBy(a => a.StartDate.Date);
 }
 
 <section class="appointment section">
@@ -23,7 +22,7 @@
                     </h5>
                 </div>
 
-                @foreach (var appointment in dateGroup.OrderBy(a => a.StartDate.TimeOfDay))
+                @foreach (var appointment in dateGroup)
                 {
                     <div class="col-lg-2 col-md-3 col-sm-4 col-6 mb-2">
                         <a asp-action="Take" asp-route-appointmentId="@appointment.Id" asp-route-patientId="@(Model.Patient?.Id ?? string.Empty)" class="btn btn-outline-primary btn-time-slot w-100 h-100 d-flex flex-column align-items-center p-3 text-decoration-none">

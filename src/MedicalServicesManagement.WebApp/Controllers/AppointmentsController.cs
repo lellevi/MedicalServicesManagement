@@ -133,7 +133,7 @@ namespace MedicalServicesManagement.WebApp.Controllers
         {
             var serviceDto = await _serviceManager.GetByIdAsync(serviceId);
 
-            var avaibleAppointments = await _appointmentManager.GetAllFreeByMedicAndServiceAsync(serviceId, medicId);
+            var avaibleAppointments = await _appointmentManager.GetAllFreeByMedicAndServiceOrderedAsync(serviceId, medicId);
 
             var model = new TakeAppointmentViewModel
             {

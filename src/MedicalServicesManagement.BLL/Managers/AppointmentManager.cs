@@ -1,20 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using MedicalServicesManagement.BLL.Dto;
 using MedicalServicesManagement.BLL.Interfaces;
 using MedicalServicesManagement.DAL.Entities;
 using MedicalServicesManagement.DAL.Interfaces;
+using MedicalServicesManagement.DAL.Repositories;
+using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace MedicalServicesManagement.BLL.Managers
 {
     internal class AppointmentManager : BaseManager<AppointmentDTO, Appointment>, IAppointmentManager
     {
-        public AppointmentManager(IRepository<Appointment> repository, IMapper mapper)
+        private readonly IAppointmentRepository _appointmentRepository;
+
+        public AppointmentManager(IAppointmentRepository repository, IMapper mapper)
             : base(repository, mapper)
         {
+            _appointmentRepository = repository;
         }
 
         protected override string EntityName { get => "appointment"; }
@@ -42,19 +46,19 @@ namespace MedicalServicesManagement.BLL.Managers
             }
         }
 
-        public async Task<List<AppointmentDTO>> GetAllFreeByMedicAndServiceAsync(string serviceId, string medicId = null)
+        public async Task<List<AppointmentDTO>> GetAllFreeByMedicAndServiceOrderedAsync(string serviceId, string medicId = null)
         {
             const int threeWeekInDays = 21;
             var threeWeeksFromNow = DateTime.UtcNow.Date.AddDays(threeWeekInDays);
+
             Expression<Func<Appointment, bool>> filter = medicId == null ?
                 (x => x.Status == DAL.Entities.AppointmentStatus.Free && x.ServiceId == serviceId
-                && x.StartDate >= DateTime.UtcNow.Date && x.StartDate <= threeWeeksFromNow)
-                : (x => x.Status == DAL.Entities.AppointmentStatus.Free && x.ServiceId == serviceId && x.MedicId == medicId
-                && x.StartDate >= DateTime.UtcNow.Date && x.StartDate <= threeWeeksFromNow);
+                 && x.StartDate >= DateTime.UtcNow.Date && x.StartDate <= threeWeeksFromNow)
+                : (x => x.Status == DAL.Entities.AppointmentStatus.Free
+                && x.ServiceId == serviceId && x.MedicId == medicId
+                 && x.StartDate >= DateTime.UtcNow.Date && x.StartDate <= threeWeeksFromNow);
 
-            var entities = await _repository.GetAllAsync(
-                filter: filter,
-                includes: [x => x.Service, x => x.Medic]);
+            var entities = await _appointmentRepository.GetAllFreeAppointmentsOrderedAsync(filter, [x => x.Service, x => x.Medic]);
 
             return _mapper.Map<List<AppointmentDTO>>(entities);
         }
@@ -85,6 +89,7 @@ namespace MedicalServicesManagement.BLL.Managers
 
             return _mapper.Map<List<AppointmentDTO>>(entities);
         }
+
 
         protected override void Validate(AppointmentDTO item)
         {
