@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -210,6 +211,38 @@ namespace MedicalServicesManagement.WebApp.Controllers
             {
                 ModelState.AddModelError(string.Empty, ex.Message);
                 return View(model);
+            }
+        }
+
+        [HttpGet("patientAppointments")]
+        public async Task<IActionResult> PatientAppointments()
+        {
+            try
+            {
+                if (!User.Identity.IsAuthenticated)
+                {
+                    return RedirectToAction("Login", "Account");
+                }
+
+                var currentUserAuthId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ??
+                                   User.FindFirst("userId")?.Value;
+
+                var currentUser = await _entityUserManager.GetByAuthIdAsync(currentUserAuthId);
+
+                if (string.IsNullOrEmpty(currentUser.Id))
+                {
+                    return View(new List<AppointmentViewModel>());
+                }
+
+                var allAppointments = await _appointmentManager.GetAllIncludingServiceAndMedicAsync();
+                var userAppointments = allAppointments.Where(a => a.PatientId == currentUser.Id && a.Status != BLL.Enums.AppointmentStatus.DonePaid).ToList();
+
+                var model = _mapper.Map<List<AppointmentViewModel>>(userAppointments);
+                return View(model);
+            }
+            catch
+            {
+                return View(new List<AppointmentViewModel>());
             }
         }
     }

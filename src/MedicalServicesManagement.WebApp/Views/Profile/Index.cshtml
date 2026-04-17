@@ -52,6 +52,21 @@
                     <div class="col-md-6">
                         <a asp-action="NewPatient" asp-controller="Users" class="btn btn-appointment w-100 profile-btn">Добавить пациента</a>
                     </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@if (User.IsInRole(Constants.PatientRole))
+{
+    <div class="w-100">
+        <div class="w-100">
+            <div class="appointment-form-wrapper profile-actions-wrapper w-100" data-aos="fade-up" data-aos-delay="200">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <a asp-action="PatientAppointments" asp-controller="Appointments" class="btn btn-appointment w-100 profile-btn">Активные записи</a>
+                    </div>
                 </div>
             </div>
         </div>
