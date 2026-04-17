@@ -48,8 +48,7 @@ namespace MedicalServicesManagement.BLL.Managers
 
         public async Task<List<AppointmentDTO>> GetAllFreeByMedicAndServiceOrderedAsync(string serviceId, string medicId = null)
         {
-            const int threeWeekInDays = 21;
-            var threeWeeksFromNow = DateTime.UtcNow.Date.AddDays(threeWeekInDays);
+            var threeWeeksFromNow = DateTime.UtcNow.Date.AddDays(Constants.FreeAppointmentsPeriodDays);
 
             Expression<Func<Appointment, bool>> filter = medicId == null ?
                 (x => x.Status == DAL.Entities.AppointmentStatus.Free && x.ServiceId == serviceId
