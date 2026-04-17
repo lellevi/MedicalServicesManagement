@@ -1,0 +1,67 @@
+﻿@model MedicalServicesManagement.WebApp.Models.AdditionalServiceViewModel
+
+@{
+    ViewData["ShowTitle"] = true;
+    ViewData["Title"] = "Редактирование доп. услуги";
+}
+
+<section class="appointmnet section">
+    <div class="container" data-aos="fade-up">
+        <div class="row gy-10">
+            <div class="col-lg-10">
+                <div class="appointment-form-wrapper" data-aos="fade-up" data-aos-delay="200">
+                    <form asp-action="Edit" method="post" class="appointment-form php-email-form needs-validation" novalidate>
+
+                        <div class="row gy-10">
+                            <div class="col-md-10 form-group">
+                                <label asp-for="Name"></label>
+                                <input asp-for="Name" class="form-control" required />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-10 form-group">
+                                <label asp-for="MedSpecialityId"></label>
+                                <select asp-for="MedSpecialityId" id="dropdownMedSpecialities" class="form-control" required></select>
+                                <span asp-validation-for="MedSpecialityId" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-10 form-group">
+                                <label asp-for="Price"></label>
+                                <input asp-for="Price" type="number" step="0.01" class="form-control" required min="0">
+                                <span asp-validation-for="Price" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <input type="hidden" asp-for="Id" />
+                        <button type="submit" class="btn btn-appointment w-100" style="margin-top:20px">Сохранить изменения</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        $(document).ready(function (){
+            var currentSpecialityId = '@Model.MedSpecialityId';
+            $.ajax({
+                url: "/MedSpecialities/GetAll",
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                    const select = $("#dropdownMedSpecialities");
+                    select.empty();
+                    select.append('<option value="">Выберите специальность</option>');
+                    $.each(data, function (i, item) {
+                        var selected = (item.id === currentSpecialityId) ? 'selected' : '';
+                        select.append(`<option value="${item.id}" ${selected}>${item.name}</option>`);
+                    });
+                },
+                error: function () {
+                    console.log("Ошибка загрузки специальностей");
+                }
+            });
+        });
+    </script>
+}

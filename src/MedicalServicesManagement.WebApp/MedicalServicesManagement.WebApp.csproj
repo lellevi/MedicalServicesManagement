@@ -42,7 +42,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\AdditionalServices\" />
     <Folder Include="Views\AppointmentServices\" />
   </ItemGroup>
 
