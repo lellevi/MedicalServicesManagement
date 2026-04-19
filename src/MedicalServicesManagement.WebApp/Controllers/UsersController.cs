@@ -33,10 +33,9 @@ namespace MedicalServicesManagement.WebApp.Controllers
         [HttpGet("")]
         public async Task<IActionResult> Index()
         {
-            var usersDtoDictionary = await _userManager.GetAllByRolesAsync(new List<string> { Constants.GuestRole, Constants.PatientRole, Constants.MedicRole, Constants.ReceptionistRole });
-            var items = _mapper.Map<Dictionary<string, List<UserViewModel>>>(usersDtoDictionary);
+            var roles = new List<string> { Constants.GuestRole, Constants.PatientRole, Constants.MedicRole, Constants.ReceptionistRole };
 
-            return View(items);
+            return View(roles);
         }
 
         [HttpGet("edit/{id}")]
@@ -201,8 +200,32 @@ namespace MedicalServicesManagement.WebApp.Controllers
         {
             var userDto = await _userManager.GetByIdAsync(id);
             var model = _mapper.Map<UserViewModel>(userDto);
+            var authUser = await _identityUserManager.FindByIdAsync(model.AuthUserId);
+            model.IsGuest = await _identityUserManager.IsInRoleAsync(authUser, Constants.GuestRole);
 
             return View(model);
+        }
+
+        [HttpGet("makePatient/{id}")]
+        public async Task<IActionResult> MakePatient(string id, string entityUserId)
+        {
+            var authUser = await _identityUserManager.FindByIdAsync(id);
+            if (await _identityUserManager.IsInRoleAsync(authUser, Constants.GuestRole))
+            {
+                await _identityUserManager.RemoveFromRoleAsync(authUser, Constants.GuestRole);
+                await _identityUserManager.AddToRoleAsync(authUser, Constants.PatientRole);
+            }
+
+            return RedirectToAction("Patient", new { id = entityUserId });
+        }
+
+        [HttpGet("byRole")]
+        public async Task<JsonResult> ByRole([FromQuery] string role)
+        {
+            var usersDtoList = await _userManager.GetAllByRoleAsync(role);
+            var items = _mapper.Map<List<UserViewModel>>(usersDtoList);
+
+            return Json(items);
         }
     }
 }

@@ -7,7 +7,7 @@
 
     var appointmentsByDate = Model.AvailableAppointments
     .Where(a => a.Status == AppointmentStatus.Free)
-    .GroupBy(a => a.StartDate.Date);
+    .GroupBy(a => a.StartDate.Date); //TODO: delete
 }
 
 <section class="appointment section">
@@ -42,7 +42,7 @@
         {
             <div class="row">
                 <div class="col-12 text-center py-5">
-                    <h5 class="text-muted">На ближайшие @TimeFormatHelper.FormatDays(Constants.FreeAppointmentsPeriodDays) нет свободных талонов</h5>
+                    <h5 class="text-muted">@string.Format("На ближайшие {0} дней нет свободных талонов", @Constants.FreeAppointmentsPeriodDays)</h5>
                 </div>
             </div>
         }

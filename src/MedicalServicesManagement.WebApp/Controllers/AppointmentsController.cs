@@ -45,9 +45,10 @@ namespace MedicalServicesManagement.WebApp.Controllers
         }
 
         [HttpGet("getAll")]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] string specialityId = null)
         {
-            var items = await _appointmentManager.GetAllAsync();
+            var items = await _appointmentManager.GetAllAsync(specialityId);
+
             return Json(items);
         }
 
@@ -214,7 +215,7 @@ namespace MedicalServicesManagement.WebApp.Controllers
             }
         }
 
-        [HttpGet("patientAppointments")]
+        [HttpGet("my")]
         public async Task<IActionResult> PatientAppointments()
         {
             try

@@ -45,5 +45,7 @@ namespace MedicalServicesManagement.WebApp.Models
 
         [Display(Name = "Мобильный телефон", Description = "+375()")]
         public string Telephone { get; set; }
+
+        public bool IsGuest { get; set; }
     }
 }

@@ -8,6 +8,8 @@ namespace MedicalServicesManagement.BLL.Interfaces
     {
         public Task<List<AppointmentDTO>> GetAllIncludingServiceAndMedicAsync();
 
+        public Task<List<AppointmentDTO>> GetAllAsync(string specialityId);
+
         public Task<List<AppointmentDTO>> GetAllFreeByMedicAndServiceOrderedAsync(string serviceId, string medicId = null);
     }
 }

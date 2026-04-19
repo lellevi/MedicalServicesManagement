@@ -1,17 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using MedicalServicesManagement.BLL.Dto;
 using MedicalServicesManagement.BLL.Interfaces;
 using MedicalServicesManagement.DAL.Entities;
 using MedicalServicesManagement.DAL.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MedicalServicesManagement.BLL.Managers
 {
     internal class EntityUserManager : BaseManager<EntityUserDTO, EntityUser>, IEntityUserManager
     {
+        public const int ChunkSize = 5;
+
         private readonly IEntityUserRepository _userRepository;
 
         public EntityUserManager(IEntityUserRepository repository, IMapper mapper)
@@ -22,18 +24,19 @@ namespace MedicalServicesManagement.BLL.Managers
 
         protected override string EntityName { get => "user"; }
 
-        public async Task<Dictionary<string, List<EntityUserDTO>>> GetAllByRolesAsync(List<string> roles)
+        public async Task<List<EntityUserDTO>> GetAllByRoleAsync(string role)
         {
-            Dictionary<string, List<EntityUserDTO>> users = [];
-            var entityUsers = await _repository.GetAllAsync(null, [u => u.MedSpeciality]);
+            List<EntityUserDTO> users = [];
+            var authUsers = await _userRepository.GetAuthUsersByRoleAsync(role);
+            var authUserIds = authUsers.Select(u => u.Id).ToList();
 
-            foreach (var role in roles)
+            var authUserIdsChunks = authUserIds.Chunk(ChunkSize);
+
+            foreach (var chunk in authUserIdsChunks)
             {
-                var authUsers = await _userRepository.GetAuthUsersByRoleAsync(role);
-                List<EntityUser> listUsers = authUsers.Select(x => entityUsers.FirstOrDefault(e => e.AuthUserId == x.Id)).ToList();
+                var entityUserChunk = await _userRepository.GetAllAsync(eu => chunk.Contains(eu.AuthUserId), includes: [x => x.MedSpeciality]);
 
-                List<EntityUserDTO> value = _mapper.Map<List<EntityUserDTO>>(listUsers);
-                users.Add(role, value);
+                users.AddRange(_mapper.Map<List<EntityUserDTO>>(entityUserChunk));
             }
 
             return users;

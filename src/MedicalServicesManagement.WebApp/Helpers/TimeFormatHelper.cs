@@ -20,28 +20,5 @@ namespace MedicalServicesManagement.WebApp.Helpers
         {
             return $"{start:HH:mm}-{end:HH:mm}";
         }
-
-        public static string FormatDays(int days)
-        {
-            var lastTwoDigits = days % 100;
-            var lastDigit = days % 10;
-
-            if (lastTwoDigits >= 11 && lastTwoDigits <= 19)
-            {
-                return $"{days} дней";
-            }
-
-            if (lastDigit == 1)
-            {
-                return $"{days} день";
-            }
-
-            if (lastDigit >= 2 && lastDigit <= 4)
-            {
-                return $"{days} дня";
-            }
-
-            return $"{days} дней";
-        }
     }
 }

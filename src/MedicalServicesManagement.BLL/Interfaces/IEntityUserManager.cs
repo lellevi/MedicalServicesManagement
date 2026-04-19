@@ -8,6 +8,8 @@ namespace MedicalServicesManagement.BLL.Interfaces
     {
         public Task<List<EntityUserDTO>> GetAllIncludeMedSpecialitiesAsync();
 
+        public Task<List<EntityUserDTO>> GetAllByRoleAsync(string role);
+
         public Task<EntityUserDTO> GetByAuthIdAsync(string id);
 
         public Task<List<EntityUserDTO>> GetMedicsAsync();
@@ -15,8 +17,6 @@ namespace MedicalServicesManagement.BLL.Interfaces
         public Task<List<EntityUserDTO>> GetMedicsBySurnameAsync(string surname);
 
         public Task<List<EntityUserDTO>> GetMedicsBySpecialityAsync(string specialityId);
-
-        public Task<Dictionary<string, List<EntityUserDTO>>> GetAllByRolesAsync(List<string> roles);
 
         public Task<EntityUserDTO> GetByIdIncludingRoles(string id);
     }

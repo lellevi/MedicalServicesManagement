@@ -31,8 +31,6 @@ namespace MedicalServicesManagement.BLL.Managers
                  "Запись можно назначить только на свободный слот. Текущий статус: " + existingStatus),
                 (Enums.AppointmentStatus.DoneNoPay, Enums.AppointmentStatus.Taken,
                  "Завершение без оплаты возможно только для назначенной записи. Текущий статус: " + existingStatus),
-                (Enums.AppointmentStatus.Cancelled, Enums.AppointmentStatus.Taken,
-                 "Отмена возможна только для назначенной записи. Текущий статус: " + existingStatus),
                 (Enums.AppointmentStatus.DonePaid, Enums.AppointmentStatus.DoneNoPay,
                  "Оплата возможна только после завершения без оплаты. Текущий статус: " + existingStatus),
             };
@@ -89,6 +87,12 @@ namespace MedicalServicesManagement.BLL.Managers
             return _mapper.Map<List<AppointmentDTO>>(entities);
         }
 
+        public async Task<List<AppointmentDTO>> GetAllAsync(string specialityId)
+        {
+            var entities = await _repository.GetAllAsync(filter: x => x.Service.MedSpecialityId == specialityId,
+                includes: [x => x.Service]);
+            return _mapper.Map<List<AppointmentDTO>>(entities);
+        }
 
         protected override void Validate(AppointmentDTO item)
         {
