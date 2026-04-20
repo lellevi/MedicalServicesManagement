@@ -3,7 +3,6 @@
 @{
     ViewData["ShowTitle"] = true;
     ViewData["Title"] = $"Страница пациента {Model.FullName}";
-    ViewData["Subtitle"] = "Быстрая запись на услугу";
 }
 
 <section class="appointment section">
@@ -34,8 +33,10 @@
         </div>
         <div class="row gy-4">
             <div class="col-lg-8">
-                <div class="appointment-form-wrapper" data-aos="fade-up" data-aos-delay="200">
-                    <form id="appointmentForm" class="needs-validation" novalidate>
+                <a asp-action="SearchForPatient" asp-controller="Appointments" asp-route-id="@Model.Id" class="btn btn-outline-primary w-100">Быстрая запись на услугу</a>
+
+
+                   @*  <form id="appointmentForm" class="needs-validation" novalidate>
                         <div class="row gy-4">
                             <div class="col-md-6 form-group">
                                 <span>Врач</span>
@@ -54,15 +55,14 @@
                             <div class="col-md-12">
                                 <button type="button" id="showAppointmentsBtn" class="btn btn-outline-primary w-100" disabled>
                                     <i class="fas fa-calendar-check me-2"></i>
-                                    Показать свободные талоны
+                                    Записать на приём
                                 </button>
                             </div>
                         </div>
 
                         <input type="hidden" id="patientId" value="@Model.Id" />
                         <input type="hidden" id="selectedAppointmentId" />
-                    </form>
-                </div>
+                    </form> *@
             </div>
         </div>
     </div>

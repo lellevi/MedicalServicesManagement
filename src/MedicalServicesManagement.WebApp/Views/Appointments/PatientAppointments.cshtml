@@ -38,7 +38,8 @@
                                     @await Html.PartialAsync("_AppointmentStatus", appointment.Status)
                                 </div>
                                 <div class="appointment-cost mt-1">
-                                    <span class="fw-bold text-success">@appointment.TotalCost.ToString("C")</span>
+                                    <span>Начальная стоимость услуги (без учёта доп.услуг)</span>
+                                    <span class="fw-bold text-success">@appointment.Service.Cost.ToString("C")</span>
                                 </div>
                             </div>
                         </div>

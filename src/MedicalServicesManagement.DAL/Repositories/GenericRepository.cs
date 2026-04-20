@@ -74,19 +74,18 @@ namespace MedicalServicesManagement.DAL.Repositories
         {
             var query = _context.Set<T>().AsNoTracking();
 
-            var item = await query.Where(filter).FirstOrDefaultAsync();
-
-            if (item == null)
-            {
-                _context.Entry(item).State = EntityState.Detached;
-            }
-
             if (includes != null && includes.Length != 0)
             {
                 foreach (var include in includes)
                 {
                     query = query.Include(include);
                 }
+            }
+
+            var item = await query.Where(filter).FirstOrDefaultAsync();
+            if (item == null)
+            {
+                _context.Entry(item).State = EntityState.Detached;
             }
 
             return item;

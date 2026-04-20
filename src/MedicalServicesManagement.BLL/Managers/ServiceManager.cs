@@ -25,6 +25,13 @@ namespace MedicalServicesManagement.BLL.Managers
             return _mapper.Map<List<ServiceDTO>>(entities);
         }
 
+        public async Task<List<ServiceDTO>> GetByMedSpecialityIdAsync(string id)
+        {
+            var entities = await _repository.GetAllAsync(filter: x => x.MedSpecialityId == id, includes: [x => x.MedSpeciality]);
+
+            return _mapper.Map<List<ServiceDTO>>(entities);
+        }
+
         protected override void Validate(ServiceDTO item)
         {
             ArgumentNullException.ThrowIfNull(item);

@@ -1,5 +1,6 @@
 ﻿@model MedicalServicesManagement.WebApp.Models.TakeConfirmViewModel
 @using MedicalServicesManagement.WebApp.Enums
+@using MedicalServicesManagement.WebApp.Helpers
 
 @{
     ViewData["ShowTitle"] = true;
@@ -51,23 +52,18 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="fw-bold text-primary mb-2">Дата и время:</div>
-                            <div class="fs-5">@Model.Appointment.StartDate.ToString("dd.MM.yyyy, ddd HH:mm") - @Model.Appointment.EndDate.ToString("HH:mm")</div>
+                            <div class="fs-5">@TimeFormatHelper.FormatTimeRange(@Model.Appointment.StartDate, @Model.Appointment.EndDate)</div>
                         </div>
                         <div class="col-md-6 text-end">
-                            <div class="fw-bold text-primary mb-2 fs-4">@Model.Appointment.TotalCost byn</div>
+                            <div>Начальная стоимость услуги (без доп. услуг)</div>
+                            <div class="fw-bold text-primary mb-2 fs-4">@Model.Appointment.Service.Cost byn</div>
                         </div>
                     </div>
                 </div>
 
                 <form id="confirmForm" asp-action="Take" method="post">
-                    <input type="hidden" asp-for="Appointment.Id" />
-                    <input type="hidden" asp-for="Appointment.PatientId" />
-                    <input type="hidden" asp-for="Appointment.ServiceId" />
-                    <input type="hidden" asp-for="Appointment.MedicId" />
-                    <input type="hidden" asp-for="Appointment.TotalCost" />
-                    <input type="hidden" asp-for="Appointment.StartDate" />
-                    <input type="hidden" asp-for="Appointment.EndDate" />
-                    <input type="hidden" asp-for="Appointment.Status" value="@(AppointmentStatus.Taken)" />
+                    <input type="hidden" asp-for="AppointmentId" />
+                    <input type="hidden" asp-for="PatientId" />
 
                     <div class="d-flex gap-2 mt-4">
                         <a asp-action="Index" class="btn btn-secondary flex-fill">Назад</a>

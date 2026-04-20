@@ -5,5 +5,9 @@
         public AppointmentViewModel Appointment { get; set; }
 
         public UserViewModel Patient { get; set; }
+
+        public string AppointmentId { get; set; }
+
+        public string PatientId { get; set; }
     }
 }

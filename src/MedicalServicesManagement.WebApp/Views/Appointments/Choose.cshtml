@@ -12,6 +12,10 @@
 
 <section class="appointment section">
     <div class="container" data-aos="fade-up">
+        @if (Model.Medic != null)
+        {
+            <div class="time fs-5 fw-bold mb-1">Врач: @Model.Medic.FullName</div>
+        }
         @foreach (var dateGroup in appointmentsByDate)
         {
             <div class="row mb-4">
@@ -21,19 +25,23 @@
                         <small class="text-muted">(@dateGroup.Key.ToString("ddd"))</small>
                     </h5>
                 </div>
-
                 @foreach (var appointment in dateGroup)
                 {
                     <div class="col-lg-2 col-md-3 col-sm-4 col-6 mb-2">
-                        <a asp-action="Take" asp-route-appointmentId="@appointment.Id" asp-route-patientId="@(Model.Patient?.Id ?? string.Empty)" class="btn btn-outline-primary btn-time-slot w-100 h-100 d-flex flex-column align-items-center p-3 text-decoration-none">
+                        <a asp-action="Take" asp-route-appointmentId="@appointment.Id" class="btn btn-outline-primary btn-time-slot w-100 h-100 d-flex flex-column align-items-center p-3 text-decoration-none">
                             <div class="time fs-5 fw-bold mb-1">
                                 @TimeFormatHelper.FormatTimeRange(appointment.StartDate, appointment.EndDate)
                             </div>
                             <div class="duration text-muted small">
                                 @TimeFormatHelper.FormatDuration(appointment.StartDate, appointment.EndDate)
                             </div>
+                            @if (Model.Medic == null)
+                            {
+                                <div class="duration text-muted small">Врач: @appointment.Medic.FullName</div>
+                            }
                         </a>
                     </div>
+
                 }
             </div>
         }

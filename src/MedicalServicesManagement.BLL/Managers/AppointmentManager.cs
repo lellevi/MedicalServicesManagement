@@ -87,9 +87,32 @@ namespace MedicalServicesManagement.BLL.Managers
             return _mapper.Map<List<AppointmentDTO>>(entities);
         }
 
+        public async Task<AppointmentDTO> GetByIdIncludingServiceAndMedicAsync(string id)
+        {
+            var entities = await _repository.GetSingleAsync(
+                filter: x => x.Id == id,
+                includes: [x => x.Service, x => x.Medic]);
+
+            return _mapper.Map<AppointmentDTO>(entities);
+        }
+
+        public async Task MarkAsTakenAsync(string appointmentId, string patientId)
+        {
+            var appointment = await _repository.GetSingleAsync(x => x.Id == appointmentId);
+            if (appointment.Status != AppointmentStatus.Free)
+            {
+                throw new ArgumentException("Данный талон занят, выберите другой");
+            }
+
+            appointment.Status = AppointmentStatus.Taken;
+            appointment.PatientId = patientId;
+            await _repository.UpdateAsync(appointment);
+        }
+
         public async Task<List<AppointmentDTO>> GetAllAsync(string specialityId)
         {
-            var entities = await _repository.GetAllAsync(filter: x => x.Service.MedSpecialityId == specialityId,
+            var entities = await _repository.GetAllAsync(
+                filter: x => x.Service.MedSpecialityId == specialityId,
                 includes: [x => x.Service]);
             return _mapper.Map<List<AppointmentDTO>>(entities);
         }

@@ -30,14 +30,14 @@ namespace MedicalServicesManagement.WebApp.Controllers
         }
 
         [HttpGet("bySpecialityId/{id}")]
-        public async Task<JsonResult> GetBySpecialityId([FromRoute] string id)
+        public async Task<JsonResult> GetByMedSpecialityId([FromRoute] string id)
         {
             if (string.IsNullOrEmpty(id))
             {
                 return Json(new List<ServiceDTO>());
             }
 
-            var services = await _serviceManager.GetAllIncludingSpecialitiesAsync() ?? new List<ServiceDTO>();
+            var services = await _serviceManager.GetByMedSpecialityIdAsync(id) ?? new List<ServiceDTO>();
 
             return Json(services);
         }

@@ -122,7 +122,6 @@ namespace MedicalServicesManagement.WebApp.Controllers
             }
 
             var medicDto = await _userManager.GetByIdIncludingRoles(id);
-
             if (string.IsNullOrEmpty(medicDto.MedSpecialityId))
             {
                 var model = _mapper.Map<UserViewModel>(medicDto);
@@ -130,9 +129,9 @@ namespace MedicalServicesManagement.WebApp.Controllers
                 return View(model);
             }
 
-            var medicServices = await _serviceManager.GetAllIncludingSpecialitiesAsync();
-
             var resultModel = _mapper.Map<UserViewModel>(medicDto);
+            var medicServices = await _serviceManager.GetByMedSpecialityIdAsync(resultModel.MedSpecialityId);
+
             resultModel.Services = _mapper.Map<List<ServiceViewModel>>(medicServices);
 
             return View(resultModel);

@@ -1,0 +1,59 @@
+﻿@model MedicalServicesManagement.WebApp.Models.TakeAppointmentForPatientViewModel
+@using MedicalServicesManagement.WebApp.Enums
+@using MedicalServicesManagement.WebApp.Helpers
+
+@{
+    ViewData["ShowTitle"] = true;
+    ViewData["Title"] = "Доступные талоны:";
+}
+
+<section class="appointment section">
+    <div class="container" data-aos="fade-up">
+
+        @if (Model?.Medic != null)
+        {
+            <div class="time fs-5 fw-bold mb-1">Врач: @Model.Medic.FullName</div>
+        }
+
+        @if (Model?.AvailableAppointments?.Any() == true)
+        {
+            @foreach (var group in Model.AppointmentsByDate)
+            {
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h5 class="text-primary mb-3">
+                            [@group.Key.ToString("d MMMM")]
+                            <small class="text-muted">(@group.Key.ToString("ddd"))</small>
+                        </h5>
+                    </div>
+                    <div class="row">
+                        @foreach (var appointment in group.Value)
+                        {
+                            <div class="col-lg-2 col-md-3 col-sm-4 col-6 mb-2">
+                                <a asp-action="Take" asp-route-appointmentId="@appointment.Id" asp-route-patientId="@Model.PatientId" class="btn btn-outline-primary btn-sm w-100 px-2 py-1 d-flex flex-column align-items-center">
+                                    <span class="fs-6">
+                                        @TimeFormatHelper.FormatTimeRange(appointment.StartDate, appointment.EndDate)
+                                    </span>
+                                    @if (Model.Medic == null)
+                                    {
+                                        <small class="text-muted">@appointment.Medic.FullName</small>
+                                    }
+                                </a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="row">
+                <div class="col-12 text-center py-5">
+                    <h5 class="text-muted">
+                        @string.Format("На ближайшие {0} дней нет свободных талонов", Constants.FreeAppointmentsPeriodDays)
+                    </h5>
+                </div>
+            </div>
+        }
+    </div>
+</section>
