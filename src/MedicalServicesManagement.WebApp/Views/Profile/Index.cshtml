@@ -7,3 +7,12 @@
     ViewData["Title"] = "Профиль";
     ViewData["Subtitle"] = User.Identity.IsAuthenticated ? $"Добро пожаловать, {fullname}!" : "Вы не вошли в аккаунт...";
 }
+
+@if (User.IsInRole(Constants.PatientRole))
+{
+    <div class="my-3 text-end">
+        <form method="post" asp-controller="Auth" asp-action="Logout" class="form-inline">
+            <a asp-action="PatientAppointments" asp-controller="Appointments" class="btn btn-appointment w-100 profile-btn">Активные записи</a>
+        </form>
+    </div>
+}

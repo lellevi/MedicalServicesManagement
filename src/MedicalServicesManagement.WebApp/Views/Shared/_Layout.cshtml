@@ -83,11 +83,7 @@
                     }
                     @if (User.IsInRole(Constants.ReceptionistRole))
                     {
-                        <li><a asp-action="NewPatient" asp-controller="Users">Добавить пациента</a></li>
-                    }
-                    @if (User.IsInRole(Constants.PatientRole))
-                    {
-                         <li><a asp-action="PatientAppointments" asp-controller="Appointments">Активные записи</a></li>
+                       <li><a asp-action="Patients" asp-controller="Users">Пациенты</a></li>
                     }
                     @if (User.IsInRole(Constants.AdminRole) || User.IsInRole(Constants.ReceptionistRole))
                     {

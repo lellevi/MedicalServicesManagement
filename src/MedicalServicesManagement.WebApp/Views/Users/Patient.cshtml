@@ -7,7 +7,14 @@
 
 <section class="appointment section">
     <div class="container" data-aos="fade-up">
-        <a class="btn btn-outline-secondary mb-3" asp-action="Index" asp-controller="Users"><i class="fas fa-arrow-left"></i>Вернуться</a>
+        @if (User.IsInRole(Constants.AdminRole))
+        {
+            <a class="btn btn-outline-secondary mb-3" asp-action="Index" asp-controller="Users"><i class="fas fa-arrow-left"></i>Вернуться</a>
+        }
+        @if (User.IsInRole(Constants.ReceptionistRole))
+        {
+            <a class="btn btn-outline-secondary mb-3" asp-action="Patients" asp-controller="Users"><i class="fas fa-arrow-left"></i>Вернуться</a>
+        }
         @if (Model.IsGuest)
         {
             <div class="alert alert-danger">
@@ -34,35 +41,6 @@
         <div class="row gy-4">
             <div class="col-lg-8">
                 <a asp-action="SearchForPatient" asp-controller="Appointments" asp-route-id="@Model.Id" class="btn btn-outline-primary w-100">Быстрая запись на услугу</a>
-
-
-                   @*  <form id="appointmentForm" class="needs-validation" novalidate>
-                        <div class="row gy-4">
-                            <div class="col-md-6 form-group">
-                                <span>Врач</span>
-                                <select id="dropdownMedics" class="form-control" required>
-                                    <option value="">Выберите врача</option>
-                                </select>
-                            </div>
-
-                            <div class="col-md-6 form-group">
-                                <span>Услуга</span>
-                                <select id="dropdownServices" class="form-control" disabled>
-                                    <option value="">Сначала выберите врача</option>
-                                </select>
-                            </div>
-
-                            <div class="col-md-12">
-                                <button type="button" id="showAppointmentsBtn" class="btn btn-outline-primary w-100" disabled>
-                                    <i class="fas fa-calendar-check me-2"></i>
-                                    Записать на приём
-                                </button>
-                            </div>
-                        </div>
-
-                        <input type="hidden" id="patientId" value="@Model.Id" />
-                        <input type="hidden" id="selectedAppointmentId" />
-                    </form> *@
             </div>
         </div>
     </div>

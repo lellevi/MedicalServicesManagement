@@ -226,5 +226,15 @@ namespace MedicalServicesManagement.WebApp.Controllers
 
             return Json(items);
         }
+
+        [HttpGet("patients")]
+        public async Task<IActionResult> Patients()
+        {
+            var role = Constants.PatientRole;
+            var usersDtoList = await _userManager.GetAllByRoleAsync(role);
+            var items = _mapper.Map<List<UserViewModel>>(usersDtoList);
+
+            return View(items);
+        }
     }
 }

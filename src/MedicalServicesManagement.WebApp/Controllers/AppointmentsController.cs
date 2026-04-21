@@ -135,6 +135,7 @@ namespace MedicalServicesManagement.WebApp.Controllers
         public async Task<IActionResult> ChooseForPatient(string patientId, string serviceId, string medicId)
         {
             var serviceDto = await _serviceManager.GetByIdAsync(serviceId);
+            var service = _mapper.Map<ServiceViewModel>(serviceDto);
             var availableAppointmentsDtos = await _appointmentManager.GetAllFreeByMedicAndServiceOrderedAsync(serviceId, medicId);
             var availableAppointments = _mapper.Map<List<AppointmentViewModel>>(availableAppointmentsDtos);
 
@@ -143,7 +144,8 @@ namespace MedicalServicesManagement.WebApp.Controllers
                 PatientId = patientId,
                 ServiceId = serviceId,
                 MedicId = medicId,
-                Service = _mapper.Map<ServiceViewModel>(serviceDto),
+                Service = service,
+                AvailableAppointments = availableAppointments,
                 AppointmentsByDate = availableAppointments.GroupBy(a => a.StartDate.Date).ToDictionary(g => g.Key, g => g.ToList()),
             };
 
@@ -157,22 +159,24 @@ namespace MedicalServicesManagement.WebApp.Controllers
         }
 
         [HttpGet("choose")]
-        public async Task<IActionResult> Choose([FromQuery] string medicId, [FromQuery] string serviceId)
+        public async Task<IActionResult> Choose(string serviceId, string medicId)
         {
             var serviceDto = await _serviceManager.GetByIdAsync(serviceId);
-
-            var avaibleAppointments = await _appointmentManager.GetAllFreeByMedicAndServiceOrderedAsync(serviceId, medicId);
+            var service = _mapper.Map<ServiceViewModel>(serviceDto);
+            var availableAppointmentsDtos = await _appointmentManager.GetAllFreeByMedicAndServiceOrderedAsync(serviceId, medicId);
+            var availableAppointments = _mapper.Map<List<AppointmentViewModel>>(availableAppointmentsDtos);
 
             var model = new TakeAppointmentViewModel
             {
-                Service = _mapper.Map<ServiceViewModel>(serviceDto),
-                AvailableAppointments = _mapper.Map<List<AppointmentViewModel>>(avaibleAppointments),
+                Service = service,
+                AvailableAppointments = availableAppointments,
+                AppointmentsByDate = availableAppointments.GroupBy(a => a.StartDate.Date).ToDictionary(g => g.Key, g => g.ToList()),
             };
 
             if (!string.IsNullOrEmpty(medicId))
             {
-                var medic = await _entityUserManager.GetByIdAsync(medicId);
-                model.Medic = _mapper.Map<UserViewModel>(medic);
+                var medicDto = await _entityUserManager.GetByIdAsync(medicId);
+                model.Medic = _mapper.Map<UserViewModel>(medicDto);
             }
 
             return View(model);
@@ -188,11 +192,11 @@ namespace MedicalServicesManagement.WebApp.Controllers
                            User.FindFirst("userId")?.Value;
             }
 
+            var patientDto = await _entityUserManager.GetByAuthIdAsync(patientId);
+            var patient = _mapper.Map<UserViewModel>(patientDto);
+
             var appointmentDto = await _appointmentManager.GetByIdIncludingServiceAndMedicAsync(appointmentId);
             var appointment = _mapper.Map<AppointmentViewModel>(appointmentDto);
-
-            var patientDto = await _entityUserManager.GetByIdAsync(patientId);
-            var patient = _mapper.Map<UserViewModel>(patientDto);
 
             var model = new TakeConfirmViewModel
             {
