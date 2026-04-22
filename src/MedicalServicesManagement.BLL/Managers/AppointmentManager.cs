@@ -109,6 +109,19 @@ namespace MedicalServicesManagement.BLL.Managers
             await _repository.UpdateAsync(appointment);
         }
 
+        public async Task MarkAsFreeAsync(string appointmentId)
+        {
+            var appointment = await _repository.GetSingleAsync(x => x.Id == appointmentId);
+            if (appointment.Status == AppointmentStatus.Free)
+            {
+                throw new ArgumentException("Данный талон уже свободен.");
+            }
+
+            appointment.Status = AppointmentStatus.Free;
+            appointment.PatientId = null;
+            await _repository.UpdateAsync(appointment);
+        }
+
         public async Task<List<AppointmentDTO>> GetAllAsync(string specialityId)
         {
             var entities = await _repository.GetAllAsync(

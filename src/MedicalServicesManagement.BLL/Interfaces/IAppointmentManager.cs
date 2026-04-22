@@ -12,6 +12,8 @@ namespace MedicalServicesManagement.BLL.Interfaces
 
         public Task MarkAsTakenAsync(string appointmentId, string patientId);
 
+        public Task MarkAsFreeAsync(string appointmentId);
+
         public Task<List<AppointmentDTO>> GetAllAsync(string specialityId);
 
         public Task<List<AppointmentDTO>> GetAllFreeByMedicAndServiceOrderedAsync(string serviceId, string medicId = null);

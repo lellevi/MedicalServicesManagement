@@ -29,13 +29,70 @@ namespace MedicalServicesManagement.WebApp.Controllers
             _mapper = mapper;
         }
 
+        //[HttpGet("")]
+        //public async Task<IActionResult> Index()
+        //{
+        //    try
+        //    {
+        //        var items = await _appointmentManager.GetAllIncludingServiceAndMedicAsync();
+        //        var model = _mapper.Map<List<AppointmentViewModel>>(items);
+        //        return View(model);
+        //    }
+        //    catch
+        //    {
+        //        return View(new List<AppointmentViewModel>());
+        //    }
+        //}
+
         [HttpGet("")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string specialityId = null, DateTime? startDate = null,
+            DateTime? endDate = null, string medicId = null, string status = null)
         {
             try
             {
                 var items = await _appointmentManager.GetAllIncludingServiceAndMedicAsync();
-                var model = _mapper.Map<List<AppointmentViewModel>>(items);
+
+                var filtered = items
+                    .AsEnumerable()
+                    .Where(a =>
+                    {
+                        if (!string.IsNullOrEmpty(specialityId) && a.Service.MedSpecialityId != specialityId)
+                        {
+                            return false;
+                        }
+
+                        if (!string.IsNullOrEmpty(medicId) && a.MedicId != medicId)
+                        {
+                            return false;
+                        }
+
+                        if (!string.IsNullOrEmpty(status))
+                        {
+                            if (!Enum.TryParse<BLL.Enums.AppointmentStatus>(status, out var statusEnum))
+                            {
+                                return false;
+                            }
+
+                            if (a.Status != statusEnum)
+                            {
+                                return false;
+                            }
+                        }
+
+                        if (startDate.HasValue && a.StartDate < startDate.Value)
+                        {
+                            return false;
+                        }
+
+                        if (endDate.HasValue && a.EndDate.Date > endDate.Value.Date)
+                        {
+                            return false;
+                        }
+
+                        return true;
+                    }).ToList();
+
+                var model = _mapper.Map<List<AppointmentViewModel>>(filtered);
                 return View(model);
             }
             catch
@@ -265,6 +322,17 @@ namespace MedicalServicesManagement.WebApp.Controllers
             {
                 return View(new List<AppointmentViewModel>());
             }
+        }
+
+        [HttpPost("free")]
+        public async Task<IActionResult> Free(string appointmentId)
+        {
+            if (!string.IsNullOrEmpty(appointmentId))
+            {
+                await _appointmentManager.MarkAsFreeAsync(appointmentId);
+            }
+
+            return RedirectToAction("Index", "Appointments");
         }
     }
 }
