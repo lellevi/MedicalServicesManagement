@@ -29,21 +29,6 @@ namespace MedicalServicesManagement.WebApp.Controllers
             _mapper = mapper;
         }
 
-        //[HttpGet("")]
-        //public async Task<IActionResult> Index()
-        //{
-        //    try
-        //    {
-        //        var items = await _appointmentManager.GetAllIncludingServiceAndMedicAsync();
-        //        var model = _mapper.Map<List<AppointmentViewModel>>(items);
-        //        return View(model);
-        //    }
-        //    catch
-        //    {
-        //        return View(new List<AppointmentViewModel>());
-        //    }
-        //}
-
         [HttpGet("")]
         public async Task<IActionResult> Index(string specialityId = null, DateTime? startDate = null,
             DateTime? endDate = null, string medicId = null, string status = null)
@@ -53,7 +38,6 @@ namespace MedicalServicesManagement.WebApp.Controllers
                 var items = await _appointmentManager.GetAllIncludingServiceAndMedicAsync();
 
                 var filtered = items
-                    .AsEnumerable()
                     .Where(a =>
                     {
                         if (!string.IsNullOrEmpty(specialityId) && a.Service.MedSpecialityId != specialityId)
@@ -330,6 +314,11 @@ namespace MedicalServicesManagement.WebApp.Controllers
             if (!string.IsNullOrEmpty(appointmentId))
             {
                 await _appointmentManager.MarkAsFreeAsync(appointmentId);
+            }
+
+            if (User.IsInRole(Constants.PatientRole))
+            {
+                return RedirectToAction("PatientAppointments", "Appointments");
             }
 
             return RedirectToAction("Index", "Appointments");

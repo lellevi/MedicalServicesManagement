@@ -41,6 +41,11 @@
                                     <span>Начальная стоимость услуги (без учёта доп.услуг)</span>
                                     <span class="fw-bold text-success">@appointment.Service.Cost.ToString("C")</span>
                                 </div>
+
+                                <form asp-controller="Appointments" asp-action="Free" method="post">
+                                    <input type="hidden" name="appointmentId" value="@appointment.Id" />
+                                    <button type="submit" class="btn btn-sm btn-outline-secondary">Отказаться от талона</button>
+                                </form>
                             </div>
                         </div>
                     </div>
