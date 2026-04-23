@@ -29,6 +29,18 @@ namespace MedicalServicesManagement.WebApp.Controllers
             _mapper = mapper;
         }
 
+        private string GetUserIdFromClaims()
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return null;
+            }
+
+            return User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                   ?? User.FindFirst("sub")?.Value
+                   ?? User.FindFirst("userId")?.Value;
+        }
+
         [HttpGet("")]
         public async Task<IActionResult> Index(string specialityId = null, DateTime? startDate = null,
             DateTime? endDate = null, string medicId = null, string status = null)
@@ -228,9 +240,7 @@ namespace MedicalServicesManagement.WebApp.Controllers
         {
             if (string.IsNullOrEmpty(patientId))
             {
-                patientId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ??
-                           User.FindFirst("sub")?.Value ??
-                           User.FindFirst("userId")?.Value;
+                patientId = GetUserIdFromClaims();
             }
 
             var patientDto = await _entityUserManager.GetByAuthIdAsync(patientId);
@@ -286,8 +296,7 @@ namespace MedicalServicesManagement.WebApp.Controllers
                     return RedirectToAction("Login", "Account");
                 }
 
-                var currentUserAuthId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ??
-                                   User.FindFirst("userId")?.Value; // TODO: to private method
+                var currentUserAuthId = GetUserIdFromClaims();
 
                 var currentUser = await _entityUserManager.GetByAuthIdAsync(currentUserAuthId);
 
