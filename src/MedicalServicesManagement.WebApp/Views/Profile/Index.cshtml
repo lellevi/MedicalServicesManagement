@@ -10,9 +10,34 @@
 
 @if (User.IsInRole(Constants.PatientRole))
 {
-    <div class="my-3 text-end">
-        <form method="post" asp-controller="Auth" asp-action="Logout" class="form-inline">
-            <a asp-action="PatientAppointments" asp-controller="Appointments" class="btn btn-appointment w-100 profile-btn">Активные записи</a>
-        </form>
-    </div>
+    <section class="profile section">
+        <div class="container" data-aos="fade-up">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <div class="text-center">
+                        <div class="profile-avatar d-inline-block mb-3">
+                            <div class="bg-primary text-white d-flex align-items-center justify-content-center rounded-circle"
+                                 style="width: 200px; height: 200px; font-size: 2rem;">
+                            </div>
+                        </div>
+
+                        <div class="mt-2 profile-info text-start mx-auto" style="max-width: 250px;">
+                            <h6>@fullname</h6>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="profile-actions d-flex flex-column gap-2">
+                        <a asp-action="PatientAppointments" asp-controller="Appointments" class="btn btn-appointment w-100 profile-btn">
+                            Действующие записи
+                        </a>
+                        <a asp-action="HistoryPatientAppointments" asp-controller="Appointments" class="btn btn-appointment w-100 profile-btn">
+                            Архив
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 }

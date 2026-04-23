@@ -306,7 +306,11 @@ namespace MedicalServicesManagement.WebApp.Controllers
                 }
 
                 var allAppointments = await _appointmentManager.GetAllIncludingServiceAndMedicAsync();
-                var userAppointments = allAppointments.Where(a => a.PatientId == currentUser.Id && a.Status != BLL.Enums.AppointmentStatus.DonePaid).ToList();
+                var userAppointments = allAppointments.Where(
+                    a => a.PatientId == currentUser.Id &&
+                    (a.Status == BLL.Enums.AppointmentStatus.Taken ||
+                    a.Status == BLL.Enums.AppointmentStatus.DoneNoPay))
+                    .ToList();
 
                 var model = _mapper.Map<List<AppointmentViewModel>>(userAppointments);
                 return View(model);
@@ -331,6 +335,38 @@ namespace MedicalServicesManagement.WebApp.Controllers
             }
 
             return RedirectToAction("Index", "Appointments");
+        }
+
+        [HttpGet("history")]
+        public async Task<IActionResult> HistoryPatientAppointments()
+        {
+            try
+            {
+                if (!User.Identity.IsAuthenticated)
+                {
+                    return RedirectToAction("Login", "Account");
+                }
+
+                var currentUserAuthId = GetUserIdFromClaims();
+                var currentUser = await _entityUserManager.GetByAuthIdAsync(currentUserAuthId);
+
+                if (string.IsNullOrEmpty(currentUser.Id))
+                {
+                    return View(new List<AppointmentViewModel>());
+                }
+
+                var allAppointments = await _appointmentManager.GetAllIncludingServiceAndMedicAsync();
+                var userAppointments = allAppointments.Where(
+                    a => a.PatientId == currentUser.Id &&
+                    a.Status == BLL.Enums.AppointmentStatus.DonePaid).ToList();
+
+                var model = _mapper.Map<List<AppointmentViewModel>>(userAppointments);
+                return View(model);
+            }
+            catch
+            {
+                return View(new List<AppointmentViewModel>());
+            }
         }
     }
 }
