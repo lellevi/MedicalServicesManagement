@@ -3,9 +3,9 @@ using MedicalServicesManagement.BLL.Dto;
 using MedicalServicesManagement.BLL.Interfaces;
 using MedicalServicesManagement.DAL.Entities;
 using MedicalServicesManagement.DAL.Interfaces;
-using MedicalServicesManagement.DAL.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -13,12 +13,9 @@ namespace MedicalServicesManagement.BLL.Managers
 {
     internal class AppointmentManager : BaseManager<AppointmentDTO, Appointment>, IAppointmentManager
     {
-        private readonly IAppointmentRepository _appointmentRepository;
-
-        public AppointmentManager(IAppointmentRepository repository, IMapper mapper)
+        public AppointmentManager(IRepository<Appointment> repository, IMapper mapper)
             : base(repository, mapper)
         {
-            _appointmentRepository = repository;
         }
 
         protected override string EntityName { get => "appointment"; }
@@ -55,7 +52,8 @@ namespace MedicalServicesManagement.BLL.Managers
                 && x.ServiceId == serviceId && x.MedicId == medicId
                  && x.StartDate >= DateTime.UtcNow.Date && x.StartDate <= threeWeeksFromNow);
 
-            var entities = await _appointmentRepository.GetAllFreeAppointmentsOrderedAsync(filter, [x => x.Service, x => x.Medic]);
+            var entities = await _repository.GetAllAsync(filter, [x => x.Service, x => x.Medic]);
+            entities = entities.OrderBy(a => a.StartDate.Date).ThenBy(a => a.StartDate.TimeOfDay).ToList();
 
             return _mapper.Map<List<AppointmentDTO>>(entities);
         }
