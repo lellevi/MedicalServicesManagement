@@ -119,7 +119,6 @@ namespace MedicalServicesManagement.WebApp.Controllers
             catch (ArgumentException ex)
             {
                 ModelState.AddModelError(string.Empty, ex.Message);
-                return View();
             }
 
             return RedirectToAction("Index");
