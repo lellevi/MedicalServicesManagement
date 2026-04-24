@@ -1,5 +1,6 @@
 ﻿using MedicalServicesManagement.WebApp.Enums;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MedicalServicesManagement.WebApp.Helpers
 {
@@ -16,6 +17,11 @@ namespace MedicalServicesManagement.WebApp.Helpers
         public static string Translate(AppointmentStatus status)
         {
             return Enums.GetValueOrDefault(status);
+        }
+
+        public static IEnumerable<AppointmentStatus> GetStatusKeys()
+        {
+            return Enums.Keys.OrderBy(k => k.ToString());
         }
     }
 }

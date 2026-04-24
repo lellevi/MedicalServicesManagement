@@ -42,53 +42,30 @@ namespace MedicalServicesManagement.WebApp.Controllers
         }
 
         [HttpGet("")]
-        public async Task<IActionResult> Index(string specialityId = null, DateTime? startDate = null,
-            DateTime? endDate = null, string medicId = null, string status = null)
+        public async Task<IActionResult> Index(
+            [FromQuery] string specialityId = null,
+            [FromQuery] DateTime? startDate = null,
+            [FromQuery] DateTime? endDate = null,
+            [FromQuery] string medicId = null,
+            [FromQuery] string status = null)
         {
             try
             {
-                var items = await _appointmentManager.GetAllIncludingServiceAndMedicAsync();
+                BLL.Enums.AppointmentStatus? statusEnum = null;
 
-                var filtered = items
-                    .Where(a =>
-                    {
-                        if (!string.IsNullOrEmpty(specialityId) && a.Service.MedSpecialityId != specialityId)
-                        {
-                            return false;
-                        }
+                if (!string.IsNullOrEmpty(status) && Enum.TryParse<BLL.Enums.AppointmentStatus>(status, out var parsed))
+                {
+                    statusEnum = parsed;
+                }
 
-                        if (!string.IsNullOrEmpty(medicId) && a.MedicId != medicId)
-                        {
-                            return false;
-                        }
+                var dtos = await _appointmentManager.GetFilteredAppointmentsAsync(
+                    specialityId,
+                    medicId,
+                    statusEnum,
+                    startDate,
+                    endDate);
 
-                        if (!string.IsNullOrEmpty(status))
-                        {
-                            if (!Enum.TryParse<BLL.Enums.AppointmentStatus>(status, out var statusEnum))
-                            {
-                                return false;
-                            }
-
-                            if (a.Status != statusEnum)
-                            {
-                                return false;
-                            }
-                        }
-
-                        if (startDate.HasValue && a.StartDate < startDate.Value)
-                        {
-                            return false;
-                        }
-
-                        if (endDate.HasValue && a.EndDate.Date > endDate.Value.Date)
-                        {
-                            return false;
-                        }
-
-                        return true;
-                    }).ToList();
-
-                var model = _mapper.Map<List<AppointmentViewModel>>(filtered);
+                var model = _mapper.Map<List<AppointmentViewModel>>(dtos);
                 return View(model);
             }
             catch

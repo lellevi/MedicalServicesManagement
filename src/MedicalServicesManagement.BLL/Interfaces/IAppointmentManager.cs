@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using MedicalServicesManagement.BLL.Dto;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using MedicalServicesManagement.BLL.Dto;
 
 namespace MedicalServicesManagement.BLL.Interfaces
 {
@@ -9,6 +10,8 @@ namespace MedicalServicesManagement.BLL.Interfaces
         public Task<List<AppointmentDTO>> GetAllIncludingServiceAndMedicAsync();
 
         public Task<AppointmentDTO> GetByIdIncludingServiceAndMedicAsync(string id);
+
+        public Task<List<AppointmentDTO>> GetFilteredAppointmentsAsync(string specialityId, string medicId, Enums.AppointmentStatus? status, DateTime? startDate, DateTime? endDate);
 
         public Task MarkAsTakenAsync(string appointmentId, string patientId);
 

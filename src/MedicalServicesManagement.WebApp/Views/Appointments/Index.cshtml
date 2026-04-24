@@ -50,9 +50,9 @@
                             <label class="form-label">Статус</label>
                             <select name="status" class="form-select">
                                 <option value="">Все</option>
-                                @foreach (var status in Enum.GetValues<MedicalServicesManagement.WebApp.Enums.AppointmentStatus>())
+                                @foreach (var status in EnumHelper.GetStatusKeys())
                                 {
-                                    <option value="@status">@status</option>
+                                    <option value="@status">@EnumHelper.Enums[status]</option>
                                 }
                             </select>
                         </div>

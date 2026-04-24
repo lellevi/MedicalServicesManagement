@@ -94,6 +94,32 @@ namespace MedicalServicesManagement.BLL.Managers
             return _mapper.Map<AppointmentDTO>(entities);
         }
 
+        public async Task<List<AppointmentDTO>> GetFilteredAppointmentsAsync(
+            string specialityId,
+            string medicId,
+            Enums.AppointmentStatus? status,
+            DateTime? startDate,
+            DateTime? endDate)
+        {
+            Expression<Func<Appointment, bool>> filter = x =>
+                (string.IsNullOrEmpty(specialityId) || x.Service.MedSpecialityId == specialityId) &&
+                (string.IsNullOrEmpty(medicId) || x.MedicId == medicId) &&
+                (!status.HasValue || x.Status == (AppointmentStatus)status) &&
+                (!startDate.HasValue || x.StartDate.Date >= startDate.Value.Date) &&
+                (!endDate.HasValue || x.EndDate.Date <= endDate.Value.Date);
+
+            var entities = await _repository.GetAllAsync(
+                filter: filter,
+                includes: [x => x.Service, x => x.Medic]);
+
+            entities = entities
+                .OrderBy(a => a.StartDate.Date)
+                .ThenBy(a => a.StartDate.TimeOfDay)
+                .ToList();
+
+            return _mapper.Map<List<AppointmentDTO>>(entities);
+        }
+
         public async Task MarkAsTakenAsync(string appointmentId, string patientId)
         {
             var appointment = await _repository.GetSingleAsync(x => x.Id == appointmentId);
