@@ -22,7 +22,7 @@ namespace MedicalServicesManagement.BLL.Managers
 
         protected abstract string EntityName { get; }
 
-        public async Task CreateAsync(TDTO item)
+        public virtual async Task CreateAsync(TDTO item)
         {
             Validate(item);
 

@@ -98,7 +98,6 @@ namespace MedicalServicesManagement.WebApp.Controllers
 
             try
             {
-                model.Status = Enums.AppointmentStatus.Free;
                 await _appointmentManager.CreateAsync(_mapper.Map<AppointmentDTO>(model));
             }
             catch (ArgumentException ex)

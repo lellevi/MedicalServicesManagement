@@ -58,6 +58,17 @@ namespace MedicalServicesManagement.BLL.Managers
             return _mapper.Map<List<AppointmentDTO>>(entities);
         }
 
+        public override async Task CreateAsync(AppointmentDTO item)
+        {
+            Validate(item);
+
+            var entity = _mapper.Map<Appointment>(item);
+
+            entity.Status = AppointmentStatus.Free;
+
+            await _repository.CreateAsync(entity);
+        }
+
         public override async Task UpdateAsync(AppointmentDTO item)
         {
             try
