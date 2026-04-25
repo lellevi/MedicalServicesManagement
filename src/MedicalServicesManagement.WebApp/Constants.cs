@@ -9,5 +9,7 @@
         public const string PatientRole = "Пациент";
         public const string MedicRole = "Врач";
         public const string ReceptionistRole = "Регистратор";
+
+        public const int FreeAppointmentsPeriodDays = 21;
     }
 }

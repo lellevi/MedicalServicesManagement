@@ -1,8 +1,12 @@
 ﻿using AutoMapper;
 using MedicalServicesManagement.BLL.Dto;
-using MedicalServicesManagement.BLL.Managers;
+using MedicalServicesManagement.BLL.Interfaces;
 using MedicalServicesManagement.WebApp.Models;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MedicalServicesManagement.WebApp.Controllers
 {
@@ -25,10 +29,23 @@ namespace MedicalServicesManagement.WebApp.Controllers
             return Json(items);
         }
 
+        [HttpGet("bySpecialityId/{id}")]
+        public async Task<JsonResult> GetByMedSpecialityId([FromRoute] string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return Json(new List<ServiceDTO>());
+            }
+
+            var services = await _serviceManager.GetByMedSpecialityIdAsync(id) ?? new List<ServiceDTO>();
+
+            return Json(services);
+        }
+
         [HttpGet("")]
         public async Task<IActionResult> Index()
         {
-            var servicesDtos = await _serviceManager.GetAllIncludingSpecialitiesAsync();
+            var servicesDtos = await _serviceManager.GetAllIncludingSpecialitiesAsync() ?? new List<ServiceDTO>();
 
             var items = _mapper.Map<List<ServiceViewModel>>(servicesDtos);
 

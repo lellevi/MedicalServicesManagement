@@ -6,6 +6,8 @@
 
 <section class="appointmnet section">
     <div class="container" data-aos="fade-up">
+        <a class="btn btn-outline-secondary mb-3" asp-action="Index" asp-controller="Home"><i class="fas fa-arrow-left"></i>Вернуться</a>
+
         @if (User.IsInRole(Constants.AdminRole))
         {
             <div class="row gy-10 mb-3">
@@ -27,7 +29,7 @@
                                 <span class="badge @(service.ForAdults ? "bg-success" : "bg-warning") me-2">
                                     @(service.ForAdults ? "Для взрослых" : "Для детей")
                                 </span>
-                                <span class="fw-bold text-primary">@service.Cost ₽</span>
+                                <span class="fw-bold text-primary">@service.Cost byn</span>
                             </div>
                             @if (!string.IsNullOrEmpty(service.Comment))
                             {
@@ -44,7 +46,7 @@
                         @if (User.IsInRole(Constants.PatientRole))
                         {
                             <div class="med-speciality-actions">
-                                <a class="btn btn-sm btn-primary">Свободные талоны</a>
+                                <a asp-controller="Appointments" asp-action="Choose" asp-route-serviceId="@service.Id" class="btn btn-sm btn-primary">Свободные талоны</a>
                             </div>
                         }
                     </div>

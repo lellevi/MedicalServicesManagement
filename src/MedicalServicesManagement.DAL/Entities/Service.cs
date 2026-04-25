@@ -7,7 +7,7 @@ namespace MedicalServicesManagement.DAL.Entities
     public class Service : BaseEntity
     {
         [Required]
-        [MaxLength(50)]
+        [MaxLength(100)]
         public string Name { get; set; }
 
         public bool ForAdults { get; set; } = true;

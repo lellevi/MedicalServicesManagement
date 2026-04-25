@@ -1,4 +1,7 @@
-﻿namespace MedicalServicesManagement.WebApp.Extensions
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace MedicalServicesManagement.WebApp.Extensions
 {
     public static class OptionsExtensions
     {

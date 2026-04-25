@@ -8,7 +8,7 @@ namespace MedicalServicesManagement.WebApp.Models
 
         [Required]
         [MaxLength(50)]
-        [Display(Description = "Введите название услуги")]
+        [Display(Name = "Название услуги")]
         public string Name { get; set; }
 
         [Display(Name = "Для взрослых")]
@@ -16,6 +16,7 @@ namespace MedicalServicesManagement.WebApp.Models
 
         [Required]
         [MaxLength(36)]
+        [Display(Name = "Специальность")]
         public string MedSpecialityId { get; set; }
 
         public MedSpecialityViewModel MedSpeciality { get; set; }
@@ -25,7 +26,9 @@ namespace MedicalServicesManagement.WebApp.Models
         public decimal Cost { get; set; }
 
         [MaxLength(100)]
-        [Display(Description = "Дополнительная информация")]
+        [Display(Name = "Дополнительная информация")]
         public string Comment { get; set; }
+
+        public string AgeRestriction => ForAdults ? "от 18 лет" : "до 18 лет";
     }
 }

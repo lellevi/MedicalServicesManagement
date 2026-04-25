@@ -1,0 +1,92 @@
+﻿@model MedicalServicesManagement.WebApp.Models.TakeAppointmentForPatientViewModel
+
+@{
+    ViewData["ShowTitle"] = true;
+    ViewData["Title"] = "Поиск услуги";
+    ViewData["Subtitle"] = "Выберите услугу и врача (при необходимости)";
+}
+
+<section class="appointment section">
+    <div class="container" data-aos="fade-up">
+        <form asp-action="ChooseForPatient" asp-controller="Appointments" method="get">
+            <input asp-for="PatientId" hidden />
+
+            <p><b>Пациент:</b> @Model.Patient.FullName</p>
+
+            <div class="row mb-4">
+                <div class="col-md-12 form-group">
+                    <label asp-for="ServiceId">Медицинская услуга</label>
+                    <select asp-for="ServiceId" id="dropdownServices" class="form-control" required>
+                        <option value="" disabled selected>Выберите услугу</option>
+                        @foreach (var service in Model.Services)
+                        {
+                            <option value="@service.Id" data-speciality="@service.MedSpecialityId">@service.Name (@service.AgeRestriction)</option>
+                        }
+                    </select>
+                    <span asp-validation-for="ServiceId" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-12 form-group">
+                    <label asp-for="MedicId">Врач (при необходимости)</label>
+                    <select asp-for="MedicId" id="dropdownMedics" name="MedicId" class="form-control">
+                        <option value="">Все врачи</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-12" id="searchResults">
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-success w-100 mt-3">Запись на приём</button>
+        </form>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#dropdownServices").on("change", function () {
+                const serviceSelect = $(this);
+                const medicSelect = $("#dropdownMedics");
+                const serviceSpecialityId = serviceSelect.find(":selected").data("speciality");
+
+                medicSelect.empty();
+                medicSelect.append('<option value="">Не выбрано</option>');
+
+                if (!serviceSpecialityId) {
+                    return;
+                }
+
+                $.ajax({
+                    url: "/Users/searchDoc",
+                    type: "GET",
+                    data: { specialityId: serviceSpecialityId },
+                    dataType: "json",
+                    success: function (medics) {
+                        if (!medics || medics.length === 0) {
+                            medicSelect.append('<option disabled>Нет врачей для этой специальности</option>');
+                            return;
+                        }
+
+                        $.each(medics, function (i, item) {
+                            medicSelect.append(`<option value="${item.id}" data-speciality="${item.medSpecialityId}">${item.fullName}</option>`);
+                        });
+
+                        const selectedMedicId = medicSelect.data("selected-medic-id");
+                        if (selectedMedicId) {
+                            medicSelect.val(selectedMedicId);
+                        }
+                    },
+                    error: function () {
+                        medicSelect.append('<option disabled>Ошибка загрузки врачей</option>');
+                    }
+                });
+            });
+         });
+
+    </script>
+}

@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MedicalServicesManagement.WebApp.Enums;
+using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace MedicalServicesManagement.WebApp.Models
 {
@@ -6,7 +8,6 @@ namespace MedicalServicesManagement.WebApp.Models
     {
         public string Id { get; set; }
 
-        [Required]
         [MaxLength(36)]
         public string PatientId { get; set; }
 
@@ -30,9 +31,7 @@ namespace MedicalServicesManagement.WebApp.Models
         [Required]
         public DateTime EndDate { get; set; }
 
-        [Required]
-        [MaxLength(20)]
-        public Enums.AppointmentStatus Status { get; set; }
+        public AppointmentStatus Status { get; set; }
 
         [Range(0, double.MaxValue)]
         public decimal TotalCost { get; set; }

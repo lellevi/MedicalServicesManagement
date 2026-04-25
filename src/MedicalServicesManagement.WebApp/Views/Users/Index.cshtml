@@ -1,4 +1,4 @@
-﻿@model Dictionary<string, List<MedicalServicesManagement.WebApp.Models.UserViewModel>>
+﻿@model List<string>
 
 @{
     ViewData["ShowTitle"] = true;
@@ -7,64 +7,107 @@
 
 <section class="appointmnet section">
     <div class="container" data-aos="fade-up">
-        <div class="row gy-3">
-            @foreach (var roleUsers in Model)
-            {
-                <h2>Имеют роль "@roleUsers.Key":</h2>
-                @foreach (var user in roleUsers.Value)
-                {
-                    <div class="col-lg-10">
-                        <div class="appointment-form-wrapper user-card med-speciality-card position-relative" data-user-id="@user.Id">
-                            <div class="user-summary d-flex justify-content-between align-items-center">
-                                <div class="user-avatar me-3">
-                                    <div class="avatar-placeholder">
-                                        <i class="fas fa-user"></i>
-                                    </div>
-                                </div>
-                                <div class="user-main-info flex-grow-1">
-                                    <div class="service-name fw-bold">@user.FullName</div>
-                                    <div class="service-speciality text-muted">@user.MedSpeciality?.Name</div>
-                                </div>
-                                <div class="user-actions">
-                                    <button class="btn btn-sm btn-outline-primary toggle-user-details me-2" type="button">
-                                        <i class="fas fa-chevron-down"></i>
-                                    </button>
-                                    <a asp-action="Edit" asp-route-id="@user.Id" class="btn btn-sm btn-primary">Редактировать</a>
-                                </div>
-                            </div>
-
-                            <div class="user-details collapse mt-3 p-3 bg-light rounded" id="user-details-@user.Id">
-                                <div class="row g-3">
-                                    <div class="col-md-3">
-                                        <strong>Дата рождения:</strong> @user.BirthDate.ToString("dd.MM.yyyy")
-                                    </div>
-                                    <div class="col-md-3">
-                                        <strong>Телефон:</strong> @user.Telephone
-                                    </div>
-                                    <div class="col-md-3">
-                                        <strong>Мед. информация:</strong> @user.MedInfo
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                }
-            }
+        <div class="row mb-4">
+            <div class="col-lg-6">
+                <label class="form-label fw-bold">Показать пользователей с ролью:</label>
+                <select id="roleFilter" class="form-select" required>
+                    <option value="">Все роли</option>
+                    @foreach (var role in Model)
+                    {
+                        <option value="@role">@role</option>
+                    }
+                </select>
+            </div>
         </div>
 
+        <div class="row gy-3" id="usersContainer"></div>
+
+        <div id="noResults" class="row" style="display: none;">
+            <div class="col-12 text-center py-5">
+                <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                <h5 class="text-muted">Пользователи с выбранной ролью не найдены</h5>
+            </div>
+        </div>
     </div>
 </section>
 
 @section Scripts {
     <script>
         $(document).ready(function() {
-            $('.toggle-user-details').on('click', function() {
-                let $button = $(this);
-                let userId = $button.closest('.user-card').data('user-id');
-                let $details = $('#user-details-' + userId);
+            $('#usersContainer').empty();
 
-                $details.collapse('toggle');
+            $('#roleFilter').on('change', function() {
+                const selectedRole = $(this).val();
+                const $usersContainer = $('#usersContainer');
+                const $loadingSpinner = $('#loadingSpinner');
+                const $noResults = $('#noResults');
+
+                $usersContainer.empty();
+                $loadingSpinner.show();
+                $noResults.hide();
+
+                $.ajax({
+                    url: '/Users/byRole',
+                    type: 'GET',
+                    data: { role: selectedRole },
+                    dataType: 'json',
+                    success: function (users) {
+                        $loadingSpinner.hide();
+
+                        if (!users || users.length === 0) {
+                            $noResults.show();
+                            return;
+                        }
+
+                        let html = '';
+                        for (const user of users) {
+                            const hasMedSpeciality = user.medSpeciality !== null;
+
+                            html += `
+                            <div class="col-lg-10 user-item">
+                                <div class="appointment-form-wrapper user-card med-speciality-card position-relative"
+                                     data-user-id="${user.id}">
+                                    <div class="user-summary d-flex justify-content-between align-items-center">
+                                        <div class="user-main-info flex-grow-1">
+                                            <div class="service-name fw-bold">${user.fullName}</div>
+                                            <div class="service-speciality text-muted">
+                                                ${hasMedSpeciality ? `Врач (${user.medSpeciality.name})` : ''}
+                                            </div>
+                                        </div>
+                                        <div class="user-actions">
+                                            <a href="/Users/Patient/${user.id}"
+                                               class="btn btn-sm btn-outline-info me-2"
+                                               title="Страница пациента">
+                                                Страница пациента
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div class="user-details collapse mt-3 p-3 bg-light rounded"
+                                         id="user-details-${user.id}>
+                                        <div class="row g-3">
+                                            <div class="col-md-3">
+                                                <strong>Дата рождения:</strong> ${user.birthDate}
+                                            </div>
+                                            <div class="col-md-3">
+                                                <strong>Телефон:</strong> ${user.telephone || '-'}
+                                            </div>
+                                            <div class="col-md-3">
+                                                <strong>Мед. информация:</strong> ${user.medInfo || '-'}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`;
+                        }
+
+                        $usersContainer.html(html);
+                    },
+                    error: function () {
+                        $loadingSpinner.hide();
+                        $usersContainer.html('<div class="col-12"><div class="alert alert-danger">Ошибка загрузки пользователей</div></div>');
+                    }
+                });
             });
         });
     </script>

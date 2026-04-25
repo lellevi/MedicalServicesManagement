@@ -6,33 +6,38 @@
     ViewData["ShowTitle"] = true;
     ViewData["Title"] = "Профиль";
     ViewData["Subtitle"] = User.Identity.IsAuthenticated ? $"Добро пожаловать, {fullname}!" : "Вы не вошли в аккаунт...";
-    @if (User.Identity.IsAuthenticated)
-    {
-        <div class="my-3 text-end">
-            <form method="post" asp-controller="Auth" asp-action="Logout" class="form-inline">
-                <button type="submit" class="btn btn-appointment w-100 profile-btn">Выйти из аккаунта</button>
-            </form>
-        </div>
-    }
 }
 
-@if (User.IsInRole(Constants.AdminRole))
+@if (User.IsInRole(Constants.PatientRole) || User.IsInRole(Constants.MedicRole))
 {
-    <div class="w-100">
-        <div class="w-100">
-            <div class="appointment-form-wrapper profile-actions-wrapper w-100" data-aos="fade-up" data-aos-delay="200">
-                <div class="row g-3">
-                    <div class="col-md-6">
-                        <a asp-action="Index" asp-controller="MedSpecialities" class="btn btn-appointment w-100 profile-btn">Просмотр мед. специальностей</a>
+    <section class="profile section">
+        <div class="container" data-aos="fade-up">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <div class="text-center">
+                        <div class="profile-avatar d-inline-block mb-3">
+                            <div class="bg-primary text-white d-flex align-items-center justify-content-center rounded-circle"
+                                 style="width: 200px; height: 200px; font-size: 2rem;">
+                            </div>
+                        </div>
+
+                        <div class="mt-2 profile-info text-start mx-auto" style="max-width: 250px;">
+                            <h6>@fullname</h6>
+                        </div>
                     </div>
-                    <div class="col-md-6">
-                        <a asp-action="Index" asp-controller="Services" class="btn btn-appointment w-100 profile-btn">Просмотр услуг</a>
-                    </div>
-                    <div class="col-md-6">
-                        <a asp-action="Index" asp-controller="Users" class="btn btn-appointment w-100 profile-btn">Просмотр пользователей</a>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="profile-actions d-flex flex-column gap-2">
+                        <a asp-action="ActiveAppointments" asp-controller="Appointments" class="btn btn-appointment w-100 profile-btn">
+                            Действующие записи
+                        </a>
+                        <a asp-action="HistoryPatientAppointments" asp-controller="Appointments" class="btn btn-appointment w-100 profile-btn">
+                            Архив
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 }

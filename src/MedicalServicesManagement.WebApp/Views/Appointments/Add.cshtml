@@ -1,0 +1,117 @@
+﻿@model MedicalServicesManagement.WebApp.Models.AppointmentViewModel
+
+@{
+    ViewData["ShowTitle"] = true;
+    ViewData["Title"] = "Добавление талона";
+}
+
+<section class="appointment section">
+    <div class="container" data-aos="fade-up">
+        <div class="row gy-4">
+            <div class="col-lg-8">
+                <div class="appointment-form-wrapper" data-aos="fade-up" data-aos-delay="200">
+                    <form asp-action="Add" method="post" class="appointment-form php-email-form needs-validation" novalidate>
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <div class="row gy-4">
+                            <div class="col-md-12 form-group">
+                                <label asp-for="MedicId">Врач</label>
+                                <select asp-for="MedicId" id="dropdownMedics" class="form-control" required></select>
+                                <span asp-validation-for="MedicId" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-12 form-group">
+                                <label asp-for="ServiceId">Медицинская услуга</label>
+                                <select asp-for="ServiceId" id="dropdownServices" class="form-control" required></select>
+                                <span asp-validation-for="ServiceId" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6 form-group">
+                                <label asp-for="StartDate">Дата и время начала приёма</label>
+                                <input asp-for="StartDate" type="datetime-local" class="form-control" required />
+                                <span asp-validation-for="StartDate" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6 form-group">
+                                <label asp-for="EndDate">Дата и время окончания приёма</label>
+                                <input asp-for="EndDate" type="datetime-local" class="form-control" required />
+                                <span asp-validation-for="EndDate" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <input type="hidden" asp-for="Id" />
+
+                        <button type="submit" class="btn btn-appointment w-100" style="margin-top:20px">Добавить талон</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: "/Users/allMedics",
+                type: "GET",
+                dataType: "json",
+                success: function (medics) {
+                    const medicSelect = $("#dropdownMedics");
+                    medicSelect.empty();
+                    medicSelect.append('<option value="">Выберите врача</option>');
+                    $.each(medics, function (i, item) {
+                        medicSelect.append(`<option value="${item.id}" data-speciality="${item.medSpecialityId}">${item.fullName}</option>`);
+                    });
+                }
+            });
+
+            $.ajax({
+                url: "/Services/getAll",
+                type: "GET",
+                dataType: "json",
+                success: function (services) {
+                    const serviceSelect = $("#dropdownServices");
+                    serviceSelect.empty();
+                    serviceSelect.append('<option value="">Выберите услугу</option>');
+                    $.each(services, function (i, item) {
+                        serviceSelect.append(`<option value="${item.id}" data-speciality="${item.medSpecialityId}">${item.name}${item.forAdults ? " (от 18)" : " (до 18)"}</option>`);
+                    });
+                }
+            });
+
+            $("#dropdownMedics").on("change", function (e) {
+                const newMedicSelect = $(this);
+                const newServiceSelect = $("#dropdownServices");
+                const medicSpecialityId = newMedicSelect.find(":selected").data("speciality");
+
+                newServiceSelect.empty();
+                newServiceSelect.append('<option value="">Выберите услугу</option>');
+
+                if (!medicSpecialityId) {
+                    return;
+                }
+                const url = `/Services/bySpecialityId/${medicSpecialityId}`;
+                $.ajax({
+                    url: url,
+                    type: "GET",
+                    dataType: "json",
+                    success: function (services) {
+                        if (!services || services.length === 0) {
+                            newServiceSelect.append('<option disabled>Нет услуг для этой специальности</option>');
+                            return;
+                        }
+
+                        $.each(services, function (i, item) {
+                            newServiceSelect.append(`<option value="${item.id}">${item.name}${item.forAdults ? " (от 18 лет)" : " (до 18 лет)"}</option>`);
+                        });
+
+                        const selectedServiceId = newServiceSelect.data("selected-service-id");
+                        if (selectedServiceId) {
+                            newServiceSelect.val(selectedServiceId);
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}

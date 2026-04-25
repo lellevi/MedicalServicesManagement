@@ -75,12 +75,47 @@
                 <ul>
                     <li><a asp-controller="Users" asp-action="SearchMedics">Врачи</a></li>
                     <li><a asp-controller="Services" asp-action="Index">Услуги</a></li>
+                    @if (User.IsInRole(Constants.AdminRole))
+                    {
+                        <li><a asp-action="Index" asp-controller="MedSpecialities">Мед. специальности</a></li>
+                        <li><a asp-action="Index" asp-controller="Users">Пользователи</a></li>
+                        <li><a asp-action="Index" asp-controller="AdditionalServices">Доп. услуги</a></li>
+                    }
+                    @if (User.IsInRole(Constants.ReceptionistRole))
+                    {
+                       <li><a asp-action="Patients" asp-controller="Users">Пациенты</a></li>
+                    }
+                    @if (User.IsInRole(Constants.AdminRole) || User.IsInRole(Constants.ReceptionistRole))
+                    {
+                         <li><a asp-action="Index" asp-controller="Appointments">Талоны</a></li>
+
+                    }
                 </ul>
                 <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
             </nav>
-            <div style="margin-left:auto;margin-right:0">
-                <a class="btn-getstarted" href="appointment.html">Запись на приём</a>
-                <a class="btn-getstarted" asp-controller="Profile" asp-action="Index">Личный кабинет</a>
+
+            <div class="header-profile" style="margin-left:auto;">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div class="dropdown">
+                        <a class="btn-getstarted dropdown-toggle" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle"></i> @User.Identity.Name
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" asp-controller="Profile" asp-action="Index">Личный кабинет</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form method="post" asp-controller="Auth" asp-action="Logout" class="logout-form">
+                                    <button type="submit" class="dropdown-item text-danger">Выйти из аккаунта</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                }
+                else
+                {
+                    <a class="btn-getstarted" asp-controller="Auth" asp-action="Login">Войти</a>
+                }
             </div>
         </div>
     </header>

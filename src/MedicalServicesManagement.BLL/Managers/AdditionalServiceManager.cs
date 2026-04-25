@@ -1,17 +1,12 @@
 ﻿using System;
 using AutoMapper;
 using MedicalServicesManagement.BLL.Dto;
-using MedicalServicesManagement.BLL.Interfaces;
 using MedicalServicesManagement.DAL.Entities;
 using MedicalServicesManagement.DAL.Interfaces;
 
 namespace MedicalServicesManagement.BLL.Managers
 {
-    public interface IAdditionalServiceManager : IManager<AdditionalServiceDTO, AdditionalService>
-    {
-    }
-
-    public class AdditionalServiceManager : BaseManager<AdditionalServiceDTO, AdditionalService>, IAdditionalServiceManager
+    internal class AdditionalServiceManager : BaseManager<AdditionalServiceDTO, AdditionalService>
     {
         public AdditionalServiceManager(IRepository<AdditionalService> repository, IMapper mapper)
             : base(repository, mapper)

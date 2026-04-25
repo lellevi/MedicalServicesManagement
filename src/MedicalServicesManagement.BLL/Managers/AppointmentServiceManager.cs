@@ -1,17 +1,12 @@
 ﻿using System;
 using AutoMapper;
 using MedicalServicesManagement.BLL.Dto;
-using MedicalServicesManagement.BLL.Interfaces;
 using MedicalServicesManagement.DAL.Entities;
 using MedicalServicesManagement.DAL.Interfaces;
 
 namespace MedicalServicesManagement.BLL.Managers
 {
-    public interface IAppointmentServiceManager : IManager<AppointmentServiceDTO, AppointmentService>
-    {
-    }
-
-    public class AppointmentServiceManager : BaseManager<AppointmentServiceDTO, AppointmentService>, IAppointmentServiceManager
+    internal class AppointmentServiceManager : BaseManager<AppointmentServiceDTO, AppointmentService>
     {
         public AppointmentServiceManager(IRepository<AppointmentService> repository, IMapper mapper)
             : base(repository, mapper)

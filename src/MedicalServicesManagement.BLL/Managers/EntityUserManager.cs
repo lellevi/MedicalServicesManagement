@@ -1,36 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using MedicalServicesManagement.BLL.Dto;
 using MedicalServicesManagement.BLL.Interfaces;
 using MedicalServicesManagement.DAL.Entities;
 using MedicalServicesManagement.DAL.Interfaces;
-using MedicalServicesManagement.DAL.Repositories;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MedicalServicesManagement.BLL.Managers
 {
-    public interface IEntityUserManager : IManager<EntityUserDTO, EntityUser>
+    internal class EntityUserManager : BaseManager<EntityUserDTO, EntityUser>, IEntityUserManager
     {
-        public Task<List<EntityUserDTO>> GetAllIncludeMedSpecialitiesAsync();
+        public const int ChunkSize = 5;
 
-        public Task<EntityUserDTO> GetByAuthIdAsync(string id);
-
-        public Task<List<EntityUserDTO>> GetMedicsAsync();
-
-        public Task<List<EntityUserDTO>> GetMedicsBySurnameAsync(string surname);
-
-        public Task<List<EntityUserDTO>> GetMedicsBySpecialityAsync(string specialityId);
-
-        public Task<Dictionary<string, List<EntityUserDTO>>> GetAllByRolesAsync(List<string> roles);
-
-        public Task<EntityUserDTO> GetByIdIncludingRoles(string id);
-    }
-
-    public class EntityUserManager : BaseManager<EntityUserDTO, EntityUser>, IEntityUserManager
-    {
         private readonly IEntityUserRepository _userRepository;
 
         public EntityUserManager(IEntityUserRepository repository, IMapper mapper)
@@ -41,37 +24,19 @@ namespace MedicalServicesManagement.BLL.Managers
 
         protected override string EntityName { get => "user"; }
 
-        protected override void Validate(EntityUserDTO item)
+        public async Task<List<EntityUserDTO>> GetAllByRoleAsync(string role)
         {
-            ArgumentNullException.ThrowIfNull(item);
-            if (string.IsNullOrWhiteSpace(item.AuthUserId))
+            List<EntityUserDTO> users = [];
+            var authUsers = await _userRepository.GetAuthUsersByRoleAsync(role);
+            var authUserIds = authUsers.Select(u => u.Id).ToList();
+
+            var authUserIdsChunks = authUserIds.Chunk(ChunkSize);
+
+            foreach (var chunk in authUserIdsChunks)
             {
-                throw new ArgumentException("AuthUserId is required.");
-            }
+                var entityUserChunk = await _userRepository.GetAllAsync(eu => chunk.Contains(eu.AuthUserId), includes: [x => x.MedSpeciality]);
 
-            if (item.AuthUserId.Length > 36)
-            {
-                throw new ArgumentException("AuthUserId max length is 36.");
-            }
-
-            if (!string.IsNullOrEmpty(item.MedInfo) && item.MedInfo.Length > 50)
-            {
-                throw new ArgumentException("MedInfo max length is 50.");
-            }
-        }
-
-        public async Task<Dictionary<string, List<EntityUserDTO>>> GetAllByRolesAsync(List<string> roles)
-        {
-            Dictionary<string, List<EntityUserDTO>> users = [];
-            var entityUsers = await _repository.GetAllAsync(null, [u => u.MedSpeciality]);
-
-            foreach (var role in roles)
-            {
-                var authUsers = await _userRepository.GetAuthUsersByRoleAsync(role);
-                List<EntityUser> listUsers = authUsers.Select(x => entityUsers.FirstOrDefault(e => e.AuthUserId == x.Id)).ToList();
-
-                List<EntityUserDTO> value = _mapper.Map<List<EntityUserDTO>>(listUsers);
-                users.Add(role, value);
+                users.AddRange(_mapper.Map<List<EntityUserDTO>>(entityUserChunk));
             }
 
             return users;
@@ -109,11 +74,18 @@ namespace MedicalServicesManagement.BLL.Managers
             return _mapper.Map<List<EntityUserDTO>>(entities);
         }
 
-        public async Task<EntityUserDTO> GetByAuthIdAsync(string id)
+        public async Task<EntityUserDTO> GetByAuthIdAsync(string id, bool neededRoles = false)
         {
             var entity = await _repository.GetSingleAsync(x => x.AuthUserId == id);
+            var user = _mapper.Map<EntityUserDTO>(entity);
 
-            return _mapper.Map<EntityUserDTO>(entity);
+            if (neededRoles)
+            {
+                var roles = await _userRepository.GetUserRolesAsync(user.Id);
+                user.Roles = roles;
+            }
+
+            return user;
         }
 
         public async Task<List<EntityUserDTO>> GetMedicsAsync()
@@ -133,7 +105,7 @@ namespace MedicalServicesManagement.BLL.Managers
             }
 
             var entities = await _repository.GetAllAsync(
-                x => x.MedSpecialityId != null && x.Surname.ToLower().Contains(surname.ToLower()),
+                x => x.MedSpecialityId != null && x.Surname.Contains(surname),
                 includes: [u => u.MedSpeciality]);
 
             return _mapper.Map<List<EntityUserDTO>>(entities);
@@ -146,6 +118,25 @@ namespace MedicalServicesManagement.BLL.Managers
                 includes: [u => u.MedSpeciality]);
 
             return _mapper.Map<List<EntityUserDTO>>(entities);
+        }
+
+        protected override void Validate(EntityUserDTO item)
+        {
+            ArgumentNullException.ThrowIfNull(item);
+            if (string.IsNullOrWhiteSpace(item.AuthUserId))
+            {
+                throw new ArgumentException("AuthUserId is required.");
+            }
+
+            if (item.AuthUserId.Length > 36)
+            {
+                throw new ArgumentException("AuthUserId max length is 36.");
+            }
+
+            if (!string.IsNullOrEmpty(item.MedInfo) && item.MedInfo.Length > 50)
+            {
+                throw new ArgumentException("MedInfo max length is 50.");
+            }
         }
     }
 }

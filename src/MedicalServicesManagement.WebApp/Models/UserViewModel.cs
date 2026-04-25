@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace MedicalServicesManagement.WebApp.Models
 {
@@ -23,6 +25,11 @@ namespace MedicalServicesManagement.WebApp.Models
         [Display(Description = "Роли")]
         public List<string> Roles { get; set; }
 
+        [Display(Description = "Роль")]
+        public string Role { get; set; }
+
+        public List<ServiceViewModel> Services { get; set; }
+
         [Display(Name = "Фамилия")]
         public string Surname { get; set; }
 
@@ -41,5 +48,7 @@ namespace MedicalServicesManagement.WebApp.Models
 
         [Display(Name = "Мобильный телефон", Description = "+375()")]
         public string Telephone { get; set; }
+
+        public bool IsGuest { get; set; }
     }
 }

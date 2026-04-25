@@ -1,0 +1,150 @@
+﻿@model List<MedicalServicesManagement.WebApp.Models.AppointmentViewModel>
+@using MedicalServicesManagement.WebApp.Enums
+@using MedicalServicesManagement.WebApp.Helpers
+@{
+    ViewData["ShowTitle"] = true;
+    ViewData["Title"] = "Доступные талоны:";
+}
+
+<section class="appointment section">
+    <div class="container" data-aos="fade-up">
+        <a class="btn btn-outline-secondary mb-3" asp-action="Index" asp-controller="Home"><i class="fas fa-arrow-left"></i>Вернуться</a>
+
+        @if (User.IsInRole(Constants.AdminRole) || User.IsInRole(Constants.ReceptionistRole))
+        {
+            <div class="row mb-3">
+                <div class="col-lg-10 d-flex justify-content-between align-items-center">
+                    <a asp-controller="Appointments" asp-action="Add" class="btn btn-primary">Добавить талон</a>
+                </div>
+            </div>
+        }
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <form method="get" asp-action="Index" asp-controller="Appointments">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label class="form-label">Специальность</label>
+                            <select id="specialitySelect" name="specialityId" class="form-select">
+                                <option value="">Все</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label">Дата от</label>
+                            <input name="startDate" type="date" class="form-control" />
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label">Дата до</label>
+                            <input name="endDate" type="date" class="form-control" />
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label">Врач</label>
+                            <select id="medicSelect" name="medicId" class="form-select">
+                                <option value="">Все</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label">Статус</label>
+                            <select name="status" class="form-select">
+                                <option value="">Все</option>
+                                @foreach (var status in EnumHelper.AppointmentStatuses.Keys)
+                                {
+                                    <option value="@((int)status)">@EnumHelper.AppointmentStatuses[status]</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="col-md-3 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary w-100">Фильтровать</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="row gy-3">
+            @foreach (var appointment in Model)
+            {
+                <div class="col-lg-12" style="border: 1px solid #ccc; ">
+                    <div class="appointment-form-wrapper appointment-card d-flex justify-content-between align-items-center">
+                        <div class="appointment-info">
+                            <div class="patient-name fw-bold">@appointment.Patient?.FullName</div>
+                            <div class="service-name text-muted">@appointment.Service?.Name (@(appointment.Service?.AgeRestriction))</div>
+                            <div class="medic-name text-primary">@appointment.Medic?.FullName</div>
+                            <div class="appointment-time mt-1">
+                                <span class="badge bg-info">
+                                    @TimeFormatHelper.FormatTimeRange(appointment.StartDate, appointment.EndDate)
+                                </span>
+                            </div>
+                            <div class="appointment-status mt-1">
+                                @await Html.PartialAsync("_AppointmentStatus", appointment.Status)
+                            </div>
+                            <div class="appointment-cost mt-1">
+                                <span class="fw-bold text-primary">Начальная стоимость: @appointment.Service.Cost byn</span>
+                                @if (appointment.Status == MedicalServicesManagement.WebApp.Enums.AppointmentStatus.DonePaid ||
+                                     appointment.Status == MedicalServicesManagement.WebApp.Enums.AppointmentStatus.DoneNoPay)
+                                {
+                                    <span class="fw-bold text-primary">Итоговая стоимость: @appointment.TotalCost byn</span>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="appointment-actions">
+                            @if (User.IsInRole(Constants.AdminRole) || User.IsInRole(Constants.ReceptionistRole))
+                            {
+                                <form asp-controller="Appointments" asp-action="Free" method="post">
+                                    <input type="hidden" name="appointmentId" value="@appointment.Id" />
+                                    <button type="submit" class="btn btn-sm btn-outline-secondary">Сделать свободным</button>
+                                    <a asp-action="Delete" asp-route-id="@appointment.Id" class="btn btn-sm btn-danger">Удалить</a>
+                                </form>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        $(function () {
+            $.ajax({
+                url: "/MedSpecialities/GetAll",
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                    const select = $("#specialitySelect");
+                    select.empty();
+                    select.append('<option value="">Все специальности</option>');
+                    $.each(data, function (i, item) {
+                        select.append(`<option value="${item.id}">${item.name}</option>`);
+                    });
+                },
+                error: function () {
+                    console.error("Ошибка загрузки специальностей");
+                }
+            });
+
+            $.ajax({
+                url: "/Users/allMedics",
+                type: "GET",
+                dataType: "json",
+                success: function (medics) {
+                    const select = $("#medicSelect");
+                    select.empty();
+                    select.append('<option value="">Все врачи</option>');
+                    $.each(medics, function (i, m) {
+                        select.append(`<option value="${m.id}">${m.fullName}</option>`);
+                    });
+                },
+                error: function () {
+                    console.error("Ошибка загрузки врачей");
+                }
+            });
+        });
+    </script>
+}

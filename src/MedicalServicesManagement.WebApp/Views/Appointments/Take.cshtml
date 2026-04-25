@@ -1,0 +1,73 @@
+﻿@model MedicalServicesManagement.WebApp.Models.TakeConfirmViewModel
+@using MedicalServicesManagement.WebApp.Enums
+@using MedicalServicesManagement.WebApp.Helpers
+
+@{
+    ViewData["ShowTitle"] = true;
+    ViewData["Title"] = "Подтверждение записи";
+}
+
+<section class="appointment section">
+    <div class="container" data-aos="fade-up">
+        <a class="btn btn-outline-secondary mb-3" asp-action="Choose" asp-controller="Appointments" asp-route-medicId="@Model.Appointment.MedicId" asp-route-serviceId="@Model.Appointment.ServiceId"><i class="fas fa-arrow-left"></i>Вернуться</a>
+
+        <div class="row gy-4 justify-content-center">
+            <div class="col-lg-8">
+                <div class="appointment-card p-4 border rounded-3 shadow-sm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="fw-bold text-primary mb-2">Пациент:</div>
+                            <div>@Model.Patient.FullName</div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="fw-bold text-primary mb-2">Телефон:</div>
+                            <div>@Model.Patient.Telephone</div>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="fw-bold text-primary mb-2">Врач:</div>
+                            <div>@Model.Appointment.Medic.FullName</div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="fw-bold text-primary mb-2">Услуга:</div>
+                            <div>
+                                @Model.Appointment.Service.Name
+                                <span class="badge @(Model.Appointment.Service.ForAdults ? "bg-warning" : "bg-info") text-dark ms-2">
+                                    @(Model.Appointment.Service.AgeRestriction)
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="fw-bold text-primary mb-2">Дата и время:</div>
+                            <div class="fs-5">@TimeFormatHelper.FormatTimeRange(@Model.Appointment.StartDate, @Model.Appointment.EndDate)</div>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <div>Начальная стоимость услуги (без доп. услуг)</div>
+                            <div class="fw-bold text-primary mb-2 fs-4">@Model.Appointment.Service.Cost byn</div>
+                        </div>
+                    </div>
+                </div>
+
+                <form id="confirmForm" asp-action="Take" method="post">
+                    <input type="hidden" asp-for="AppointmentId" />
+                    <input type="hidden" asp-for="PatientId" />
+
+                    <div class="d-flex gap-2 mt-4">
+                        <button type="submit" class="btn btn-success flex-fill">
+                            <i class="fas fa-check-circle me-2"></i>Подтвердить запись
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

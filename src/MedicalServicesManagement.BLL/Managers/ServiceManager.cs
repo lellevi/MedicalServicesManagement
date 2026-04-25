@@ -9,12 +9,7 @@ using MedicalServicesManagement.DAL.Interfaces;
 
 namespace MedicalServicesManagement.BLL.Managers
 {
-    public interface IServiceManager : IManager<ServiceDTO, Service>
-    {
-        Task<List<ServiceDTO>> GetAllIncludingSpecialitiesAsync();
-    }
-
-    public class ServiceManager : BaseManager<ServiceDTO, Service>, IServiceManager
+    internal class ServiceManager : BaseManager<ServiceDTO, Service>, IServiceManager
     {
         public ServiceManager(IRepository<Service> repository, IMapper mapper)
             : base(repository, mapper)
@@ -22,6 +17,20 @@ namespace MedicalServicesManagement.BLL.Managers
         }
 
         protected override string EntityName { get => "service"; }
+
+        public async Task<List<ServiceDTO>> GetAllIncludingSpecialitiesAsync()
+        {
+            var entities = await _repository.GetAllAsync(includes: [x => x.MedSpeciality]);
+
+            return _mapper.Map<List<ServiceDTO>>(entities);
+        }
+
+        public async Task<List<ServiceDTO>> GetByMedSpecialityIdAsync(string id)
+        {
+            var entities = await _repository.GetAllAsync(filter: x => x.MedSpecialityId == id, includes: [x => x.MedSpeciality]);
+
+            return _mapper.Map<List<ServiceDTO>>(entities);
+        }
 
         protected override void Validate(ServiceDTO item)
         {
@@ -45,13 +54,6 @@ namespace MedicalServicesManagement.BLL.Managers
             {
                 throw new ArgumentException("Cost must be zero or positive");
             }
-        }
-
-        public async Task<List<ServiceDTO>> GetAllIncludingSpecialitiesAsync()
-        {
-            var entities = await _repository.GetAllAsync(includes: [x => x.MedSpeciality]);
-
-            return _mapper.Map<List<ServiceDTO>>(entities);
         }
     }
 }

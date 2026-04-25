@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using MedicalServicesManagement.WebApp.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace MedicalServicesManagement.WebApp.Controllers
 {

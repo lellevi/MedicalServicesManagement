@@ -7,7 +7,6 @@ namespace MedicalServicesManagement.DAL.Entities
     [Table("Appointment")]
     public class Appointment : BaseEntity
     {
-        [Required]
         [MaxLength(36)]
         public string PatientId { get; set; }
 
@@ -31,8 +30,6 @@ namespace MedicalServicesManagement.DAL.Entities
         [Required]
         public DateTime EndDate { get; set; }
 
-        [Required]
-        [MaxLength(20)]
         public AppointmentStatus Status { get; set; }
 
         [Range(0, double.MaxValue)]
