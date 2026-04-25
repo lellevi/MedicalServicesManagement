@@ -6,7 +6,7 @@ namespace MedicalServicesManagement.WebApp.Helpers
 {
     internal static class EnumHelper
     {
-        public static readonly Dictionary<AppointmentStatus, string> Enums = new ()
+        public static readonly Dictionary<AppointmentStatus, string> AppointmentStatuses = new ()
         {
             [AppointmentStatus.Free] = "Свободный",
             [AppointmentStatus.Taken] = "Забронированный",
@@ -16,12 +16,7 @@ namespace MedicalServicesManagement.WebApp.Helpers
 
         public static string Translate(AppointmentStatus status)
         {
-            return Enums.GetValueOrDefault(status);
-        }
-
-        public static IEnumerable<AppointmentStatus> GetStatusKeys()
-        {
-            return Enums.Keys.OrderBy(k => k.ToString());
+            return AppointmentStatuses.GetValueOrDefault(status);
         }
     }
 }

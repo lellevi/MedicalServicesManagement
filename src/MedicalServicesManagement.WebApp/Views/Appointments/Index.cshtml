@@ -50,9 +50,9 @@
                             <label class="form-label">Статус</label>
                             <select name="status" class="form-select">
                                 <option value="">Все</option>
-                                @foreach (var status in EnumHelper.GetStatusKeys())
+                                @foreach (var status in EnumHelper.AppointmentStatuses.Keys)
                                 {
-                                    <option value="@status">@EnumHelper.Enums[status]</option>
+                                    <option value="@((int)status)">@EnumHelper.AppointmentStatuses[status]</option>
                                 }
                             </select>
                         </div>
