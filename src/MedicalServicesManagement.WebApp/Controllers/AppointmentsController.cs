@@ -47,21 +47,14 @@ namespace MedicalServicesManagement.WebApp.Controllers
             [FromQuery] DateTime? startDate = null,
             [FromQuery] DateTime? endDate = null,
             [FromQuery] string medicId = null,
-            [FromQuery] string status = null)
+            [FromQuery] int? status = null)
         {
             try
             {
-                BLL.Enums.AppointmentStatus? statusEnum = null;
-
-                if (!string.IsNullOrEmpty(status) && Enum.TryParse<BLL.Enums.AppointmentStatus>(status, out var parsed))
-                {
-                    statusEnum = parsed;
-                }
-
-                var dtos = await _appointmentManager.GetFilteredAppointmentsAsync(
+                var dtos = await _appointmentManager.GetAllIncludingServiceAndMedicAsync(
                     specialityId,
                     medicId,
-                    statusEnum,
+                    status,
                     startDate,
                     endDate);
 

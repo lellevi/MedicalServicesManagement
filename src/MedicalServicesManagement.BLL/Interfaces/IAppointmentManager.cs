@@ -7,7 +7,7 @@ namespace MedicalServicesManagement.BLL.Interfaces
 {
     public interface IAppointmentManager : IManager<AppointmentDTO>
     {
-        public Task<List<AppointmentDTO>> GetAllIncludingServiceAndMedicAsync();
+        public Task<List<AppointmentDTO>> GetAllIncludingServiceAndMedicAsync(string specialityId = null, string medicId = null, int? status = null, DateTime? startDate = null, DateTime? endDate = null);
 
         public Task<List<AppointmentDTO>> GetAllPatientAppointmentsAsync(string id);
 
@@ -18,8 +18,6 @@ namespace MedicalServicesManagement.BLL.Interfaces
         public Task<List<AppointmentDTO>> GetMedicHistoryAppointmentsAsync(string id);
 
         public Task<AppointmentDTO> GetByIdIncludingServiceAndMedicAsync(string id);
-
-        public Task<List<AppointmentDTO>> GetFilteredAppointmentsAsync(string specialityId, string medicId, Enums.AppointmentStatus? status, DateTime? startDate, DateTime? endDate);
 
         public Task MarkAsTakenAsync(string appointmentId, string patientId);
 

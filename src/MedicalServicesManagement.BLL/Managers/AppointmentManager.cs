@@ -45,12 +45,12 @@ namespace MedicalServicesManagement.BLL.Managers
         {
             var threeWeeksFromNow = DateTime.UtcNow.Date.AddDays(Constants.FreeAppointmentsPeriodDays);
 
-            Expression<Func<Appointment, bool>> filter = medicId == null ?
-                (x => x.Status == DAL.Entities.AppointmentStatus.Free && x.ServiceId == serviceId
-                 && x.StartDate >= DateTime.UtcNow.Date && x.StartDate <= threeWeeksFromNow)
-                : (x => x.Status == DAL.Entities.AppointmentStatus.Free
-                && x.ServiceId == serviceId && x.MedicId == medicId
-                 && x.StartDate >= DateTime.UtcNow.Date && x.StartDate <= threeWeeksFromNow);
+            Expression<Func<Appointment, bool>> filter = x =>
+                x.Status == AppointmentStatus.Free &&
+                x.ServiceId == serviceId &&
+                x.StartDate >= DateTime.UtcNow.Date &&
+                x.StartDate <= threeWeeksFromNow &&
+                (medicId == null || x.MedicId == medicId);
 
             var entities = await _repository.GetAllAsync(filter, [x => x.Service, x => x.Medic]);
             entities = entities.OrderBy(a => a.StartDate.Date).ThenBy(a => a.StartDate.TimeOfDay).ToList();
@@ -88,10 +88,28 @@ namespace MedicalServicesManagement.BLL.Managers
             }
         }
 
-        public async Task<List<AppointmentDTO>> GetAllIncludingServiceAndMedicAsync()
+        public async Task<List<AppointmentDTO>> GetAllIncludingServiceAndMedicAsync(
+            string specialityId = null,
+            string medicId = null,
+            int? status = null,
+            DateTime? startDate = null,
+            DateTime? endDate = null)
         {
+            Expression<Func<Appointment, bool>> filter = x =>
+                (string.IsNullOrEmpty(specialityId) || x.Service.MedSpecialityId == specialityId) &&
+                (string.IsNullOrEmpty(medicId) || x.MedicId == medicId) &&
+                (!status.HasValue || x.Status == (AppointmentStatus)status.Value) &&
+                (!startDate.HasValue || x.StartDate.Date >= startDate.Value.Date) &&
+                (!endDate.HasValue || x.EndDate.Date <= endDate.Value.Date);
+
             var entities = await _repository.GetAllAsync(
+                filter: filter,
                 includes: [x => x.Service, x => x.Medic]);
+
+            entities = entities
+                .OrderBy(a => a.StartDate.Date)
+                .ThenBy(a => a.StartDate.TimeOfDay)
+                .ToList();
 
             return _mapper.Map<List<AppointmentDTO>>(entities);
         }
@@ -139,32 +157,6 @@ namespace MedicalServicesManagement.BLL.Managers
                 includes: [x => x.Service, x => x.Medic]);
 
             return _mapper.Map<AppointmentDTO>(entities);
-        }
-
-        public async Task<List<AppointmentDTO>> GetFilteredAppointmentsAsync(
-            string specialityId,
-            string medicId,
-            Enums.AppointmentStatus? status,
-            DateTime? startDate,
-            DateTime? endDate)
-        {
-            Expression<Func<Appointment, bool>> filter = x =>
-                (string.IsNullOrEmpty(specialityId) || x.Service.MedSpecialityId == specialityId) &&
-                (string.IsNullOrEmpty(medicId) || x.MedicId == medicId) &&
-                (!status.HasValue || x.Status == (AppointmentStatus)status) &&
-                (!startDate.HasValue || x.StartDate.Date >= startDate.Value.Date) &&
-                (!endDate.HasValue || x.EndDate.Date <= endDate.Value.Date);
-
-            var entities = await _repository.GetAllAsync(
-                filter: filter,
-                includes: [x => x.Service, x => x.Medic]);
-
-            entities = entities
-                .OrderBy(a => a.StartDate.Date)
-                .ThenBy(a => a.StartDate.TimeOfDay)
-                .ToList();
-
-            return _mapper.Map<List<AppointmentDTO>>(entities);
         }
 
         public async Task MarkAsTakenAsync(string appointmentId, string patientId)
