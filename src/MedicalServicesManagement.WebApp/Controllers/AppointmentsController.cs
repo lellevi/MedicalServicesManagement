@@ -145,10 +145,11 @@ namespace MedicalServicesManagement.WebApp.Controllers
         {
             var serviceDto = await _serviceManager.GetByIdAsync(model.ServiceId);
 
-            var avaibleAppointments = await _appointmentManager.GetAllFreeByMedicAndServiceOrderedAsync(model.ServiceId, model.MedicId);
+            var availableAppointmentsDtos = await _appointmentManager.GetAllFreeByMedicAndServiceOrderedAsync(model.ServiceId, model.MedicId);
+            var availableAppointments = _mapper.Map<List<AppointmentViewModel>>(availableAppointmentsDtos);
 
             model.Service = _mapper.Map<ServiceViewModel>(serviceDto);
-            model.AvailableAppointments = _mapper.Map<List<AppointmentViewModel>>(avaibleAppointments);
+            model.AppointmentsByDate = availableAppointments.GroupBy(a => a.StartDate.Date).ToDictionary(g => g.Key, g => g.ToList());
 
             if (!string.IsNullOrEmpty(model.MedicId))
             {
@@ -173,7 +174,6 @@ namespace MedicalServicesManagement.WebApp.Controllers
                 ServiceId = serviceId,
                 MedicId = medicId,
                 Service = service,
-                AvailableAppointments = availableAppointments,
                 AppointmentsByDate = availableAppointments.GroupBy(a => a.StartDate.Date).ToDictionary(g => g.Key, g => g.ToList()),
             };
 
@@ -197,7 +197,6 @@ namespace MedicalServicesManagement.WebApp.Controllers
             var model = new TakeAppointmentViewModel
             {
                 Service = service,
-                AvailableAppointments = availableAppointments,
                 AppointmentsByDate = availableAppointments.GroupBy(a => a.StartDate.Date).ToDictionary(g => g.Key, g => g.ToList()),
             };
 
@@ -211,14 +210,14 @@ namespace MedicalServicesManagement.WebApp.Controllers
         }
 
         [HttpGet("take")]
-        public async Task<IActionResult> Take(string appointmentId, string patientId)
+        public async Task<IActionResult> Take([FromQuery]string appointmentId, [FromQuery] string patientId)
         {
             if (string.IsNullOrEmpty(patientId))
             {
                 patientId = GetUserIdFromClaims();
             }
 
-            var patientDto = await _entityUserManager.GetByAuthIdAsync(patientId);
+            var patientDto = await _entityUserManager.GetByIdAsync(patientId);
             var patient = _mapper.Map<UserViewModel>(patientDto);
 
             var appointmentDto = await _appointmentManager.GetByIdIncludingServiceAndMedicAsync(appointmentId);
@@ -266,7 +265,7 @@ namespace MedicalServicesManagement.WebApp.Controllers
         {
             try
             {
-                if (!User.Identity.IsAuthenticated)
+                if (!User.Identity.IsAuthenticated) //TODO: remove that later
                 {
                     return RedirectToAction("Login", "Account");
                 }

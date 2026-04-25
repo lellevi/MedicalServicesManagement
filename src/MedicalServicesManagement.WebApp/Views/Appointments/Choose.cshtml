@@ -22,7 +22,7 @@
             <div class="time fs-5 fw-bold mb-1">Врач: @Model.Medic.FullName</div>
         }
 
-        @if (Model?.AvailableAppointments?.Any() == true)
+        @if (Model?.AppointmentsByDate.Count > 0)
         {
             @foreach (var group in Model.AppointmentsByDate)
             {

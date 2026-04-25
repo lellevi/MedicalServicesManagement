@@ -83,7 +83,7 @@ namespace MedicalServicesManagement.DAL.Repositories
             }
 
             var item = await query.Where(filter).SingleOrDefaultAsync();
-            if (item == null)
+            if (item != null)
             {
                 _context.Entry(item).State = EntityState.Detached;
             }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MedicalServicesManagement.WebApp.Models
 {
@@ -18,8 +19,6 @@ namespace MedicalServicesManagement.WebApp.Models
         public ServiceViewModel Service { get; set; }
 
         public List<ServiceViewModel> Services { get; set; }
-
-        public List<AppointmentViewModel> AvailableAppointments { get; set; }
 
         public Dictionary<DateTime, List<AppointmentViewModel>> AppointmentsByDate { get; set; }
     }
