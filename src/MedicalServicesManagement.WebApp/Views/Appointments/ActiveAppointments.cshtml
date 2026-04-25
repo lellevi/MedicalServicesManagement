@@ -4,7 +4,10 @@
 
 @{
     ViewData["ShowTitle"] = true;
-    ViewData["Title"] = "Мои записи на прием";
+    ViewData["Title"] = "Активные записи на прием";
+
+    bool isPatient = User.IsInRole(Constants.PatientRole);
+    bool isMedic = User.IsInRole(Constants.MedicRole);
 }
 
 <section class="appointment section">
@@ -27,7 +30,15 @@
                         <div class="appointment-form-wrapper my-appointment-card d-flex justify-content-between align-items-center">
                             <div class="appointment-info">
                                 <div class="service-name fw-bold">@appointment.Service?.Name</div>
-                                <div class="medic-name text-primary">@appointment.Medic?.FullName</div>
+                                @if (isPatient)
+                                {
+                                    <div class="medic-name text-primary">@appointment.Medic?.FullName</div>
+                                }
+                                else if (appointment.Status != AppointmentStatus.Free)
+                                {
+                                    <div class="medic-name text-primary">@appointment.Patient.FullName</div>
+                                }
+
                                 <div class="appointment-time mt-2">
                                     <span class="badge bg-info fs-6 px-3 py-2">
                                         @appointment.StartDate.ToString("dd.MM.yyyy, ddd")<br />
@@ -37,15 +48,20 @@
                                 <div class="appointment-status mt-2">
                                     @await Html.PartialAsync("_AppointmentStatus", appointment.Status)
                                 </div>
-                                <div class="appointment-cost mt-1">
-                                    <span>Начальная стоимость услуги (без учёта доп.услуг)</span>
-                                    <span class="fw-bold text-success">@appointment.Service.Cost.ToString("C")</span>
-                                </div>
 
-                                <form asp-controller="Appointments" asp-action="Free" method="post">
-                                    <input type="hidden" name="appointmentId" value="@appointment.Id" />
-                                    <button type="submit" class="btn btn-sm btn-outline-secondary">Отказаться от талона</button>
-                                </form>
+                                @if (isPatient)
+                                {
+                                    <div class="appointment-cost mt-1">
+                                        <span>Начальная стоимость услуги (без учёта доп.услуг)</span>
+                                        <span class="fw-bold text-success">@appointment.Service.Cost.ToString("C")</span>
+                                    </div>
+
+                                    <form asp-controller="Appointments" asp-action="Free" method="post">
+                                        <input type="hidden" name="appointmentId" value="@appointment.Id" />
+                                        <button type="submit" class="btn btn-sm btn-outline-secondary">Отказаться от талона</button>
+                                    </form>
+                                }
+
                             </div>
                         </div>
                     </div>

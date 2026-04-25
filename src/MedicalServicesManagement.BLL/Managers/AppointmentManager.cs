@@ -96,11 +96,38 @@ namespace MedicalServicesManagement.BLL.Managers
             return _mapper.Map<List<AppointmentDTO>>(entities);
         }
 
-        public async Task<List<AppointmentDTO>> GetAllUsersAppointmentsAsync(string id)
+        public async Task<List<AppointmentDTO>> GetAllPatientAppointmentsAsync(string id)
         {
             var entities = await _repository.GetAllAsync(
                 filter: x => (x.PatientId == id) && ((x.Status == AppointmentStatus.Taken) || (x.Status == AppointmentStatus.DoneNoPay)),
                 includes: [x => x.Service, x => x.Medic]);
+
+            return _mapper.Map<List<AppointmentDTO>>(entities);
+        }
+
+        public async Task<List<AppointmentDTO>> GetAllMedicAppointmentsAsync(string id)
+        {
+            var entities = await _repository.GetAllAsync(
+                filter: x => (x.MedicId == id) && ((x.Status == AppointmentStatus.Free) || (x.Status == AppointmentStatus.Taken)),
+                includes: [x => x.Service, x => x.Medic, x => x.Patient]);
+
+            return _mapper.Map<List<AppointmentDTO>>(entities);
+        }
+
+        public async Task<List<AppointmentDTO>> GetPatientHistoryAppointmentsAsync(string id)
+        {
+            var entities = await _repository.GetAllAsync(
+                filter: x => (x.PatientId == id) && (x.Status == AppointmentStatus.DonePaid),
+                includes: [x => x.Service, x => x.Medic]);
+
+            return _mapper.Map<List<AppointmentDTO>>(entities);
+        }
+
+        public async Task<List<AppointmentDTO>> GetMedicHistoryAppointmentsAsync(string id)
+        {
+            var entities = await _repository.GetAllAsync(
+                filter: x => (x.MedicId == id) && ((x.Status == AppointmentStatus.DoneNoPay) || (x.Status == AppointmentStatus.DonePaid)),
+                includes: [x => x.Service, x => x.Medic, x => x.Patient]);
 
             return _mapper.Map<List<AppointmentDTO>>(entities);
         }

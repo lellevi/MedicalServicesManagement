@@ -8,7 +8,7 @@
     ViewData["Subtitle"] = User.Identity.IsAuthenticated ? $"Добро пожаловать, {fullname}!" : "Вы не вошли в аккаунт...";
 }
 
-@if (User.IsInRole(Constants.PatientRole))
+@if (User.IsInRole(Constants.PatientRole) || User.IsInRole(Constants.MedicRole))
 {
     <section class="profile section">
         <div class="container" data-aos="fade-up">
@@ -29,7 +29,7 @@
 
                 <div class="col-lg-6">
                     <div class="profile-actions d-flex flex-column gap-2">
-                        <a asp-action="PatientAppointments" asp-controller="Appointments" class="btn btn-appointment w-100 profile-btn">
+                        <a asp-action="ActiveAppointments" asp-controller="Appointments" class="btn btn-appointment w-100 profile-btn">
                             Действующие записи
                         </a>
                         <a asp-action="HistoryPatientAppointments" asp-controller="Appointments" class="btn btn-appointment w-100 profile-btn">

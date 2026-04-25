@@ -74,11 +74,18 @@ namespace MedicalServicesManagement.BLL.Managers
             return _mapper.Map<List<EntityUserDTO>>(entities);
         }
 
-        public async Task<EntityUserDTO> GetByAuthIdAsync(string id)
+        public async Task<EntityUserDTO> GetByAuthIdAsync(string id, bool neededRoles = false)
         {
             var entity = await _repository.GetSingleAsync(x => x.AuthUserId == id);
+            var user = _mapper.Map<EntityUserDTO>(entity);
 
-            return _mapper.Map<EntityUserDTO>(entity);
+            if (neededRoles)
+            {
+                var roles = await _userRepository.GetUserRolesAsync(user.Id);
+                user.Roles = roles;
+            }
+
+            return user;
         }
 
         public async Task<List<EntityUserDTO>> GetMedicsAsync()

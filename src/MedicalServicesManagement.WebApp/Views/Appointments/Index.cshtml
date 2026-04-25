@@ -80,7 +80,7 @@
                                 </span>
                             </div>
                             <div class="appointment-status mt-1">
-                                @await Html.PartialAsync("_AppointmentStatus", (MedicalServicesManagement.WebApp.Enums.AppointmentStatus)appointment.Status)
+                                @await Html.PartialAsync("_AppointmentStatus", appointment.Status)
                             </div>
                             <div class="appointment-cost mt-1">
                                 <span class="fw-bold text-primary">Начальная стоимость: @appointment.Service.Cost byn</span>

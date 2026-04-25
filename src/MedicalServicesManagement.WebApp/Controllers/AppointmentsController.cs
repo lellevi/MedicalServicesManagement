@@ -261,7 +261,7 @@ namespace MedicalServicesManagement.WebApp.Controllers
         }
 
         [HttpGet("my")]
-        public async Task<IActionResult> PatientAppointments()
+        public async Task<IActionResult> ActiveAppointments()
         {
             try
             {
@@ -271,15 +271,23 @@ namespace MedicalServicesManagement.WebApp.Controllers
                 }
 
                 var currentUserId = GetUserIdFromClaims();
-
-                var currentUser = await _entityUserManager.GetByAuthIdAsync(currentUserId);
+                var currentUser = await _entityUserManager.GetByAuthIdAsync(currentUserId, true);
 
                 if (string.IsNullOrEmpty(currentUser.Id))
                 {
                     return View(new List<AppointmentViewModel>());
                 }
 
-                var allusersAppointments = await _appointmentManager.GetAllUsersAppointmentsAsync(currentUser.Id);
+                List<AppointmentDTO> allusersAppointments;
+
+                if (currentUser.Roles.FirstOrDefault() == Constants.MedicRole)
+                {
+                    allusersAppointments = await _appointmentManager.GetAllMedicAppointmentsAsync(currentUser.Id);
+                }
+                else
+                {
+                    allusersAppointments = await _appointmentManager.GetAllPatientAppointmentsAsync(currentUser.Id);
+                }
 
                 var model = _mapper.Map<List<AppointmentViewModel>>(allusersAppointments);
                 return View(model);
@@ -288,22 +296,6 @@ namespace MedicalServicesManagement.WebApp.Controllers
             {
                 return View(new List<AppointmentViewModel>());
             }
-        }
-
-        [HttpPost("free")]
-        public async Task<IActionResult> Free(string appointmentId)
-        {
-            if (!string.IsNullOrEmpty(appointmentId))
-            {
-                await _appointmentManager.MarkAsFreeAsync(appointmentId);
-            }
-
-            if (User.IsInRole(Constants.PatientRole))
-            {
-                return RedirectToAction("PatientAppointments", "Appointments");
-            }
-
-            return RedirectToAction("Index", "Appointments");
         }
 
         [HttpGet("history")]
@@ -324,18 +316,40 @@ namespace MedicalServicesManagement.WebApp.Controllers
                     return View(new List<AppointmentViewModel>());
                 }
 
-                var allAppointments = await _appointmentManager.GetAllIncludingServiceAndMedicAsync();
-                var userAppointments = allAppointments.Where(
-                    a => a.PatientId == currentUser.Id &&
-                    a.Status == BLL.Enums.AppointmentStatus.DonePaid).ToList();
+                List<AppointmentDTO> userHistoryAppointments;
 
-                var model = _mapper.Map<List<AppointmentViewModel>>(userAppointments);
+                if (currentUser.Roles.FirstOrDefault() == Constants.MedicRole)
+                {
+                    userHistoryAppointments = await _appointmentManager.GetMedicHistoryAppointmentsAsync(currentUser.Id);
+                }
+                else
+                {
+                    userHistoryAppointments = await _appointmentManager.GetPatientHistoryAppointmentsAsync(currentUser.Id);
+                }
+
+                var model = _mapper.Map<List<AppointmentViewModel>>(userHistoryAppointments);
                 return View(model);
             }
             catch
             {
                 return View(new List<AppointmentViewModel>());
             }
+        }
+
+        [HttpPost("free")]
+        public async Task<IActionResult> Free(string appointmentId)
+        {
+            if (!string.IsNullOrEmpty(appointmentId))
+            {
+                await _appointmentManager.MarkAsFreeAsync(appointmentId);
+            }
+
+            if (User.IsInRole(Constants.PatientRole))
+            {
+                return RedirectToAction("ActiveAppointments", "Appointments");
+            }
+
+            return RedirectToAction("Index", "Appointments");
         }
     }
 }

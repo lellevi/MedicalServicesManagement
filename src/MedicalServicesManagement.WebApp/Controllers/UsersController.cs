@@ -122,6 +122,11 @@ namespace MedicalServicesManagement.WebApp.Controllers
             }
 
             var medicDto = await _userManager.GetByIdIncludingRoles(id);
+            if (medicDto == null)
+            {
+                return View("Error", new ErrorViewModel("Ошибка: врач не найден."));
+            }
+
             if (string.IsNullOrEmpty(medicDto.MedSpecialityId))
             {
                 var model = _mapper.Map<UserViewModel>(medicDto);

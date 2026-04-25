@@ -10,7 +10,7 @@ namespace MedicalServicesManagement.BLL.Interfaces
 
         public Task<List<EntityUserDTO>> GetAllByRoleAsync(string role);
 
-        public Task<EntityUserDTO> GetByAuthIdAsync(string id);
+        public Task<EntityUserDTO> GetByAuthIdAsync(string id, bool neededRoles = false);
 
         public Task<List<EntityUserDTO>> GetMedicsAsync();
 
