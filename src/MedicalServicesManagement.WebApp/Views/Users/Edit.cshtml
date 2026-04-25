@@ -60,17 +60,25 @@
                     </div>
 
                     <div class="col-md-10 form-group">
-                        @foreach (var role in roles)
-                        {
-                            var isChecked = Model.Roles?.Contains(role) ?? false;
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" name="Roles" value="@role" id="role_@role"
-                                @(isChecked ? "checked" : "")>
-                                <label class="form-check-label" for="role_@role">@role</label>
-                            </div>
-                        }
+                        <label asp-for="Roles"></label>
+                        <select asp-for="Role" id="dropdownRoles" class="form-control" required>
+                            <option value="">Выберите роль</option>
+                            @foreach (var role in roles)
+                            {
+                                var isSelected = Model.Roles?.Contains(role) ?? false;
+                                @if (isSelected)
+                                {
+                                    <option value="@role" selected>@role</option>
+                                }
+                                else
+                                {
+                                    <option value="@role">@role</option>
+                                }
+                            }
+                        </select>
+                        <span asp-validation-for="Role" class="text-danger"></span>
                     </div>
-                    </div>
+                </div>
                         <input type="hidden" asp-for="Id" />
                         <input type="hidden" asp-for="AuthUserId" />
                         <button type="submit" class="btn btn-appointment w-100" style="margin-top:20px">Сохранить изменения</button>

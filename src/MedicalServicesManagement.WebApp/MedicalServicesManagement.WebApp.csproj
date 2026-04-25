@@ -9,7 +9,7 @@
     <CodeAnalysisTreatWarningsAsErrors>false</CodeAnalysisTreatWarningsAsErrors>
     <CodeAnalysisRuleSet>..\..\code-analysis.ruleset</CodeAnalysisRuleSet>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
-    <NoWarn>S3267,SA1101,SA1010,SA1309,CA1002,S3887,SA1208,CA1515,SA1117</NoWarn>
+    <NoWarn>S3267,SA1101,SA1010,SA1309,CA1002,S3887,SA1208,CA1515,SA1117,S6853</NoWarn>
     <!-- 1101 No usage of "this" in local calls -->
     <!-- 1010 OpeningSquareBracketsMustBeSpacedCorrectly -->
 	<!-- 1309 underscore-->
@@ -18,6 +18,7 @@
 	<!-- SA1208 Usings sort-->
 	<!-- CA1515 Internal classes - only for web app-->
 	<!-- SA1117 Parameters must be on same line or separate lines-->
+	<!-- Web:S6853 labels-->
   </PropertyGroup>
 
   <ItemGroup>

@@ -25,6 +25,9 @@ namespace MedicalServicesManagement.WebApp.Models
         [Display(Description = "Роли")]
         public List<string> Roles { get; set; }
 
+        [Display(Description = "Роль")]
+        public string Role { get; set; }
+
         public List<ServiceViewModel> Services { get; set; }
 
         [Display(Name = "Фамилия")]

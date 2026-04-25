@@ -9,6 +9,8 @@ namespace MedicalServicesManagement.BLL.Interfaces
     {
         public Task<List<AppointmentDTO>> GetAllIncludingServiceAndMedicAsync();
 
+        public Task<List<AppointmentDTO>> GetAllUsersAppointmentsAsync(string id);
+
         public Task<AppointmentDTO> GetByIdIncludingServiceAndMedicAsync(string id);
 
         public Task<List<AppointmentDTO>> GetFilteredAppointmentsAsync(string specialityId, string medicId, Enums.AppointmentStatus? status, DateTime? startDate, DateTime? endDate);

@@ -270,23 +270,18 @@ namespace MedicalServicesManagement.WebApp.Controllers
                     return RedirectToAction("Login", "Account");
                 }
 
-                var currentUserAuthId = GetUserIdFromClaims();
+                var currentUserId = GetUserIdFromClaims();
 
-                var currentUser = await _entityUserManager.GetByAuthIdAsync(currentUserAuthId);
+                var currentUser = await _entityUserManager.GetByAuthIdAsync(currentUserId);
 
                 if (string.IsNullOrEmpty(currentUser.Id))
                 {
                     return View(new List<AppointmentViewModel>());
                 }
 
-                var allAppointments = await _appointmentManager.GetAllIncludingServiceAndMedicAsync();
-                var userAppointments = allAppointments.Where(
-                    a => a.PatientId == currentUser.Id &&
-                    (a.Status == BLL.Enums.AppointmentStatus.Taken ||
-                    a.Status == BLL.Enums.AppointmentStatus.DoneNoPay))
-                    .ToList();
+                var allusersAppointments = await _appointmentManager.GetAllUsersAppointmentsAsync(currentUser.Id);
 
-                var model = _mapper.Map<List<AppointmentViewModel>>(userAppointments);
+                var model = _mapper.Map<List<AppointmentViewModel>>(allusersAppointments);
                 return View(model);
             }
             catch
