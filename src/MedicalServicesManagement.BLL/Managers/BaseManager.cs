@@ -11,10 +11,10 @@ namespace MedicalServicesManagement.BLL.Managers
         where TDTO : IDTO
         where TEntity : IEntity
     {
-        protected readonly IRepository<TEntity> _repository;
+        protected readonly ISqlRepository<TEntity> _repository;
         protected readonly IMapper _mapper;
 
-        protected BaseManager(IRepository<TEntity> repository, IMapper mapper)
+        protected BaseManager(ISqlRepository<TEntity> repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;

@@ -18,24 +18,28 @@ using System.Collections.Generic;
 
 const string MedServiceConnectionString = "MedDB";
 const string AuthConnectionString = "AuthDB";
+const string MongoConnectionString = "MongoDB";
 const string JwtTokenSettings = "JwtTokenSettings";
 
 var builder = WebApplication.CreateBuilder(args);
-
-var configuration = builder.Configuration;
 
 var medServiceConnection = builder.Configuration.GetConnectionString(MedServiceConnectionString)
     ?? throw new ArgumentException($"{MedServiceConnectionString} is null. Error connection.");
 var authConnection = builder.Configuration.GetConnectionString(AuthConnectionString)
     ?? throw new ArgumentException($"{AuthConnectionString} is null. Error connection.");
+var mongoConnection = builder.Configuration.GetConnectionString(MongoConnectionString)
+    ?? throw new ArgumentException($"{MongoConnectionString} is null. Error connection.");
 
 var strings = new Dictionary<string, string>
 {
     [MedServiceConnectionString] = medServiceConnection,
     [AuthConnectionString] = authConnection,
+    [MongoConnectionString] = mongoConnection,
 };
 
-builder.Services.ConfigureBLL(strings);
+var mongoDbName = builder.Configuration.GetSection("mongoDbName").Value;
+
+builder.Services.ConfigureBLL(strings, mongoDbName);
 
 var mapperConfig = new MapperConfiguration(
     cfg =>

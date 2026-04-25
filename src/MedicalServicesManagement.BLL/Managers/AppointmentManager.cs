@@ -13,7 +13,7 @@ namespace MedicalServicesManagement.BLL.Managers
 {
     internal class AppointmentManager : BaseManager<AppointmentDTO, Appointment>, IAppointmentManager
     {
-        public AppointmentManager(IRepository<Appointment> repository, IMapper mapper)
+        public AppointmentManager(ISqlRepository<Appointment> repository, IMapper mapper)
             : base(repository, mapper)
         {
         }

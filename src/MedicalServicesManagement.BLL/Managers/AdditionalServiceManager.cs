@@ -8,7 +8,7 @@ namespace MedicalServicesManagement.BLL.Managers
 {
     internal class AdditionalServiceManager : BaseManager<AdditionalServiceDTO, AdditionalService>
     {
-        public AdditionalServiceManager(IRepository<AdditionalService> repository, IMapper mapper)
+        public AdditionalServiceManager(ISqlRepository<AdditionalService> repository, IMapper mapper)
             : base(repository, mapper)
         {
         }

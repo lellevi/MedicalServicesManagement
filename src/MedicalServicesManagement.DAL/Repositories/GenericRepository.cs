@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MedicalServicesManagement.DAL.Repositories
 {
-    public class GenericRepository<T> : IRepository<T>
-        where T : BaseEntity
+    public class GenericRepository<T> : ISqlRepository<T>
+        where T : BaseSqlEntity
     {
         protected readonly MedServiceContext _context;
 

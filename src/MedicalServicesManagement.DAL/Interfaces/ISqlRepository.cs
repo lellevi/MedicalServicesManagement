@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using MedicalServicesManagement.DAL.Entities;
 
 namespace MedicalServicesManagement.DAL.Interfaces
 {
-    public interface IRepository<T>
-        where T : IEntity
+    public interface ISqlRepository<T>
+        where T : BaseSqlEntity
     {
         Task<string> CreateAsync(T item);
 

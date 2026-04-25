@@ -4,7 +4,7 @@ using MedicalServicesManagement.DAL.Interfaces;
 
 namespace MedicalServicesManagement.DAL.Entities
 {
-    public abstract class BaseEntity : IEntity
+    public abstract class BaseSqlEntity : IEntity
     {
         [Key]
         [Required]

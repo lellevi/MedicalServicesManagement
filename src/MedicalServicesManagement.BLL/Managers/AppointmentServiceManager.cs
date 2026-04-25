@@ -8,7 +8,7 @@ namespace MedicalServicesManagement.BLL.Managers
 {
     internal class AppointmentServiceManager : BaseManager<AppointmentServiceDTO, AppointmentService>
     {
-        public AppointmentServiceManager(IRepository<AppointmentService> repository, IMapper mapper)
+        public AppointmentServiceManager(ISqlRepository<AppointmentService> repository, IMapper mapper)
             : base(repository, mapper)
         {
         }

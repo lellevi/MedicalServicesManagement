@@ -8,7 +8,7 @@ namespace MedicalServicesManagement.BLL.Managers
 {
     internal class MedSpecialityManager : BaseManager<MedSpecialityDTO, MedSpeciality>
     {
-        public MedSpecialityManager(IRepository<MedSpeciality> repository, IMapper mapper)
+        public MedSpecialityManager(ISqlRepository<MedSpeciality> repository, IMapper mapper)
             : base(repository, mapper)
         {
         }

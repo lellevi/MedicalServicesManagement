@@ -10,9 +10,9 @@ namespace MedicalServicesManagement.BLL
 {
     public static class ConfigurationExtensionsBll
     {
-        public static void ConfigureBLL(this IServiceCollection services, Dictionary<string, string> connectionStrings)
+        public static void ConfigureBLL(this IServiceCollection services, Dictionary<string, string> connectionStrings, string mongoDbName)
         {
-            services.ConfigureDAL(connectionStrings);
+            services.ConfigureDAL(connectionStrings, mongoDbName);
 
             services.AddScoped<JwtTokenService>();
 

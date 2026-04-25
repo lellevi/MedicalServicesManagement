@@ -1,5 +1,17 @@
 # MedicalServicesManagement
 
+## Работа с Mongo
+
+⚠️ do not forget start MongoDB first
+
+В адресную строку explorer в корне проекта написать cmd
+Затем запустить
+```
+docker-compose up -d
+```
+
+## Работа с миграциями в sql
+
 Поиск > Консоль диспетчера пакетов. 
 
 0) Установить EF tool
