@@ -1,4 +1,6 @@
-﻿using MedicalServicesManagement.DAL.Contexts;
+﻿using System;
+using System.Collections.Generic;
+using MedicalServicesManagement.DAL.Contexts;
 using MedicalServicesManagement.DAL.Entities;
 using MedicalServicesManagement.DAL.Factories;
 using MedicalServicesManagement.DAL.Interfaces;
@@ -6,10 +8,6 @@ using MedicalServicesManagement.DAL.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using MongoDB.Driver.Core.Configuration;
-using System;
-using System.Collections.Generic;
 
 namespace MedicalServicesManagement.DAL
 {
@@ -49,7 +47,6 @@ namespace MedicalServicesManagement.DAL
 
             services.AddScoped<ISqlRepository<Appointment>, GenericRepository<Appointment>>();
             services.AddScoped<ISqlRepository<AdditionalService>, GenericRepository<AdditionalService>>();
-
 
             services.AddSingleton<IMongoDbFactory>(new MongoDbFactory(mongoString, mongoDbName));
             services.AddTransient<IMongoRepository<MedicalResult>, MedicalResultRepository>();

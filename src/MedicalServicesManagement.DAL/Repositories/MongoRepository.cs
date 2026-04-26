@@ -1,11 +1,11 @@
-﻿using MedicalServicesManagement.DAL.Entities;
-using MedicalServicesManagement.DAL.Factories;
-using MedicalServicesManagement.DAL.Interfaces;
-using MongoDB.Driver;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using MedicalServicesManagement.DAL.Entities;
+using MedicalServicesManagement.DAL.Factories;
+using MedicalServicesManagement.DAL.Interfaces;
+using MongoDB.Driver;
 
 namespace MedicalServicesManagement.DAL.Repositories
 {

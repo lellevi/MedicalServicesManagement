@@ -16,6 +16,8 @@ namespace MedicalServicesManagement.WebApp.Mapper
             CreateMap<AppointmentServiceViewModel, AppointmentServiceDTO>().ReverseMap();
             CreateMap<AdditionalServiceViewModel, AdditionalServiceDTO>().ReverseMap();
 
+            CreateMap<MedicalResultViewModel, MedicalResultDto>().ReverseMap();
+
             CreateMap<BLL.Enums.AppointmentStatus, Enums.AppointmentStatus>()
                 .ConvertUsingEnumMapping(opt => opt.MapByName())
                 .ReverseMap();
