@@ -1,12 +1,15 @@
-﻿using System;
-using AutoMapper;
+﻿using AutoMapper;
 using MedicalServicesManagement.BLL.Dto;
+using MedicalServicesManagement.BLL.Interfaces;
 using MedicalServicesManagement.DAL.Entities;
 using MedicalServicesManagement.DAL.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MedicalServicesManagement.BLL.Managers
 {
-    internal class AppointmentServiceManager : BaseManager<AppointmentServiceDTO, AppointmentService>
+    internal class AppointmentServiceManager : BaseManager<AppointmentServiceDTO, AppointmentService>, IAppointmentServiceManager
     {
         public AppointmentServiceManager(ISqlRepository<AppointmentService> repository, IMapper mapper)
             : base(repository, mapper)
@@ -14,6 +17,20 @@ namespace MedicalServicesManagement.BLL.Managers
         }
 
         protected override string EntityName { get => "appointmentService"; }
+
+        public async Task<List<AppointmentServiceDTO>> GetAllIncludingSpecialitiesAsync()
+        {
+            var entities = await _repository.GetAllAsync(includes: [x => x.AdditionalService, x => x.AdditionalService.MedSpeciality]);
+            return _mapper.Map<List<AppointmentServiceDTO>>(entities);
+        }
+
+        public async Task<List<AppointmentServiceDTO>> GetByAppointmentIdAsync(string appointmentId)
+        {
+            var entities = await _repository.GetAllAsync(
+                filter: x => x.AppointmentId == appointmentId,
+                includes: [x => x.AdditionalService]);
+            return _mapper.Map<List<AppointmentServiceDTO>>(entities);
+        }
 
         protected override void Validate(AppointmentServiceDTO item)
         {

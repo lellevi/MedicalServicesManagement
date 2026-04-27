@@ -24,14 +24,18 @@ namespace MedicalServicesManagement.BLL
             services.AddScoped<IManager<ServiceDTO>, ServiceManager>();
 
             services.AddScoped<IManager<MedSpecialityDTO>, MedSpecialityManager>();
+
             services.AddScoped<IManager<AppointmentServiceDTO>, AppointmentServiceManager>();
+            services.AddScoped<IAppointmentServiceManager, AppointmentServiceManager>();
 
             services.AddScoped<IAppointmentManager, AppointmentManager>();
             services.AddScoped<IManager<AppointmentDTO>, AppointmentManager>();
 
             services.AddScoped<IManager<AdditionalServiceDTO>, AdditionalServiceManager>();
+            services.AddScoped<IAdditionalServiceManager, AdditionalServiceManager>();
 
             services.AddScoped<IMongoBaseManager<MedicalResult, MedicalResultDto>, MedicalResultMongoManager>();
+            services.AddScoped<IMedicalResultMongoManager, MedicalResultMongoManager>();
         }
     }
 }

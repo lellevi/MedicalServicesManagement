@@ -88,7 +88,9 @@
                     @if (User.IsInRole(Constants.AdminRole) || User.IsInRole(Constants.ReceptionistRole))
                     {
                          <li><a asp-action="Index" asp-controller="Appointments">Талоны</a></li>
-                        @*ВРЕМЕННО*@
+                    }
+                    @if (User.IsInRole(Constants.MedicRole))
+                    {
                         <li><a asp-action="Index" asp-controller="MedicalResults">Мед.результаты</a></li>
                     }
                 </ul>

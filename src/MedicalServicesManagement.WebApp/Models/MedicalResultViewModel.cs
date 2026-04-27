@@ -1,15 +1,16 @@
-﻿using MedicalServicesManagement.DAL.Entities;
-using System;
+﻿using System;
 
 namespace MedicalServicesManagement.WebApp.Models
 {
     public class MedicalResultViewModel
     {
-        public Appointment Appointment { get; set; }
+        public AppointmentViewModel Appointment { get; set; }
 
-        public EntityUser Medic { get; set; }
+        public string AppointmentId { get; set; }
 
-        public EntityUser Patient { get; set; }
+        public UserViewModel Medic { get; set; }
+
+        public UserViewModel Patient { get; set; }
 
         public DateTime ModifiedOn { get; set; }
 

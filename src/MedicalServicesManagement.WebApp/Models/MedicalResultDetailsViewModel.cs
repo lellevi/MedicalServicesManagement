@@ -12,14 +12,14 @@ namespace MedicalServicesManagement.WebApp.Models
 
         public ServiceViewModel Service { get; set; }
 
-        public List<AdditionalServiceViewModel> ExistingAdditionalServices { get; set; }
-
-        public List<AdditionalServiceViewModel> AllAvailableServices { get; set; }
+        public List<AdditionalServiceViewModel> AdditionalServices { get; set; }
 
         public List<AppointmentServiceViewModel> AppointmentServices { get; set; }
 
         public MedicalResultViewModel MedicalResult { get; set; }
 
         public decimal TotalCost { get; set; }
+
+        public bool IsReadOnly { get; set; }
     }
 }
