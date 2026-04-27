@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace MedicalServicesManagement.DAL.Entities
 {
     [Table("AppointmentService")]
-    public class AppointmentService : BaseEntity
+    public class AppointmentService : BaseSqlEntity
     {
         [Required]
         [MaxLength(36)]

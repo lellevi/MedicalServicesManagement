@@ -1,0 +1,58 @@
+﻿@model List<MedicalServicesManagement.WebApp.Models.MedicalResultViewModel>
+@using MedicalServicesManagement.WebApp.Helpers
+
+@{
+    ViewData["ShowTitle"] = true;
+    ViewData["Title"] = "Мед. результаты:";
+}
+
+<section class="medical-results section">
+    <div class="container" data-aos="fade-up">
+        <a class="btn btn-outline-secondary mb-3" asp-action="Index" asp-controller="Home">
+            <i class="fas fa-arrow-left"></i> Вернуться
+        </a>
+
+        <div class="row mb-3">
+            <div class="col-lg-10 d-flex justify-content-between align-items-center">
+                <a asp-action="Create" class="btn btn-primary">Добавить результат</a>
+            </div>
+        </div>
+
+        <div class="row gy-3">
+            @foreach (var result in Model)
+            {
+                <div class="col-lg-12" style="border: 1px solid #ccc; padding: 1rem; position: relative;">
+                    <div class="medical-result-card d-flex justify-content-between align-items-center">
+                        <div class="medical-result-info">
+                            <div class="patient-name fw-bold">@result.Patient?.FullName</div>
+                            <div class="medic-name text-primary">@result.Medic?.FullName</div>
+                            <div class="appointment-time mt-1">
+                                <span class="badge bg-info">
+                                    @TimeFormatHelper.FormatTimeRange(result.CreatedOn, result.ModifiedOn)
+                                </span>
+                            </div>
+                            <div class="diagnosis mt-1">
+                                <strong>Диагноз:</strong> @result.Diagnosis
+                            </div>
+                            <div class="examination-data mt-1">
+                                <strong>Данные осмотра:</strong> @result.ExaminationData
+                            </div>
+                            <div class="recommendations mt-1">
+                                <strong>Рекомендации:</strong> @result.Recommendations
+                            </div>
+                        </div>
+
+                        <div class="medical-result-actions">
+                            <a asp-controller="MedicalResults"
+                                   asp-action="Details"
+                                   asp-route-appointmentId="@result.Appointment?.Id"
+                                   class="btn btn-sm btn-outline-info">
+                                Подробнее...
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>

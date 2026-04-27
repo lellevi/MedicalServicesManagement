@@ -4,7 +4,7 @@ using MedicalServicesManagement.DAL.Entities;
 
 namespace MedicalServicesManagement.DAL.Interfaces
 {
-    public interface IEntityUserRepository : IRepository<EntityUser>
+    public interface IEntityUserRepository : ISqlRepository<EntityUser>
     {
         public Task UpdateRoles(string authUserId, List<string> newRoles);
 

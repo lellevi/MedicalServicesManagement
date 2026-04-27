@@ -1,19 +1,29 @@
-﻿using System;
-using AutoMapper;
+﻿using AutoMapper;
 using MedicalServicesManagement.BLL.Dto;
+using MedicalServicesManagement.BLL.Interfaces;
 using MedicalServicesManagement.DAL.Entities;
 using MedicalServicesManagement.DAL.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MedicalServicesManagement.BLL.Managers
 {
-    internal class AdditionalServiceManager : BaseManager<AdditionalServiceDTO, AdditionalService>
+    internal class AdditionalServiceManager : BaseManager<AdditionalServiceDTO, AdditionalService>, IAdditionalServiceManager
     {
-        public AdditionalServiceManager(IRepository<AdditionalService> repository, IMapper mapper)
+        public AdditionalServiceManager(ISqlRepository<AdditionalService> repository, IMapper mapper)
             : base(repository, mapper)
         {
         }
 
         protected override string EntityName { get => "additionalService"; }
+
+        public async Task<List<AdditionalServiceDTO>> GetAllIncludingSpecialitiesAsync()
+        {
+            var entities = await _repository.GetAllAsync(includes: [x => x.MedSpeciality]);
+
+            return _mapper.Map<List<AdditionalServiceDTO>>(entities);
+        }
 
         protected override void Validate(AdditionalServiceDTO item)
         {

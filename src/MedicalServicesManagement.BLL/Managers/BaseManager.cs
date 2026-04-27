@@ -9,12 +9,12 @@ namespace MedicalServicesManagement.BLL.Managers
 {
     internal abstract class BaseManager<TDTO, TEntity> : IManager<TDTO>
         where TDTO : IDTO
-        where TEntity : IEntity
+        where TEntity : class, IEntity
     {
-        protected readonly IRepository<TEntity> _repository;
+        protected readonly ISqlRepository<TEntity> _repository;
         protected readonly IMapper _mapper;
 
-        protected BaseManager(IRepository<TEntity> repository, IMapper mapper)
+        protected BaseManager(ISqlRepository<TEntity> repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;

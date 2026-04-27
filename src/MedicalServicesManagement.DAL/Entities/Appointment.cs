@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace MedicalServicesManagement.DAL.Entities
 {
     [Table("Appointment")]
-    public class Appointment : BaseEntity
+    public class Appointment : BaseSqlEntity
     {
         [MaxLength(36)]
         public string PatientId { get; set; }

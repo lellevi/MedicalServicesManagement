@@ -11,7 +11,7 @@ namespace MedicalServicesManagement.BLL.Managers
 {
     internal class ServiceManager : BaseManager<ServiceDTO, Service>, IServiceManager
     {
-        public ServiceManager(IRepository<Service> repository, IMapper mapper)
+        public ServiceManager(ISqlRepository<Service> repository, IMapper mapper)
             : base(repository, mapper)
         {
         }

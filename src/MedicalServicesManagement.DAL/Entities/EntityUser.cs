@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 namespace MedicalServicesManagement.DAL.Entities
 {
     [Table("[User]")]
-    public class EntityUser : BaseEntity
+    public class EntityUser : BaseSqlEntity
     {
         [Required]
         [MaxLength(36)]

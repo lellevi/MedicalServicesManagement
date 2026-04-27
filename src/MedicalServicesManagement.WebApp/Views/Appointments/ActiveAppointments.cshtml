@@ -61,7 +61,15 @@
                                         <button type="submit" class="btn btn-sm btn-outline-secondary">Отказаться от талона</button>
                                     </form>
                                 }
-
+                                @if (isMedic)
+                                {
+                                    <a asp-controller="MedicalResults"
+                                           asp-action="Details"
+                                           asp-route-appointmentId="@appointment.Id"
+                                           class="btn btn-sm btn-outline-success">
+                                        Медицинский результат
+                                    </a>
+                                }
                             </div>
                         </div>
                     </div>

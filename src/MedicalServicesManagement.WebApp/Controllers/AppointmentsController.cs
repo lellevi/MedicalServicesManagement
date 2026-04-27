@@ -205,12 +205,17 @@ namespace MedicalServicesManagement.WebApp.Controllers
         [HttpGet("take")]
         public async Task<IActionResult> Take([FromQuery]string appointmentId, [FromQuery] string patientId)
         {
+            EntityUserDTO patientDto;
             if (string.IsNullOrEmpty(patientId))
             {
                 patientId = GetUserIdFromClaims();
+                patientDto = await _entityUserManager.GetByAuthIdAsync(patientId);
+            }
+            else
+            {
+                patientDto = await _entityUserManager.GetByIdAsync(patientId);
             }
 
-            var patientDto = await _entityUserManager.GetByIdAsync(patientId);
             var patient = _mapper.Map<UserViewModel>(patientDto);
 
             var appointmentDto = await _appointmentManager.GetByIdIncludingServiceAndMedicAsync(appointmentId);

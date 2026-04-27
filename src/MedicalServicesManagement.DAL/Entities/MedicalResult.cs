@@ -2,15 +2,17 @@
 
 namespace MedicalServicesManagement.DAL.Entities
 {
-    public class MedicalResult : BaseEntity
+    public class MedicalResult : BaseMongoEntity
     {
-        public string AppointmentId { get; set; }
+        public Appointment Appointment { get; set; }
 
-        public string MedicId { get; set; }
+        public EntityUser Medic { get; set; }
 
-        public string PatientId { get; set; }
+        public EntityUser Patient { get; set; }
 
         public DateTime ModifiedOn { get; set; }
+
+        public DateTime CreatedOn { get; set; }
 
         public string ExaminationData { get; set; }
 

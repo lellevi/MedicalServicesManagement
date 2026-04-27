@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace MedicalServicesManagement.DAL.Interfaces
 {
-    public interface IRepository<T>
-        where T : IEntity
+    public interface ISqlRepository<T>
+        where T : class, IEntity
     {
         Task<string> CreateAsync(T item);
 
